@@ -73,7 +73,8 @@ namespace commands
                         insertReinforcementSingle(re, true, trans);
                     }
 
-                    insertReinforcmentMark(rea.ToString(), rea.IP, trans);
+                    //insertReinforcmentMark(rea.ToString(), rea.IP, trans);
+                    insertReinforcmentMark2(rea.ToString(), rea.IP, trans);
                 }
             }
         }
@@ -120,6 +121,40 @@ namespace commands
                 curSpace.AppendEntity(reinf_label);
                 trans.AddNewlyCreatedDBObject(reinf_label, true);
             }
+        }
+
+        private static void insertReinforcmentMark2(string mark, G.Point IP, Transaction trans)
+        {
+            string layerName = "K023TL";
+
+            Document doc = Application.DocumentManager.MdiActiveDocument;
+            Database db = doc.Database;
+
+            BlockTableRecord curSpace = trans.GetObject(db.CurrentSpaceId, OpenMode.ForWrite) as BlockTableRecord;
+
+            Point3d insertPointLeader = new Point3d(IP.X, IP.Y, 0);
+            Point3d insertPointLeader2 = new Point3d(IP.X + 5 * L._V_.Z_DRAWING_SCALE, IP.Y + 5 * L._V_.Z_DRAWING_SCALE, 0);
+            Point3d insertPointText = new Point3d(IP.X + 7.5 * L._V_.Z_DRAWING_SCALE, IP.Y + 7.5 * L._V_.Z_DRAWING_SCALE, 0);
+
+            MLeader leader = new MLeader();
+            leader.Layer = layerName;
+
+            leader.SetDatabaseDefaults();
+            leader.ContentType = ContentType.MTextContent;
+
+            MText mText = new MText();
+            mText.SetDatabaseDefaults();
+            mText.TextHeight = 2.5 * L._V_.Z_DRAWING_SCALE;
+            mText.SetContentsRtf(mark);
+            mText.Location = insertPointText;
+
+            leader.MText = mText;
+
+            int idx = leader.AddLeaderLine(insertPointLeader2);
+            leader.AddFirstVertex(idx, insertPointLeader);
+
+            curSpace.AppendEntity(leader);
+            trans.AddNewlyCreatedDBObject(leader, true);
         }
 
         private static void insertBending(R.Raud _ALFA_, G.Point insertion, Transaction trans)

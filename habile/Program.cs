@@ -15,7 +15,7 @@ namespace habile
             if (File.Exists(@"C:\Program Files\Bricsys\BricsCAD V16 en_US\bricscad.exe"))
             {
                 string run = @"C:\Program Files\Bricsys\BricsCAD V16 en_US\bricscad.exe";
-                string netload = @"C:\Users\aleksandr.ess\Dropbox\CODE\habile\BricsCommands\bin\Debug\BricsCommands.dll";
+                string netload = @"C:\Users\aleksandr.ess\Documents\GitHub\habile\BricsCommands\bin\Debug\BricsCommands.dll";
                 string dwg = @"C:\Users\aleksandr.ess\Dropbox\DMT\ERM\training3.dwg";
                 string script = "script1.scr";
 
@@ -25,7 +25,7 @@ namespace habile
             else if (File.Exists(@"C:\Program Files\Autodesk\AutoCAD 2013\acad.exe"))
             {
                 string run = @"C:\Program Files\Autodesk\AutoCAD 2013\acad.exe";
-                string netload = @"C:\Users\Alex\Dropbox\CODE\habile\CadCommands\bin\Debug\CadCommands.dll";
+                string netload = @"C:\Users\Alex\Documents\GitHub\habile\CadCommands\bin\Debug\CadCommands.dll";
                 string dwg = @"C:\Users\Alex\Dropbox\DMT\ERM\training3.dwg";
                 string script = "script1.scr";
 
@@ -35,7 +35,7 @@ namespace habile
             else if (File.Exists(@"C:\Program Files\Autodesk\AutoCAD 2014\acad.exe"))
             {
                 string run = @"C:\Program Files\Autodesk\AutoCAD 2014\acad.exe";
-                string netload = @"C:\Users\Alex\Dropbox\CODE\habile\CadCommands\bin\Debug\CadCommands.dll";
+                string netload = @"C:\Users\Alex\Documents\GitHub\habile\CadCommands\bin\Debug\CadCommands.dll";
                 string dwg = @"C:\Users\Alex\Dropbox\DMT\ERM\training.dwg";
                 string script = "script1.scr";
 
