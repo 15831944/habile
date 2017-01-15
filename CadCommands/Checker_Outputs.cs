@@ -23,14 +23,6 @@ namespace commands
 {
     static class Checker_Outputs
     {
-        public static void writeCadMessage(string errorMessage)
-        {
-            Document doc = Application.DocumentManager.MdiActiveDocument;
-            Editor ed = doc.Editor;
-
-            ed.WriteMessage("\n" + errorMessage);
-        }
-
         public static void main(List<T.ErrorPoint> errors)
         {
             Document doc = Application.DocumentManager.MdiActiveDocument;
@@ -55,8 +47,8 @@ namespace commands
 
         private static void errorHandler(List<T.ErrorPoint> errors, Transaction trans)
         {
-            writeCadMessage(" ");
-            writeCadMessage("----- VIGADE LOETELU ALGUS -----");
+            Universal.writeCadMessage(" ");
+            Universal.writeCadMessage("----- VIGADE LOETELU ALGUS -----");
             foreach (T.ErrorPoint e in errors)
             {
                 double scale = e.Scale;
@@ -64,11 +56,11 @@ namespace commands
                 createCircle(5 * scale, insertPoint, trans);
                 createCircle(40 * scale, insertPoint, trans);
 
-                writeCadMessage(e.ErrorMessage);
+                Universal.writeCadMessage(e.ErrorMessage);
             }
-            writeCadMessage("----- VIGADE LOETELU LÕPP -----");
-            writeCadMessage(" ");
-            writeCadMessage("VIGADE ARV - " + errors.Count.ToString());
+            Universal.writeCadMessage("----- VIGADE LOETELU LÕPP -----");
+            Universal.writeCadMessage(" ");
+            Universal.writeCadMessage("VIGADE ARV - " + errors.Count.ToString());
         }
 
         private static void createCircle(double radius, Point3d ip, Transaction trans)
