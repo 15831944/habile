@@ -114,7 +114,7 @@ namespace Logic_Reinf
             G.Line side1 = new G.Line(side1Start, mainPoint);
             G.Line side2 = new G.Line(mainEnd, side2End);
 
-            if (main.Length() < _V_.X_REINFORCEMENT_MAIN_RADIUS * 2) return false;
+            if (main.Length() < _V_.Y_REINFORCEMENT_MAIN_RADIUS * 2) return false;
 
             if (denier(main)) return false;
             if (denier(side1)) return false;
@@ -167,7 +167,7 @@ namespace Logic_Reinf
             {
                 if (_V_.X_REINFORCEMENT_SIDE_D_CREATE == 1)
                 {
-                    cur = new R.D_Raud(side, _V_.Y_ELEMENT_WIDTH_COVER - parand, 1, _V_.X_REINFORCEMENT_SIDE_D_DIAMETER, _V_.X_REINFORCEMENT_MARK);
+                    cur = new R.D_Raud(side, _V_.Y_ELEMENT_WIDTH_COVER + parand, 1, _V_.X_REINFORCEMENT_SIDE_D_DIAMETER, _V_.X_REINFORCEMENT_MARK);
                 }
                 else
                 {
@@ -178,7 +178,7 @@ namespace Logic_Reinf
             {
                 if (_V_.X_REINFORCEMENT_TOP_D_CREATE == 1)
                 {
-                    cur = new R.D_Raud(side, _V_.Y_ELEMENT_WIDTH_COVER - parand, 1, _V_.X_REINFORCEMENT_TOP_D_DIAMETER, _V_.X_REINFORCEMENT_MARK);
+                    cur = new R.D_Raud(side, _V_.Y_ELEMENT_WIDTH_COVER + parand, 1, _V_.X_REINFORCEMENT_TOP_D_DIAMETER, _V_.X_REINFORCEMENT_MARK);
                 }
                 else
                 {
@@ -206,6 +206,7 @@ namespace Logic_Reinf
         private bool U_side_handler(G.Point start, G.Point end, LineSegment ls)
         {
             G.Line side = new G.Line(start, end);
+            if (side.Length() < _V_.Y_REINFORCEMENT_STIRRUP_RADIUS * 2) return false;
 
             if (denier(side)) return false;
 

@@ -26,7 +26,7 @@ namespace habile
             {
                 string run = @"C:\Program Files\Autodesk\AutoCAD 2013\acad.exe";
                 string netload = @"C:\Users\Alex\Documents\GitHub\habile\CadCommands\bin\Debug\CadCommands.dll";
-                string dwg = @"C:\Users\Alex\Dropbox\DMT\Brics_testimine\training3.dwg";
+                string dwg = @"C:\Users\Alex\Dropbox\DMT\Brics_testimine\training.dwg";
                 string script = "script1.scr";
 
                 createScriptFile(script, netload, dwg);

@@ -17,7 +17,7 @@ namespace Logic_Reinf
 
         public static int X_REINFORCEMENT_MAIN_DIAMETER = 12;
         public static int X_REINFORCEMENT_MAIN_ANCHOR_LENGTH = 500;
-        public static int X_REINFORCEMENT_MAIN_RADIUS = 30;
+        
         public static double X_FIRST_PASS_CONSTRAINT = 1.2; // A + 2B vs D
 
         public static int X_REINFORCEMENT_DIAGONAL_DIAMETER = 8;
@@ -31,11 +31,13 @@ namespace Logic_Reinf
         public static int X_REINFORCEMENT_SIDE_D_DIAMETER = 8;
         public static int X_REINFORCEMENT_SIDE_D_ANCHOR_LENGTH = 300;
         public static int X_REINFORCEMENT_SIDE_D_SPACING = 400;
+        public static int X_REINFORCEMENT_SIDE_D_FIX = -30;
 
         public static int X_REINFORCEMENT_TOP_D_CREATE = 1;
         public static int X_REINFORCEMENT_TOP_D_DIAMETER = 8;
         public static int X_REINFORCEMENT_TOP_D_ANCHOR_LENGTH = 300;
         public static int X_REINFORCEMENT_TOP_D_SPACING = 400;
+        public static int X_REINFORCEMENT_TOP_D_FIX = 0;
 
         public static string X_REINFORCEMENT_MARK = "B500B";
         public static int X_REINFORCEMENT_NUMBER = 2;
@@ -45,8 +47,10 @@ namespace Logic_Reinf
 
         // calculated constants
         public static double Y_REINFORCEMENT_MAIN_MIN_LENGTH = X_REINFORCEMENT_MAIN_ANCHOR_LENGTH * 2 * 1.2; // A + 2B vs D
+        public static int Y_REINFORCEMENT_MAIN_RADIUS = 1000;
 
         public static int Y_STIRRUP_MAX_LENGTH = X_REINFORCEMENT_STIRRUP_CONSTRAINT * X_ELEMENT_WIDTH;
+        public static int Y_REINFORCEMENT_STIRRUP_RADIUS = 1000;
         public static int Y_ELEMENT_WIDTH_COVER = X_ELEMENT_WIDTH - X_CONCRETE_COVER_1 * 2;
 
         public static int Y_CONCRETE_COVER_DELTA = (int)(Math.Ceiling(X_REINFORCEMENT_MAIN_DIAMETER / 5.0 + 0.01) * 5) + 5;

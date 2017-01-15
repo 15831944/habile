@@ -32,20 +32,20 @@ namespace Logic_Reinf
             {
                 spacing = _V_.X_REINFORCEMENT_SIDE_D_SPACING;
                 distance = _V_.X_REINFORCEMENT_SIDE_D_ANCHOR_LENGTH;
-                parand = 2 * _V_.Y_CONCRETE_COVER_DELTA - 10; // parand magic
+                parand = _V_.X_REINFORCEMENT_SIDE_D_FIX;
             }
             else
             {
                 spacing = _V_.X_REINFORCEMENT_TOP_D_SPACING;
                 distance = _V_.X_REINFORCEMENT_TOP_D_ANCHOR_LENGTH;
-                parand = 0; // parand magic
+                parand = _V_.X_REINFORCEMENT_TOP_D_FIX;
             }
 
-            double lineTrim = _V_.X_CONCRETE_COVER_1 * 2;
+            double lineTrim = _V_.X_CONCRETE_COVER_1 * 2.5;
             double equalSpacer = ((ln.Length() - 2 * lineTrim) % spacing) / 2;
 
             double j = lineTrim + equalSpacer;
-            double len = ln.Length() - lineTrim;
+            double len = ln.Length();
 
             if (len > spacing)
             {

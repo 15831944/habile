@@ -58,8 +58,6 @@ namespace Logic_Reinf
                         cover1 = cover1 + _V_.Y_CONCRETE_COVER_DELTA;
                     }
 
-                    MessageBox.Show("here");
-
                     IP1 = getCornerPoint(side1Edge, mainEdge, cover1, coverMain, ref startCorner);
                     IP2 = getCornerPoint(mainEdge, side2Edge, coverMain, cover2, ref endCorner);
                     side1Start = IP1.move(side1Dist, v2);
@@ -82,8 +80,6 @@ namespace Logic_Reinf
                         cover2 = cover2 + _V_.Y_CONCRETE_COVER_DELTA;
                     }
 
-                    MessageBox.Show("here2");
-
                     IP1 = getCornerPoint(side1Edge, mainEdge, cover1, coverMain, ref startCorner);
                     IP2 = getCornerPoint(mainEdge, side2Edge, coverMain, cover2, ref endCorner);
                     side1Start = IP1.move(side1Dist, v2);
@@ -93,10 +89,7 @@ namespace Logic_Reinf
                 }
             }
 
-            G.Line mainLine = new G.Line(IP1, IP2);
-            if (mainLine.Length() < _V_.X_REINFORCEMENT_MAIN_RADIUS * 2) return false;
-
-            //A_handler_debug(side1Start, IP1);
+           //A_handler_debug(side1Start, IP1);
             //A_handler_debug(IP1, IP2);
             //A_handler_debug(IP2, side2End);
 

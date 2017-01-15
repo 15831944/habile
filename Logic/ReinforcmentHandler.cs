@@ -358,7 +358,7 @@ namespace Logic_Reinf
                 if (c2)
                 {
                     G.Line extended = main.extendStart(_V_.X_REINFORCEMENT_MAIN_ANCHOR_LENGTH);
-                    G.Line trimmed = trimLine_baseline(extended, main, _V_.Y_CONCRETE_COVER_2, ref startTrimmerEdge);
+                    G.Line trimmed = trimLine_basepoint(extended, main.End, _V_.Y_CONCRETE_COVER_2, ref startTrimmerEdge);
                     if (trimmed.Length() < main.Length() + _V_.X_REINFORCEMENT_MAIN_ANCHOR_LENGTH * 0.95) startTrimmed = true;
                     main = trimmed;
                 }
@@ -368,11 +368,11 @@ namespace Logic_Reinf
                 if (c3)
                 {
                     G.Line extended = main.extendEnd(_V_.X_REINFORCEMENT_MAIN_ANCHOR_LENGTH);
-                    G.Line trimmed = trimLine_baseline(extended, main, _V_.Y_CONCRETE_COVER_2, ref endTrimmerEdge);
+                    G.Line trimmed = trimLine_basepoint(extended, main.Start, _V_.Y_CONCRETE_COVER_2, ref endTrimmerEdge);
                     if (trimmed.Length() < main.Length() + _V_.X_REINFORCEMENT_MAIN_ANCHOR_LENGTH * 0.95) endTrimmed = true;
                     main = trimmed;
                 }
-
+                
                 if (main.Length() <= c1)
                 {
                     if (startTrimmed && endTrimmed)

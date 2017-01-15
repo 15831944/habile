@@ -131,6 +131,16 @@ namespace commands
                     if (parser)
                     {
                         L._V_.X_REINFORCEMENT_MAIN_DIAMETER = (int)number;
+
+                        if (number > 16)
+                        {
+                            L._V_.Y_REINFORCEMENT_MAIN_RADIUS = (int)number * 7;
+                        }
+                        else
+                        {
+                            L._V_.Y_REINFORCEMENT_MAIN_RADIUS = (int)number * 4;
+                        }
+
                     }
                     else
                     {
@@ -150,18 +160,18 @@ namespace commands
                         return false;
                     }
                 }
-                else if (ar.Tag == "PÕHIARMATUURI_RAADIUS")
-                {
-                    if (parser)
-                    {
-                        L._V_.X_REINFORCEMENT_MAIN_RADIUS = (int)number;
-                    }
-                    else
-                    {
-                        ed.WriteMessage("\nSetting invalid - PÕHIARMATUURI_RAADIUS");
-                        return false;
-                    }
-                }
+                //else if (ar.Tag == "PÕHIARMATUURI_RAADIUS")
+                //{
+                //    if (parser)
+                //    {
+                //        L._V_.X_REINFORCEMENT_MAIN_RADIUS = (int)number;
+                //    }
+                //    else
+                //    {
+                //        ed.WriteMessage("\nSetting invalid - PÕHIARMATUURI_RAADIUS");
+                //        return false;
+                //    }
+                //}
                 else if (ar.Tag == "PÕHIARMATUURI_ABISUURUS")
                 {
                     if (parser)
@@ -209,6 +219,15 @@ namespace commands
                     if (parser)
                     {
                         L._V_.X_REINFORCEMENT_STIRRUP_DIAMETER = (int)number;
+
+                        if (number > 16)
+                        {
+                            L._V_.Y_REINFORCEMENT_STIRRUP_RADIUS = (int)number * 7;
+                        }
+                        else
+                        {
+                            L._V_.Y_REINFORCEMENT_STIRRUP_RADIUS = (int)number * 4;
+                        }
                     }
                     else
                     {
@@ -228,7 +247,7 @@ namespace commands
                         return false;
                     }
                 }
-                else if (ar.Tag == "RANGIDE_PIKKUS_LAIUS")
+                else if (ar.Tag == "RANGIDE_ABISUURUS")
                 {
                     if (parser)
                     {
@@ -236,7 +255,7 @@ namespace commands
                     }
                     else
                     {
-                        ed.WriteMessage("\nSetting invalid - RANGIDE_PIKKUS_LAIUS");
+                        ed.WriteMessage("\nSetting invalid - RANGIDE_ABISUURUS");
                         return false;
                     }
                 }
@@ -299,6 +318,18 @@ namespace commands
                         return false;
                     }
                 }
+                else if (ar.Tag == "HORISONTAAL_D_PARAND")
+                {
+                    if (parser)
+                    {
+                        L._V_.X_REINFORCEMENT_SIDE_D_FIX = (int)number;
+                    }
+                    else
+                    {
+                        ed.WriteMessage("\nSetting invalid - HORISONTAAL_D_PARAND");
+                        return false;
+                    }
+                }
 
 
                 //E
@@ -355,6 +386,18 @@ namespace commands
                     else
                     {
                         ed.WriteMessage("\nSetting invalid - VERTIKAAL_D_SAMM");
+                        return false;
+                    }
+                }
+                else if (ar.Tag == "VERTIKAAL_D_PARAND")
+                {
+                    if (parser)
+                    {
+                        L._V_.X_REINFORCEMENT_TOP_D_FIX = (int)number;
+                    }
+                    else
+                    {
+                        ed.WriteMessage("\nSetting invalid - VERTIKAAL_D_PARAND");
                         return false;
                     }
                 }

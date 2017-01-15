@@ -39,7 +39,7 @@ namespace commands
             }
             catch (System.Exception ex)
             {
-                Universal.writeCadMessage("Program stopped with ERROR: " + ex.TargetSite);
+                Universal.writeCadMessage("Program stopped with ERROR:\n" + ex.Message + "\n" + ex.TargetSite);
             }
             finally
             {

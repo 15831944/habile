@@ -27,12 +27,12 @@ namespace Logic_Reinf
             G.Vector o1 = mainLine.getOffsetVector();
             int spacing = _V_.X_REINFORCEMENT_STIRRUP_SPACING;
 
-            double nearEdge = _V_.X_CONCRETE_COVER_1 * 2;
+            double nearEdge = _V_.X_CONCRETE_COVER_1 * 1.2;
             double equalSpacer = ((mainLine.Length() - 2 * nearEdge) % spacing) / 2;
 
             double j = nearEdge + equalSpacer;
-            double len = mainLine.Length() - nearEdge;
-
+            double len = mainLine.Length();
+            
             if ((mainLine.Length() - nearEdge * 2) > spacing)
             {
                 R.Raud_Array rauad = new R.Raud_Array(spacing);
@@ -42,7 +42,7 @@ namespace Logic_Reinf
                 {
                     G.Point start = offsetLine.Start.move(j, d1);
 
-                    G.Point extended = start.move(_V_.Y_STIRRUP_MAX_LENGTH * 2000, o1);
+                    G.Point extended = start.move(_V_.Y_STIRRUP_MAX_LENGTH * 1.1, o1);
                     G.Line temp = new G.Line(start, extended);
 
                     G.Point end = G.Line.getIntersectionPoint(temp, otherOffsetline);
