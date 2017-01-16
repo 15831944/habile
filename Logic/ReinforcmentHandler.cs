@@ -75,6 +75,24 @@ namespace Logic_Reinf
         {
             _V_.Y_REINFORCEMENT_MAIN_MIN_LENGTH = _V_.X_REINFORCEMENT_MAIN_ANCHOR_LENGTH * 2 * 1.2; // A + 2B vs D
 
+            if (_V_.X_REINFORCEMENT_MAIN_DIAMETER > 16)
+            {
+                _V_.Y_REINFORCEMENT_MAIN_RADIUS = _V_.X_REINFORCEMENT_MAIN_DIAMETER * 7;
+            }
+            else
+            {
+                _V_.Y_REINFORCEMENT_MAIN_RADIUS = _V_.X_REINFORCEMENT_MAIN_DIAMETER * 4;
+            }
+
+            if (_V_.X_REINFORCEMENT_STIRRUP_DIAMETER > 16)
+            {
+                _V_.Y_REINFORCEMENT_STIRRUP_RADIUS = _V_.X_REINFORCEMENT_STIRRUP_DIAMETER * 7;
+            }
+            else
+            {
+                _V_.Y_REINFORCEMENT_STIRRUP_RADIUS = _V_.X_REINFORCEMENT_STIRRUP_DIAMETER * 4;
+            }
+
             _V_.Y_STIRRUP_MAX_LENGTH = _V_.X_REINFORCEMENT_STIRRUP_CONSTRAINT * _V_.X_ELEMENT_WIDTH;
             _V_.Y_ELEMENT_WIDTH_COVER = _V_.X_ELEMENT_WIDTH - _V_.X_CONCRETE_COVER_1 * 2;
 

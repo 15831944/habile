@@ -83,8 +83,6 @@ namespace commands
 
         public static void getBlockFromMaster(string blockName, Transaction trans)
         {
-
-
             try
             {
                 Document doc = Application.DocumentManager.MdiActiveDocument;
@@ -94,17 +92,13 @@ namespace commands
                 Editor ed = dm.MdiActiveDocument.Editor;
                 Database sourceDb = new Database(false, true);
 
-                string sourceFileName = @"C:\Users\aleksandr.ess\Dropbox\DMT\Brics_testimine\master.dwg";
+                string sourceFileName = @"C:\Brics_pealeehitus\master.dwg";
                 if (!File.Exists(sourceFileName))
                 {
-                    sourceFileName = @"C:\Brics_pealeehitus\master.dwg";
+                    sourceFileName = @"C:\Users\aleksandr.ess\Dropbox\DMT\Brics_testimine\master.dwg";
                     if (!File.Exists(sourceFileName))
                     {
-                        sourceFileName = @"W:\Alex\Brics_pealeehitus\master.dwg";
-                        if (!File.Exists(sourceFileName))
-                        {
-                            sourceFileName = @"C:\Users\Alex\Dropbox\DMT\Brics_testimine\master.dwg";
-                        }
+                        sourceFileName = @"C:\Users\Alex\Dropbox\DMT\Brics_testimine\master.dwg";
                     }
                 }
 
@@ -133,6 +127,7 @@ namespace commands
             {
                 throw new System.Exception();
             }
+
         }
     }
 }

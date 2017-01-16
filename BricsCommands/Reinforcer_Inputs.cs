@@ -136,16 +136,6 @@ namespace commands
                     if (parser)
                     {
                         L._V_.X_REINFORCEMENT_MAIN_DIAMETER = (int)number;
-
-                        if (number > 16)
-                        {
-                            L._V_.Y_REINFORCEMENT_MAIN_RADIUS = (int)number * 7;
-                        }
-                        else
-                        {
-                            L._V_.Y_REINFORCEMENT_MAIN_RADIUS = (int)number * 4;
-                        }
-
                     }
                     else
                     {
@@ -213,14 +203,6 @@ namespace commands
                     {
                         L._V_.X_REINFORCEMENT_STIRRUP_DIAMETER = (int)number;
 
-                        if (number > 16)
-                        {
-                            L._V_.Y_REINFORCEMENT_STIRRUP_RADIUS = (int)number * 7;
-                        }
-                        else
-                        {
-                            L._V_.Y_REINFORCEMENT_STIRRUP_RADIUS = (int)number * 4;
-                        }
                     }
                     else
                     {

@@ -15,7 +15,12 @@ namespace habile
             if (File.Exists(@"C:\Program Files\Bricsys\BricsCAD V16 en_US\bricscad.exe"))
             {
                 string run = @"C:\Program Files\Bricsys\BricsCAD V16 en_US\bricscad.exe";
+
                 string netload = @"C:\Users\aleksandr.ess\Documents\GitHub\habile\BricsCommands\bin\Debug\BricsCommands.dll";
+                if (!File.Exists(netload))
+                {
+                    netload = @"C:\Users\aleksandr.ess\Documents\GitHub\habile\BricsCommands\bin\Release\BricsCommands.dll";
+                }
                 string dwg = @"C:\Users\aleksandr.ess\Dropbox\DMT\Brics_testimine\training3.dwg";
                 string script = "script1.scr";
 
@@ -26,6 +31,10 @@ namespace habile
             {
                 string run = @"C:\Program Files\Autodesk\AutoCAD 2013\acad.exe";
                 string netload = @"C:\Users\Alex\Documents\GitHub\habile\CadCommands\bin\Debug\CadCommands.dll";
+                if (!File.Exists(netload))
+                {
+                    netload = @"C:\Users\Alex\Documents\GitHub\habile\BricsCommands\bin\Release\CadCommands.dll";
+                }
                 string dwg = @"C:\Users\Alex\Dropbox\DMT\Brics_testimine\training.dwg";
                 string script = "script1.scr";
 
@@ -36,6 +45,10 @@ namespace habile
             {
                 string run = @"C:\Program Files\Autodesk\AutoCAD 2014\acad.exe";
                 string netload = @"C:\Users\Alex\Documents\GitHub\habile\CadCommands\bin\Debug\CadCommands.dll";
+                if (!File.Exists(netload))
+                {
+                    netload = @"C:\Users\Alex\Documents\GitHub\habile\BricsCommands\bin\Release\CadCommands.dll";
+                }
                 string dwg = @"C:\Users\Alex\Dropbox\DMT\Brics_testimine\training.dwg";
                 string script = "script1.scr";
 

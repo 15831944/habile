@@ -26,6 +26,12 @@ namespace commands
 {
     public class CadCommands
     {
+        [CommandMethod("AERDEBUG")]
+        public void debuger()
+        {
+            Reinforcer.main();
+        }
+
         [CommandMethod("AER")]
         public void one()
         {
