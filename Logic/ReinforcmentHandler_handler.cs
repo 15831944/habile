@@ -60,6 +60,9 @@ namespace Logic_Reinf
             G.Line main = new G.Line(mainPoint, mainEnd);
             G.Line side = new G.Line(sideStart, mainPoint);
 
+            if (main.Length() < _V_.Y_REINFORCEMENT_MAIN_RADIUS) return false;
+            if (side.Length() < _V_.Y_REINFORCEMENT_MAIN_RADIUS) return false;
+
             if (denier(main)) return false;
             if (denier(side)) return false;
 

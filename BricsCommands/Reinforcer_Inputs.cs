@@ -84,7 +84,9 @@ namespace commands
             else
             {
                 double number;
-                bool parser = Double.TryParse(ar.TextString, out number);
+                string txt = ar.TextString;
+                txt = txt.Replace('.', ',');
+                bool parser = Double.TryParse(txt, out number);
 
                 //A
                 if (ar.Tag == "ELEMENDI_LAIUS")
@@ -163,18 +165,6 @@ namespace commands
                         return false;
                     }
                 }
-                //else if (ar.Tag == "PÕHIARMATUURI_RAADIUS")
-                //{
-                //    if (parser)
-                //    {
-                //        L._V_.X_REINFORCEMENT_MAIN_RADIUS = (int)number;
-                //    }
-                //    else
-                //    {
-                //        ed.WriteMessage("\nSetting invalid - PÕHIARMATUURI_RAADIUS");
-                //        return false;
-                //    }
-                //}
                 else if (ar.Tag == "PÕHIARMATUURI_ABISUURUS")
                 {
                     if (parser)
