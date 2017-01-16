@@ -19,6 +19,7 @@
 //using L = Logic_Reinf;
 //using T = Logic_Tabler;
 
+<<<<<<< HEAD
 //namespace commands
 //{
 //    static class Checker_Outputs
@@ -35,12 +36,23 @@
 //        {
 //            Document doc = Application.DocumentManager.MdiActiveDocument;
 //            Database db = doc.Database;
+=======
+namespace commands
+{
+    static class Checker_Outputs
+    {
+        public static void main(List<T.ErrorPoint> errors)
+        {
+            Document doc = Application.DocumentManager.MdiActiveDocument;
+            Database db = doc.Database;
+>>>>>>> f9e896c1ac9c93a01b3c4525c361f2086cbb152b
 
 //            Transaction trans = db.TransactionManager.StartTransaction();
 //            try
 //            {
 //                errorHandler(errors, trans);
 
+<<<<<<< HEAD
 //                trans.Commit();
 //            }
 //            catch (System.Exception ex)
@@ -70,6 +82,37 @@
 //            writeCadMessage(" ");
 //            writeCadMessage("VIGADE ARV - " + errors.Count.ToString());
 //        }
+=======
+                trans.Commit();
+            }
+            catch (System.Exception ex)
+            {
+                Universal.writeCadMessage("Program stopped with ERROR:\n" + ex.Message + "\n" + ex.TargetSite);
+            }
+            finally
+            {
+                trans.Dispose();
+            }
+        }
+
+        private static void errorHandler(List<T.ErrorPoint> errors, Transaction trans)
+        {
+            Universal.writeCadMessage(" ");
+            Universal.writeCadMessage("----- VIGADE LOETELU ALGUS -----");
+            foreach (T.ErrorPoint e in errors)
+            {
+                double scale = e.Scale;
+                Point3d insertPoint = new Point3d(e.IP.X, e.IP.Y, 0);
+                createCircle(5 * scale, insertPoint, trans);
+                createCircle(40 * scale, insertPoint, trans);
+
+                Universal.writeCadMessage(e.ErrorMessage);
+            }
+            Universal.writeCadMessage("----- VIGADE LOETELU LÕPP -----");
+            Universal.writeCadMessage(" ");
+            Universal.writeCadMessage("VIGADE ARV - " + errors.Count.ToString());
+        }
+>>>>>>> f9e896c1ac9c93a01b3c4525c361f2086cbb152b
 
 //        private static void createCircle(double radius, Point3d ip, Transaction trans)
 //        {
