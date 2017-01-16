@@ -128,33 +128,35 @@ namespace Logic_Reinf
             return trimmedLine;
         }
 
-        private G.Line trimLine_basepoint(G.Line extendedLine, G.Point fixedPoint, double offset, ref G.Edge trimmer)
+        private G.Line trimLine_basepoint(G.Line extendedLine, G.Point fixedPoint, double offset, G.Edge e, ref G.Edge trimmer)
         {
-            G.Line trimmedLine = extendedLine;
+            G.Line trimmedLine = new G.Line(extendedLine.Start, extendedLine.End);
 
             foreach (G.Edge eg in allEdges)
             {
+                if (eg == e) continue;
+
                 G.Line offsetLine = eg.edgeOffset(_V_.X_CONCRETE_COVER_1 - 5, 0, 0);
                 if (G.Line.hasIntersection(extendedLine, offsetLine))
                 {
                     G.Line interLine = eg.edgeOffset(offset, 0, 0);
 
-                    G.Point ip = G.Line.getIntersectionPoint(extendedLine, interLine);
+                    G.Point ip = G.Line.getIntersectionPoint(trimmedLine, interLine);
 
                     if (fixedPoint == extendedLine.End)
                     {
-                        extendedLine = new G.Line(ip, extendedLine.End);
+                        trimmedLine = new G.Line(ip, extendedLine.End);
                     }
                     else
                     {
-                        extendedLine = new G.Line(extendedLine.Start, ip);
+                        trimmedLine = new G.Line(extendedLine.Start, ip);
                     }
 
                     trimmer = eg;
                 }
             }
 
-            return extendedLine;
+            return trimmedLine;
         }
 
         private void diagonalRotater(G.Point centerPoint, G.Vector v3, double n, double m, ref G.Line tester)

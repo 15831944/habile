@@ -35,7 +35,7 @@ namespace habile
                 {
                     netload = @"C:\Users\Alex\Documents\GitHub\habile\BricsCommands\bin\Release\CadCommands.dll";
                 }
-                string dwg = @"C:\Users\Alex\Dropbox\DMT\Brics_testimine\training.dwg";
+                string dwg = @"C:\Users\Alex\Dropbox\DMT\Brics_testimine\training3.dwg";
                 string script = "script1.scr";
 
                 createScriptFile(script, netload, dwg);

@@ -45,10 +45,9 @@ namespace Geometry
         public bool Equals(Point other)
         {
             if (other == null) return false;
-            double dX = Math.Abs(this.X - other.X);
-            double dY = Math.Abs(this.Y - other.Y);
+            double dL = distanceTo(other);
 
-            return (dX < _Variables.EQUALS_TOLERANCE && dY < _Variables.EQUALS_TOLERANCE);
+            return (dL < _Variables.EQUALS_TOLERANCE);
         }
 
         public override bool Equals(object obj)
@@ -76,7 +75,7 @@ namespace Geometry
 
         public override string ToString()
         {
-            string str = "X: " + X.ToString("f4") + "  Y: " + Y.ToString("f4");
+            string str = "X: " + X.ToString("f2") + "  Y: " + Y.ToString("f2");
 
             return str;
         }

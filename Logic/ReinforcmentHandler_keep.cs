@@ -97,7 +97,7 @@ namespace Logic_Reinf
                 knownUniqueReinforcement.Remove(old2);
             }
 
-            if (!knownReinforcement.Contains(nw))
+            if (!knownUniqueReinforcement.Contains(nw))
             {
                 knownUniqueReinforcement.Add(nw);
             }

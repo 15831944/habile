@@ -58,7 +58,8 @@ namespace Geometry
         {
             Vector dir = -1 * getDirectionVector();
             Point new_start = Start.move(dist, dir);
-            Line new_line = new Line(new_start, End);
+            Point new_end = new Point(End.X, End.Y);
+            Line new_line = new Line(new_start, new_end);
 
             return new_line;
         }
@@ -67,7 +68,8 @@ namespace Geometry
         {
             Vector dir = getDirectionVector();
             Point new_end = End.move(dist, dir);
-            Line new_line = new Line(Start, new_end);
+            Point new_start = new Point(Start.X, Start.Y);
+            Line new_line = new Line(new_start, new_end);
 
             return new_line;
         }
@@ -75,8 +77,8 @@ namespace Geometry
         public Line extendDouble(double dist)
         {
             Vector dir = getDirectionVector();
-            Point new_end = End.move(dist, dir);
             Point new_start = Start.move(dist, -1 * dir);
+            Point new_end = End.move(dist, dir);
             Line new_line = new Line(new_start, new_end);
 
             return new_line;
