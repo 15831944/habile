@@ -35,7 +35,7 @@ namespace commands
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show("viga" + ex.Message);
+                MessageBox.Show("Viga\n" + ex.Message);
             }
         }
 
@@ -49,7 +49,7 @@ namespace commands
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show("viga" + ex.Message);
+                MessageBox.Show("Viga\n" + ex.Message);
             }
         }
 
@@ -63,7 +63,7 @@ namespace commands
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show("viga" + ex.Message);
+                MessageBox.Show("Viga\n" + ex.Message);
             }
         }
 
@@ -77,22 +77,7 @@ namespace commands
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show("viga" + ex.Message);
-            }
-        }
-
-
-        [CommandMethod("BB")]
-        public void five()
-        {
-            try
-            {
-                Tabler program = new Tabler();
-                program.main4();
-            }
-            catch (System.Exception ex)
-            {
-                MessageBox.Show("viga" + ex.Message);
+                MessageBox.Show("Viga\n" + ex.Message);
             }
         }
     }

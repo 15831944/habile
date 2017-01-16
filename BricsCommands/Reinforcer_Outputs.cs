@@ -45,7 +45,7 @@ namespace commands
             }
             catch (System.Exception ex)
             {
-                Universal.writeCadMessage("Program stopped with ERROR: " + ex.TargetSite);
+                Universal.writeCadMessage("Program stopped with ERROR:\n" + ex.Message + "\n" + ex.TargetSite);
             }
             finally
             {
@@ -58,7 +58,6 @@ namespace commands
             foreach (R.Raud re in reinf)
             {
                 insertReinforcementSingle(re, false, trans);
-                //insertReinforcmentMark(rea.ToString(), re.IP, trans);
                 insertReinforcmentMark2(re.ToString(), re.IP, trans);
             }
         }
@@ -73,7 +72,7 @@ namespace commands
                     {
                         insertReinforcementSingle(re, true, trans);
                     }
-                    //insertReinforcmentMark(rea.ToString(), rea.IP, trans);
+
                     insertReinforcmentMark2(rea.ToString(), rea.IP, trans);
                 }
             }
@@ -102,28 +101,6 @@ namespace commands
             }
         }
 
-        private static void insertReinforcmentMark(string mark, G.Point IP, Transaction trans)
-        {
-            string layerName = "K023TL";
-
-            Document doc = Application.DocumentManager.MdiActiveDocument;
-            Database db = doc.Database;
-
-            BlockTableRecord curSpace = trans.GetObject(db.CurrentSpaceId, OpenMode.ForWrite) as BlockTableRecord;
-            Point3d insertPointText = new Point3d(IP.X, IP.Y, 0);
-            using (MText reinf_label = new MText())
-            {
-                reinf_label.SetDatabaseDefaults();
-                reinf_label.Location = insertPointText;
-                reinf_label.TextHeight = 2.5 * L._V_.Z_DRAWING_SCALE;
-                reinf_label.Layer = layerName;
-                reinf_label.Contents = mark;
-
-                curSpace.AppendEntity(reinf_label);
-                trans.AddNewlyCreatedDBObject(reinf_label, true);
-            }
-        }
-
         private static void insertReinforcmentMark2(string mark, G.Point IP, Transaction trans)
         {
             string layerName = "K023TL";
@@ -143,14 +120,14 @@ namespace commands
             BlockTable blockTable = trans.GetObject(db.BlockTableId, OpenMode.ForRead) as BlockTable;
             if (!blockTable.Has("_NONE"))
             {
-                Application.SetSystemVariable("DIMBLK", "_NONE");
+                Autodesk.AutoCAD.ApplicationServices.Application.SetSystemVariable("DIMBLK", "_NONE");
             }
             leader.ArrowSymbolId = blockTable["_NONE"];
 
             leader.SetTextAttachmentType(TextAttachmentType.AttachmentBottomOfTopLine, LeaderDirectionType.LeftLeader); // Left attachment
             leader.SetTextAttachmentType(TextAttachmentType.AttachmentBottomOfTopLine, LeaderDirectionType.RightLeader); // Right attachment
             leader.EnableLanding = false;
-            leader.LeaderLineColor = Teigha.Colors.Color.FromColorIndex(Teigha.Colors.ColorMethod.None, 155);
+            leader.LeaderLineColor = Autodesk.AutoCAD.Colors.Color.FromColorIndex(Autodesk.AutoCAD.Colors.ColorMethod.None, 155);
             leader.LandingGap = 0;
             leader.ContentType = ContentType.MTextContent;
 

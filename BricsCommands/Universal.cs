@@ -69,11 +69,11 @@ namespace commands
             newLayer.Name = layerName;
             if (layerName == "Armatuur")
             {
-                newLayer.Color = Teigha.Colors.Color.FromColorIndex(Teigha.Colors.ColorMethod.None, 4);
+                newLayer.Color = Autodesk.AutoCAD.Colors.Color.FromColorIndex(Autodesk.AutoCAD.Colors.ColorMethod.None, 4);
             }
             else
             {
-                newLayer.Color = Teigha.Colors.Color.FromColorIndex(Teigha.Colors.ColorMethod.None, 6);
+                newLayer.Color = Autodesk.AutoCAD.Colors.Color.FromColorIndex(Autodesk.AutoCAD.Colors.ColorMethod.None, 6);
             }
 
             ObjectId layerId = lt.Add(newLayer);
@@ -109,7 +109,7 @@ namespace commands
                 sourceDb.ReadDwgFile(sourceFileName, System.IO.FileShare.Read, true, "");
                 ObjectIdCollection blockIds = new ObjectIdCollection();
 
-                Teigha.DatabaseServices.TransactionManager tm = sourceDb.TransactionManager;
+                Autodesk.AutoCAD.DatabaseServices.TransactionManager tm = sourceDb.TransactionManager;
                 using (Transaction myT = tm.StartTransaction())
                 {
                     BlockTable bt = (BlockTable)tm.GetObject(sourceDb.BlockTableId, OpenMode.ForRead, false);
