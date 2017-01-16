@@ -34,7 +34,7 @@ namespace commands
                 MessageBox.Show("Viga\n" + ex.Message);
             }
         }
-    
+
         [CommandMethod("AEB")]
         public void two()
         {
