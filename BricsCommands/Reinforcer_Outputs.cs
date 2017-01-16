@@ -120,14 +120,14 @@ namespace commands
             BlockTable blockTable = trans.GetObject(db.BlockTableId, OpenMode.ForRead) as BlockTable;
             if (!blockTable.Has("_NONE"))
             {
-                Autodesk.AutoCAD.ApplicationServices.Application.SetSystemVariable("DIMBLK", "_NONE");
+                Application.SetSystemVariable("DIMBLK", "_NONE");
             }
             leader.ArrowSymbolId = blockTable["_NONE"];
 
             leader.SetTextAttachmentType(TextAttachmentType.AttachmentBottomOfTopLine, LeaderDirectionType.LeftLeader); // Left attachment
             leader.SetTextAttachmentType(TextAttachmentType.AttachmentBottomOfTopLine, LeaderDirectionType.RightLeader); // Right attachment
             leader.EnableLanding = false;
-            leader.LeaderLineColor = Autodesk.AutoCAD.Colors.Color.FromColorIndex(Autodesk.AutoCAD.Colors.ColorMethod.None, 155);
+            leader.LeaderLineColor = Teigha.Colors.Color.FromColorIndex(Teigha.Colors.ColorMethod.None, 155);
             leader.LandingGap = 0;
             leader.ContentType = ContentType.MTextContent;
 
