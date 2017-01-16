@@ -9,8 +9,7 @@ namespace Logic_Reinf
     public static class _V_
     {
         //taken constants
-        public static double Z_DRAWING_SCALE = 40;
-        
+        public static double Z_DRAWING_SCALE = 40;        
 
         //given constants
         public static int X_ELEMENT_WIDTH = 200;

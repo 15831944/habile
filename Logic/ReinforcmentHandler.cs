@@ -51,6 +51,8 @@ namespace Logic_Reinf
 
         public void main(ref List<R.Raud> reinf, ref List<R.Raud_Array> reinf_array, ref List<R.Raud> unique_reinf)
         {
+            setCalculatedParameters();
+
             create_all_main_reinforcement();
             create_all_side_reinforcement();
 
@@ -67,6 +69,18 @@ namespace Logic_Reinf
             //List<G.Corner> setCornerDebug = allCorners.Where(x => setCorners.Keys.Contains(x)).ToList();
             //Drawing_Box visu1 = new Drawing_Box(r, emptyEdgesDebug, emptyCornersDebug, setEdgesDebug, setCornerDebug, reinf_geometry_debug);
             //visu1.Show();
+        }
+
+        private void setCalculatedParameters()
+        {
+            _V_.Y_REINFORCEMENT_MAIN_MIN_LENGTH = _V_.X_REINFORCEMENT_MAIN_ANCHOR_LENGTH * 2 * 1.2; // A + 2B vs D
+
+            _V_.Y_STIRRUP_MAX_LENGTH = _V_.X_REINFORCEMENT_STIRRUP_CONSTRAINT * _V_.X_ELEMENT_WIDTH;
+            _V_.Y_ELEMENT_WIDTH_COVER = _V_.X_ELEMENT_WIDTH - _V_.X_CONCRETE_COVER_1 * 2;
+
+            _V_.Y_CONCRETE_COVER_DELTA = (int)(Math.Ceiling(_V_.X_REINFORCEMENT_MAIN_DIAMETER / 5.0 + 0.01) * 5) + 5;
+            _V_.Y_CONCRETE_COVER_2 = _V_.X_CONCRETE_COVER_1 + _V_.Y_CONCRETE_COVER_DELTA;
+            _V_.Y_CONCRETE_COVER_3 = _V_.Y_CONCRETE_COVER_2 + _V_.Y_CONCRETE_COVER_DELTA;
         }
 
         private void create_all_side_reinforcement()

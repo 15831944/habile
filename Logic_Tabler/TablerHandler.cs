@@ -26,12 +26,29 @@ namespace Logic_Tabler
                     f.setInvalid("WARNING - Tabel on juba koostatud");
                     continue;
                 }
+                if (f._marks.Count == 0)
+                {
+                    f.setInvalid("WARNING - Ei leia ühtegi raua viidet");
+                    continue;
+                }
+
+                string defaultMaterial = "B500B";
 
                 foreach (Bending b in f._bendings)
                 {
                     TableRow r = new TableRow(b);
                     f.addRow(r);
                 }
+
+                try
+                {
+                    defaultMaterial = f._rows.GroupBy(i => i.Material).OrderByDescending(grp => grp.Count()).Select(grp => grp.Key).First();
+                }
+                catch
+                {
+
+                }
+                
 
                 foreach (ReinforcementMark m in f._marks)
                 {
@@ -52,7 +69,7 @@ namespace Logic_Tabler
                         {
                             Bending newBending = new Bending(m.IP, "Raud_A");
                             newBending.A = m.Other;
-                            newBending.Material = "B500B";
+                            newBending.Material = defaultMaterial;
                             newBending.Position = m.Position;
 
                             if (newBending.validator())
