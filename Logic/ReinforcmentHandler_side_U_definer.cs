@@ -33,7 +33,7 @@ namespace Logic_Reinf
             double j = nearEdge + equalSpacer;
             double len = mainLine.Length();
             
-            if ((mainLine.Length() - nearEdge * 2) > spacing)
+            if ((len - nearEdge * 2) > spacing)
             {
                 R.Raud_Array rauad = new R.Raud_Array(spacing);
                 knownArrayReinforcement.Add(rauad);

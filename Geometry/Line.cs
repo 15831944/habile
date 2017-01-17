@@ -34,6 +34,15 @@ namespace Geometry
             }
         }
 
+        public Line Copy()
+        {
+            Point new_start = new Point(Start.X, Start.Y);
+            Point new_end = new Point(End.X, End.Y);
+            Line new_line = new Line(new_start, new_end);
+
+            return new_line;
+        }
+
         public double Length()
         {
             double dx = End.X - Start.X;

@@ -303,27 +303,30 @@ namespace Logic_Reinf
                 bool c2 = e.StartCorner.Angle > Math.PI;
                 bool c3 = e.EndCorner.Angle > Math.PI;
 
-                G.Line main = e.edgeOffset(_V_.X_CONCRETE_COVER_1, _V_.X_CONCRETE_COVER_1, _V_.X_CONCRETE_COVER_1);
+                G.Line mainStart = e.edgeOffset(_V_.X_CONCRETE_COVER_1, _V_.X_CONCRETE_COVER_1, 0);
 
                 bool startTrimmed = false;
                 G.Edge startTrimmerEdge = null;
                 if (c2)
                 {
-                    G.Line extended = main.extendStart(_V_.X_REINFORCEMENT_MAIN_ANCHOR_LENGTH);
-                    G.Line trimmed = trimLine_baseline(extended, main, _V_.Y_CONCRETE_COVER_2, ref startTrimmerEdge);
-                    if (trimmed.Length() < main.Length() + _V_.X_REINFORCEMENT_MAIN_ANCHOR_LENGTH * 0.95) startTrimmed = true;
-                    main = trimmed;
+                    G.Line extended = mainStart.extendStart(_V_.X_REINFORCEMENT_MAIN_ANCHOR_LENGTH);
+                    G.Line trimmed = trimLine_baseline(extended, mainStart, _V_.Y_CONCRETE_COVER_2, ref startTrimmerEdge);
+                    if (trimmed.Length() < mainStart.Length() + _V_.X_REINFORCEMENT_MAIN_ANCHOR_LENGTH * 0.95) startTrimmed = true;
+                    mainStart = trimmed;
                 }
 
+                G.Line mainEnd = e.edgeOffset(_V_.X_CONCRETE_COVER_1, 0, _V_.X_CONCRETE_COVER_1);
                 bool endTrimmed = false;
                 G.Edge endTrimmerEdge = null;
                 if (c3)
                 {
-                    G.Line extended = main.extendEnd(_V_.X_REINFORCEMENT_MAIN_ANCHOR_LENGTH);
-                    G.Line trimmed = trimLine_baseline(extended, main, _V_.Y_CONCRETE_COVER_2, ref endTrimmerEdge);
-                    if (trimmed.Length() < main.Length() + _V_.X_REINFORCEMENT_MAIN_ANCHOR_LENGTH * 0.95) endTrimmed = true;
-                    main = trimmed;
+                    G.Line extended = mainEnd.extendEnd(_V_.X_REINFORCEMENT_MAIN_ANCHOR_LENGTH);
+                    G.Line trimmed = trimLine_baseline(extended, mainEnd, _V_.Y_CONCRETE_COVER_2, ref endTrimmerEdge);
+                    if (trimmed.Length() < mainEnd.Length() + _V_.X_REINFORCEMENT_MAIN_ANCHOR_LENGTH * 0.95) endTrimmed = true;
+                    mainEnd = trimmed;
                 }
+
+                G.Line main = new G.Line(mainStart.Start, mainEnd.End);
 
                 if (main.Length() > c1)
                 {

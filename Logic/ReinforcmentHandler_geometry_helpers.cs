@@ -102,7 +102,7 @@ namespace Logic_Reinf
 
         private G.Line trimLine_baseline(G.Line extendedLine, G.Line startLine, double offset, ref G.Edge trimmer)
         {
-            G.Line trimmedLine = extendedLine;
+            G.Line trimmedLine = extendedLine.Copy();
 
             foreach (G.Edge eg in allEdges)
             {
@@ -130,7 +130,7 @@ namespace Logic_Reinf
 
         private G.Line trimLine_basepoint(G.Line extendedLine, G.Point fixedPoint, double offset, G.Edge e, ref G.Edge trimmer)
         {
-            G.Line trimmedLine = new G.Line(extendedLine.Start, extendedLine.End);
+            G.Line trimmedLine = extendedLine.Copy();
 
             foreach (G.Edge eg in allEdges)
             {

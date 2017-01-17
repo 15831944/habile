@@ -41,13 +41,13 @@ namespace Logic_Reinf
                 parand = _V_.X_REINFORCEMENT_TOP_D_FIX;
             }
 
-            double lineTrim = _V_.X_CONCRETE_COVER_1 * 2.5;
-            double equalSpacer = ((ln.Length() - 2 * lineTrim) % spacing) / 2;
+            double nearEdge = _V_.X_CONCRETE_COVER_1 * 2.5;
+            double equalSpacer = ((ln.Length() - 2 * nearEdge) % spacing) / 2;
 
-            double j = lineTrim + equalSpacer;
+            double j = nearEdge + equalSpacer;
             double len = ln.Length();
 
-            if (len > spacing)
+            if ((len - nearEdge * 2) > spacing)
             {
                 R.Raud_Array rauad = new R.Raud_Array(spacing);
                 knownArrayReinforcement.Add(rauad);
