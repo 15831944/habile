@@ -17,7 +17,7 @@ namespace Logic_Reinf
         {
             G.Line main = new G.Line(mainPoint, mainEnd);
 
-            reinf_geometry_debug.Add(main);
+            //reinf_geometry_debug.Add(main);
 
             R.A_Raud reinf = new R.A_Raud(main, _V_.X_REINFORCEMENT_NUMBER, _V_.X_REINFORCEMENT_MAIN_DIAMETER, _V_.X_REINFORCEMENT_MARK);
             keep(reinf, null, null, null);
@@ -38,7 +38,19 @@ namespace Logic_Reinf
             return true;
         }
 
-        //A HANDLE
+        public bool A_handler_limit(G.Point mainPoint, G.Point mainEnd, G.Edge e, G.Corner c, int d)
+        {
+            G.Line main = new G.Line(mainPoint, mainEnd);
+
+            if (denier(main)) return false;
+            if (main.Length() < _V_.Y_REINFORCEMENT_MAIN_RADIUS * 2) return false;
+
+            //reinf_geometry_debug.Add(main);
+
+            R.A_Raud reinf = new R.A_Raud(main, _V_.X_REINFORCEMENT_NUMBER, d, _V_.X_REINFORCEMENT_MARK);
+            keep(reinf, e, c, null);
+            return true;
+        }
 
         private void A_handler_replace(R.A_Raud a, R.A_Raud b)
         {
@@ -88,26 +100,36 @@ namespace Logic_Reinf
             return true;
         }
 
-        private void B_handler_replace(R.B_Raud a, R.B_Raud b)
+        private bool B_handler_replace(R.B_Raud a, R.B_Raud b)
         {
             R.D_Raud new_reinf = R.B_Raud.mergeTwoRebar(a, b);
 
-            if (denier(new_reinf.makeMainLine())) return;
-            if (denier(new_reinf.makeSide1Line())) return;
-            if (denier(new_reinf.makeSide2Line())) return;
+            if (denier(new_reinf.makeMainLine())) return false;
+            if (denier(new_reinf.makeSide1Line())) return false;
+            if (denier(new_reinf.makeSide2Line())) return false;
+
+            if (new_reinf.A < _V_.Y_REINFORCEMENT_MAIN_RADIUS) return false;
+            if (new_reinf.B2 < _V_.Y_REINFORCEMENT_MAIN_RADIUS * 2.01) return false;
+            if (new_reinf.C < _V_.Y_REINFORCEMENT_MAIN_RADIUS) return false;
 
             keep_replace(new_reinf, a, b);
+            return true;
         }
 
-        private void C_handler_replace(R.C_Raud a, R.C_Raud b)
+        private bool C_handler_replace(R.C_Raud a, R.C_Raud b)
         {
             R.E_Raud new_reinf = R.C_Raud.mergeTwoRebar(a, b);
 
-            if (denier(new_reinf.makeMainLine())) return;
-            if (denier(new_reinf.makeSide1Line())) return;
-            if (denier(new_reinf.makeSide2Line())) return;
+            if (denier(new_reinf.makeMainLine())) return false;
+            if (denier(new_reinf.makeSide1Line())) return false;
+            if (denier(new_reinf.makeSide2Line())) return false;
+
+            if (new_reinf.A < _V_.Y_REINFORCEMENT_MAIN_RADIUS) return false;
+            if (new_reinf.B2 < _V_.Y_REINFORCEMENT_MAIN_RADIUS * 2.01) return false;
+            if (new_reinf.C < _V_.Y_REINFORCEMENT_MAIN_RADIUS) return false;
 
             keep_replace(new_reinf, a, b);
+            return true;
         }
 
         //D HANDLE
@@ -118,6 +140,10 @@ namespace Logic_Reinf
             G.Line side2 = new G.Line(mainEnd, side2End);
 
             if (main.Length() < _V_.Y_REINFORCEMENT_MAIN_RADIUS * 2) return false;
+
+            reinf_geometry_debug.Add(main);
+            reinf_geometry_debug.Add(side1);
+            reinf_geometry_debug.Add(side2);
 
             if (denier(main)) return false;
             if (denier(side1)) return false;

@@ -16,12 +16,47 @@ namespace Logic_Reinf
         {
             foreach (G.Edge eg in allEdges)
             {
-                G.Line offsetLine = eg.edgeOffset(_V_.X_CONCRETE_COVER_1 - 5, 0, 0);
+                double o = _V_.X_CONCRETE_COVER_1 - 5;
+                G.Line offsetLine = eg.edgeOffset(o, o, o);
                 if (G.Line.hasIntersection(final, offsetLine))
                 {
                     return true;
                 }
             }
+            return false;
+        }
+
+        private bool denier(G.Line final, G.Edge e)
+        {
+            foreach (G.Edge eg in allEdges)
+            {
+                if (eg == e) continue;
+
+                double o = _V_.X_CONCRETE_COVER_1 - 5;
+                G.Line offsetLine = eg.edgeOffset(o, o, o);
+                if (G.Line.hasIntersection(final, offsetLine))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private bool narrow_denier(G.Edge e)
+        {
+            G.Line main = e.Line.Copy();
+
+            G.Vector v1 = main.getOffsetVector();
+            G.Point cp = main.getCenterPoint();
+            G.Point ep1 = main.Start.move(_V_.X_CONCRETE_COVER_1 * 2, v1);
+            G.Point ep2 = cp.move(_V_.X_CONCRETE_COVER_1 * 2, v1);
+            G.Point ep3 = main.End.move(_V_.X_CONCRETE_COVER_1 * 2, v1);
+            G.Line testLine1 = new G.Line(main.Start, ep1);
+            G.Line testLine2 = new G.Line(cp, ep2);
+            G.Line testLine3 = new G.Line(main.End, ep3);
+
+            if (denier(testLine1, e) && denier(testLine2, e) && denier(testLine3, e)) return true;
+
             return false;
         }
 
@@ -106,10 +141,11 @@ namespace Logic_Reinf
 
             foreach (G.Edge eg in allEdges)
             {
-                G.Line offsetLine = eg.edgeOffset(_V_.X_CONCRETE_COVER_1 - 5, 0, 0);
+                double o = _V_.X_CONCRETE_COVER_1 - 5;
+                G.Line offsetLine = eg.edgeOffset(o, o, o);
                 if (G.Line.hasIntersection(trimmedLine, offsetLine))
                 {
-                    G.Line interLine = eg.edgeOffset(offset, 0, 0);
+                    G.Line interLine = eg.edgeOffset(offset, offset, offset);
                     G.Point ip = G.Line.getIntersectionPoint(trimmedLine, interLine);
 
                     if (ip.distanceTo(extendedLine.Start) < ip.distanceTo(extendedLine.End))
@@ -136,10 +172,11 @@ namespace Logic_Reinf
             {
                 if (eg == e) continue;
 
-                G.Line offsetLine = eg.edgeOffset(_V_.X_CONCRETE_COVER_1 - 5, 0, 0);
-                if (G.Line.hasIntersection(extendedLine, offsetLine))
+                double o = _V_.X_CONCRETE_COVER_1 - 5;
+                G.Line offsetLine = eg.edgeOffset(o, o, o);
+                if (G.Line.hasIntersection(trimmedLine, offsetLine))
                 {
-                    G.Line interLine = eg.edgeOffset(offset, 0, 0);
+                    G.Line interLine = eg.edgeOffset(offset, offset, offset);
 
                     G.Point ip = G.Line.getIntersectionPoint(trimmedLine, interLine);
 

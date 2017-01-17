@@ -39,11 +39,6 @@ namespace Logic_Reinf
             }
 
             knownReinforcement.Add(reinf);
-
-            if (!knownUniqueReinforcement.Contains(reinf))
-            {
-                knownUniqueReinforcement.Add(reinf);
-            }
         }
 
         private void keep_array(R.Raud reinf, LineSegment ls)
@@ -54,11 +49,6 @@ namespace Logic_Reinf
                 {
                     setLineSegment.Add(ls);
                 }
-            }
-
-            if (!knownUniqueReinforcement.Contains(reinf))
-            {
-                knownUniqueReinforcement.Add(reinf);
             }
         }
 
@@ -86,21 +76,6 @@ namespace Logic_Reinf
             }
 
             knownReinforcement.Add(nw);
-
-            if (!knownReinforcement.Contains(old1))
-            {
-                knownUniqueReinforcement.Remove(old1);
-            }
-
-            if (!knownReinforcement.Contains(old2))
-            {
-                knownUniqueReinforcement.Remove(old2);
-            }
-
-            if (!knownUniqueReinforcement.Contains(nw))
-            {
-                knownUniqueReinforcement.Add(nw);
-            }
         }
 
         private void keep_remove(R.Raud a)
@@ -115,11 +90,32 @@ namespace Logic_Reinf
                     knownReinforcement.RemoveAt(i);
                 }
             }
+        }
 
-            if (!knownReinforcement.Contains(a))
+        private List<R.Raud> get_unique()
+        {
+            List<R.Raud> unique = new List<R.Raud>();
+            
+            foreach (R.Raud current in knownReinforcement)
             {
-                knownUniqueReinforcement.Remove(a);
+                if (!unique.Contains(current))
+                {
+                    unique.Add(current);
+                }
             }
+
+            foreach (R.Raud_Array current_array in knownArrayReinforcement)
+            {
+                foreach (R.Raud current in current_array.array)
+                {
+                    if (!unique.Contains(current))
+                    {
+                        unique.Add(current);
+                    }
+                }
+            }
+
+            return unique;
         }
 
         private static void ReplaceByValue<TKey, TValue>(Dictionary<TKey, TValue> dictionary, TValue someValue, TValue someNewValue)

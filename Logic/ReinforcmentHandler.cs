@@ -84,14 +84,14 @@ namespace Logic_Reinf
         public void main(ref List<R.Raud> reinf, ref List<R.Raud_Array> reinf_array, ref List<R.Raud> unique_reinf)
         {
             create_all_main_reinforcement();
-            create_all_side_reinforcement();
+            //create_all_side_reinforcement();
 
-            //Drawing_Box visu2 = new Drawing_Box(r, reinf_geometry_debug);
-            //visu2.Show();
+            Drawing_Box visu2 = new Drawing_Box(r, reinf_geometry_debug);
+            visu2.Show();
 
             reinf = knownReinforcement;
             reinf_array = knownArrayReinforcement;
-            unique_reinf = knownUniqueReinforcement;
+            unique_reinf = get_unique();
 
             //List<G.Edge> emptyEdgesDebug = allEdges.Where(x => !setEdges.Keys.Contains(x)).ToList();
             //List<G.Corner> emptyCornersDebug = allCorners.Where(x => !setCorners.Keys.Contains(x)).ToList();
@@ -107,28 +107,37 @@ namespace Logic_Reinf
             merge_A();
             remove_short_A();
 
-            create_valid_D();
-            create_extended_B(); // Corner > Math.Pi
-            merge_B();
-            merge_C();
+            //create_valid_D();
+            //create_extended_B(); // Corner > Math.Pi
+            //merge_B();
+            //merge_C();
 
-            trimmed_long_A();
+            //trimmed_long_A();
 
-            create_valid_D();
-            create_extended_B(); // Corner > Math.Pi
-            create_long_B();
-            merge_A();
-            merge_B();
-            merge_C();
+            //create_valid_D();
+            //create_extended_B(); // Corner > Math.Pi
+            //create_long_B();
+            //merge_A();
+            //merge_B();
+            //merge_C();
 
             trimmed_short_A();
 
-            create_valid_B();
-            create_diagonal_A();
+            //create_valid_D();
+            //create_extended_B(); // Corner > Math.Pi
+            //create_long_B();
+            //merge_A();
+            //merge_B();
+            //merge_C();
 
-            merge_A();
-            merge_B();
-            merge_C();
+            //create_valid_B();
+            //create_diagonal_A();
+
+            //create_limited_A();
+
+            //merge_A();
+            //merge_B();
+            //merge_C();
         }
 
         private void create_all_side_reinforcement()
@@ -163,6 +172,8 @@ namespace Logic_Reinf
             for (int i = emptyEdges.Count - 1; i >= 0; i--)
             {
                 G.Edge e = emptyEdges[i];
+                if (narrow_denier(e)) continue;
+
                 G.Line main = e.edgeOffset(_V_.X_CONCRETE_COVER_1, _V_.X_CONCRETE_COVER_1, _V_.X_CONCRETE_COVER_1);
 
                 double c1 = _V_.Y_REINFORCEMENT_MAIN_MIN_LENGTH;
@@ -173,6 +184,28 @@ namespace Logic_Reinf
                 if (c3) main = main.extendEnd(_V_.X_REINFORCEMENT_MAIN_ANCHOR_LENGTH);
 
                 A_handler(main.Start, main.End, e, null, _V_.X_REINFORCEMENT_MAIN_DIAMETER);
+            }
+        }
+
+        private void create_limited_A()
+        {
+            emptyEdges = allEdges.Where(x => !setEdges.Keys.Contains(x)).ToList();
+
+            for (int i = emptyEdges.Count - 1; i >= 0; i--)
+            {
+                G.Edge e = emptyEdges[i];
+                if (narrow_denier(e)) continue;
+
+                G.Line main = e.edgeOffset(_V_.X_CONCRETE_COVER_1, _V_.X_CONCRETE_COVER_1, _V_.X_CONCRETE_COVER_1);
+
+                double c1 = _V_.Y_REINFORCEMENT_MAIN_MIN_LENGTH;
+                bool c2 = e.StartCorner.Angle > Math.PI;
+                bool c3 = e.EndCorner.Angle > Math.PI;
+
+                if (c2) main = main.extendStart(_V_.X_REINFORCEMENT_MAIN_ANCHOR_LENGTH);
+                if (c3) main = main.extendEnd(_V_.X_REINFORCEMENT_MAIN_ANCHOR_LENGTH);
+
+                A_handler_limit(main.Start, main.End, e, null, _V_.X_REINFORCEMENT_MAIN_DIAMETER);
             }
         }
 
@@ -298,35 +331,37 @@ namespace Logic_Reinf
             for (int i = emptyEdges.Count - 1; i >= 0; i--)
             {
                 G.Edge e = emptyEdges[i];
+                if (narrow_denier(e)) continue;
 
                 double c1 = _V_.Y_REINFORCEMENT_MAIN_MIN_LENGTH;
                 bool c2 = e.StartCorner.Angle > Math.PI;
                 bool c3 = e.EndCorner.Angle > Math.PI;
-
-                G.Line mainStart = e.edgeOffset(_V_.X_CONCRETE_COVER_1, _V_.X_CONCRETE_COVER_1, 0);
-
+                
                 bool startTrimmed = false;
                 G.Edge startTrimmerEdge = null;
-                if (c2)
-                {
-                    G.Line extended = mainStart.extendStart(_V_.X_REINFORCEMENT_MAIN_ANCHOR_LENGTH);
-                    G.Line trimmed = trimLine_baseline(extended, mainStart, _V_.Y_CONCRETE_COVER_2, ref startTrimmerEdge);
-                    if (trimmed.Length() < mainStart.Length() + _V_.X_REINFORCEMENT_MAIN_ANCHOR_LENGTH * 0.95) startTrimmed = true;
-                    mainStart = trimmed;
-                }
 
-                G.Line mainEnd = e.edgeOffset(_V_.X_CONCRETE_COVER_1, 0, _V_.X_CONCRETE_COVER_1);
                 bool endTrimmed = false;
                 G.Edge endTrimmerEdge = null;
+
+                G.Edge temp = null;
+                G.Line main = e.edgeOffset(_V_.X_CONCRETE_COVER_1, _V_.X_CONCRETE_COVER_1, _V_.X_CONCRETE_COVER_1);
+                main = trimLine_baseline(main, main.Copy(), _V_.Y_CONCRETE_COVER_2, ref temp);
+
+                if (c2)
+                {
+                    G.Line extended = main.extendStart(_V_.X_REINFORCEMENT_MAIN_ANCHOR_LENGTH);
+                    G.Line trimmed = trimLine_basepoint(extended, main.End, _V_.Y_CONCRETE_COVER_2, e, ref startTrimmerEdge);
+                    if (trimmed.Length() < main.Length() + _V_.X_REINFORCEMENT_MAIN_ANCHOR_LENGTH * 0.95) startTrimmed = true;
+                    main = trimmed;
+                }
+                
                 if (c3)
                 {
-                    G.Line extended = mainEnd.extendEnd(_V_.X_REINFORCEMENT_MAIN_ANCHOR_LENGTH);
-                    G.Line trimmed = trimLine_baseline(extended, mainEnd, _V_.Y_CONCRETE_COVER_2, ref endTrimmerEdge);
-                    if (trimmed.Length() < mainEnd.Length() + _V_.X_REINFORCEMENT_MAIN_ANCHOR_LENGTH * 0.95) endTrimmed = true;
-                    mainEnd = trimmed;
+                    G.Line extended = main.extendEnd(_V_.X_REINFORCEMENT_MAIN_ANCHOR_LENGTH);
+                    G.Line trimmed = trimLine_basepoint(extended, main.Start, _V_.Y_CONCRETE_COVER_2, e, ref endTrimmerEdge);
+                    if (trimmed.Length() < main.Length() + _V_.X_REINFORCEMENT_MAIN_ANCHOR_LENGTH * 0.95) endTrimmed = true;
+                    main = trimmed;
                 }
-
-                G.Line main = new G.Line(mainStart.Start, mainEnd.End);
 
                 if (main.Length() > c1)
                 {
@@ -381,33 +416,40 @@ namespace Logic_Reinf
             for (int i = emptyEdges.Count - 1; i >= 0; i--)
             {
                 G.Edge e = emptyEdges[i];
+                if (narrow_denier(e)) continue;
+
+                bool print = false;
+                if (Math.Abs(e.Line.Length() - 200) < 0.01) print = true;
 
                 double c1 = _V_.Y_REINFORCEMENT_MAIN_MIN_LENGTH;
                 bool c2 = e.StartCorner.Angle > Math.PI;
                 bool c3 = e.EndCorner.Angle > Math.PI;
 
-                G.Line main = e.edgeOffset(_V_.X_CONCRETE_COVER_1, 0, 0);
-
                 bool startTrimmed = false;
+                bool endTrimmed = false;
                 G.Edge startTrimmerEdge = null;
+                G.Edge endTrimmerEdge = null;
+
+                G.Edge temp = null;
+                G.Line main = e.edgeOffset(_V_.X_CONCRETE_COVER_1, _V_.X_CONCRETE_COVER_1, _V_.X_CONCRETE_COVER_1);
+                main = trimLine_baseline(main, main.Copy(), _V_.Y_CONCRETE_COVER_2, ref temp);
+
                 if (c2)
                 {
-                    G.Line extended = main.extendStart(_V_.X_REINFORCEMENT_MAIN_ANCHOR_LENGTH + _V_.X_CONCRETE_COVER_1);
+                    G.Line extended = main.extendStart(_V_.X_REINFORCEMENT_MAIN_ANCHOR_LENGTH);
                     G.Line trimmed = trimLine_basepoint(extended, main.End, _V_.Y_CONCRETE_COVER_2, e, ref startTrimmerEdge);
                     if (trimmed.Length() < main.Length() + _V_.X_REINFORCEMENT_MAIN_ANCHOR_LENGTH * 0.95) startTrimmed = true;
                     main = trimmed;
                 }
-
-                bool endTrimmed = false;
-                G.Edge endTrimmerEdge = null;
+                
                 if (c3)
                 {
-                    G.Line extended = main.extendEnd(_V_.X_REINFORCEMENT_MAIN_ANCHOR_LENGTH + _V_.X_CONCRETE_COVER_1);
+                    G.Line extended = main.extendEnd(_V_.X_REINFORCEMENT_MAIN_ANCHOR_LENGTH);
                     G.Line trimmed = trimLine_basepoint(extended, main.Start, _V_.Y_CONCRETE_COVER_2, e, ref endTrimmerEdge);
                     if (trimmed.Length() < main.Length() + _V_.X_REINFORCEMENT_MAIN_ANCHOR_LENGTH * 0.95) endTrimmed = true;
                     main = trimmed;
                 }
-                
+
                 if (main.Length() <= c1)
                 {
                     if (startTrimmed && endTrimmed)
@@ -506,10 +548,6 @@ namespace Logic_Reinf
                             define_D(endTrimmerEdge, e, sideTrimmerEdge);
                         }
                     }
-                    else
-                    {
-                        A_handler(main.Start, main.End, e, null, _V_.X_REINFORCEMENT_MAIN_DIAMETER);
-                    }
                 }
             }
         }
@@ -607,10 +645,16 @@ namespace Logic_Reinf
 
                     if (colinear.Count > 0)
                     {
-                        B_handler_replace(a, colinear[0] as R.B_Raud);
-
-                        restartLoop = true;
-                        break;
+                        bool success = B_handler_replace(a, colinear[0] as R.B_Raud);
+                        if (success)
+                        {
+                            restartLoop = true;
+                            break;
+                        }
+                        else
+                        {
+                            continue;
+                        }
                     }
                 }
             }
@@ -634,10 +678,16 @@ namespace Logic_Reinf
 
                     if (colinear.Count > 0)
                     {
-                        C_handler_replace(a, colinear[0] as R.C_Raud);
-
-                        restartLoop = true;
-                        break;
+                        bool success = C_handler_replace(a, colinear[0] as R.C_Raud);
+                        if (success)
+                        {
+                            restartLoop = true;
+                            break;
+                        }
+                        else
+                        {
+                            continue;
+                        }
                     }
                 }
             }
