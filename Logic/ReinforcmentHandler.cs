@@ -84,10 +84,10 @@ namespace Logic_Reinf
         public void main(ref List<R.Raud> reinf, ref List<R.Raud_Array> reinf_array, ref List<R.Raud> unique_reinf)
         {
             create_all_main_reinforcement();
-            //create_all_side_reinforcement();
+            create_all_side_reinforcement();
 
-            Drawing_Box visu2 = new Drawing_Box(r, reinf_geometry_debug);
-            visu2.Show();
+            //Drawing_Box visu2 = new Drawing_Box(r, reinf_geometry_debug);
+            //visu2.Show();
 
             reinf = knownReinforcement;
             reinf_array = knownArrayReinforcement;
@@ -107,37 +107,35 @@ namespace Logic_Reinf
             merge_A();
             remove_short_A();
 
-            //create_valid_D();
-            //create_extended_B(); // Corner > Math.Pi
-            //merge_B();
-            //merge_C();
+            create_valid_D();
+            create_extended_B(); // Corner > Math.Pi
+            merge_B();
+            merge_C();
 
-            //trimmed_long_A();
+            trimmed_long_A();
 
-            //create_valid_D();
-            //create_extended_B(); // Corner > Math.Pi
-            //create_long_B();
-            //merge_A();
-            //merge_B();
-            //merge_C();
+            create_valid_D();
+            create_extended_B(); // Corner > Math.Pi
+            create_long_B();
+            merge_A();
+            merge_B();
+            merge_C();
 
             trimmed_short_A();
 
-            //create_valid_D();
-            //create_extended_B(); // Corner > Math.Pi
-            //create_long_B();
-            //merge_A();
-            //merge_B();
-            //merge_C();
+            create_valid_D();
+            create_extended_B(); // Corner > Math.Pi
+            create_long_B();
+            merge_A();
+            merge_B();
+            merge_C();
 
-            //create_valid_B();
-            //create_diagonal_A();
-
-            //create_limited_A();
-
-            //merge_A();
-            //merge_B();
-            //merge_C();
+            create_valid_B();
+            create_diagonal_A();
+            create_limited_A();
+            merge_A();
+            merge_B();
+            merge_C();
         }
 
         private void create_all_side_reinforcement()
@@ -332,15 +330,17 @@ namespace Logic_Reinf
             {
                 G.Edge e = emptyEdges[i];
                 if (narrow_denier(e)) continue;
-
+                
+                bool print = false;
+                if (Math.Abs(e.Line.Length() - 2330) < 0.1) print = true;
+                
                 double c1 = _V_.Y_REINFORCEMENT_MAIN_MIN_LENGTH;
                 bool c2 = e.StartCorner.Angle > Math.PI;
                 bool c3 = e.EndCorner.Angle > Math.PI;
                 
                 bool startTrimmed = false;
-                G.Edge startTrimmerEdge = null;
-
                 bool endTrimmed = false;
+                G.Edge startTrimmerEdge = null;
                 G.Edge endTrimmerEdge = null;
 
                 G.Edge temp = null;

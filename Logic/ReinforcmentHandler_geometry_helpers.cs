@@ -145,7 +145,7 @@ namespace Logic_Reinf
                 G.Line offsetLine = eg.edgeOffset(o, o, o);
                 if (G.Line.hasIntersection(trimmedLine, offsetLine))
                 {
-                    G.Line interLine = eg.edgeOffset(offset, offset, offset);
+                    G.Line interLine = eg.edgeTrimmer(offset, offset, offset);
                     G.Point ip = G.Line.getIntersectionPoint(trimmedLine, interLine);
 
                     if (ip.distanceTo(extendedLine.Start) < ip.distanceTo(extendedLine.End))
@@ -176,8 +176,7 @@ namespace Logic_Reinf
                 G.Line offsetLine = eg.edgeOffset(o, o, o);
                 if (G.Line.hasIntersection(trimmedLine, offsetLine))
                 {
-                    G.Line interLine = eg.edgeOffset(offset, offset, offset);
-
+                    G.Line interLine = eg.edgeTrimmer(offset, offset, offset);
                     G.Point ip = G.Line.getIntersectionPoint(trimmedLine, interLine);
 
                     if (fixedPoint == extendedLine.End)

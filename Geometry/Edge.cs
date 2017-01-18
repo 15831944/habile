@@ -54,6 +54,19 @@ namespace Geometry
             return offset_line;
         }
 
+        public Line edgeTrimmer(double offset_main, double offset_side1, double offset_side2)
+        {
+            if (StartCorner.Angle < Math.PI) offset_side1 = -offset_side1;
+            if (EndCorner.Angle < Math.PI) offset_side2 = -offset_side2;
+
+            Point startPoint = StartCorner.getCornerPoint(this, offset_main, offset_side1);
+            Point endPoint = EndCorner.getCornerPoint(this, offset_main, offset_side2);
+
+            Line offset_line = new Line(startPoint, endPoint);
+
+            return offset_line;
+        }
+
         public static bool getSharedCorner(Edge e1, Edge e2, ref Corner c)
         {
             if (e1.StartCorner == e2.EndCorner)
