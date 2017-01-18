@@ -330,10 +330,7 @@ namespace Logic_Reinf
             {
                 G.Edge e = emptyEdges[i];
                 if (narrow_denier(e)) continue;
-                
-                bool print = false;
-                if (Math.Abs(e.Line.Length() - 2330) < 0.1) print = true;
-                
+                                
                 double c1 = _V_.Y_REINFORCEMENT_MAIN_MIN_LENGTH;
                 bool c2 = e.StartCorner.Angle > Math.PI;
                 bool c3 = e.EndCorner.Angle > Math.PI;
