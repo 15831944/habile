@@ -94,6 +94,16 @@ namespace Geometry
             return false;
         }
 
+        public static bool haveSharedCorner(Edge e1, Edge e2)
+        {
+            if (e1.StartCorner == e2.EndCorner) return true;
+            else if (e1.EndCorner == e2.StartCorner) return true;
+            else if (e1.StartCorner == e2.StartCorner) return true;
+            else if (e1.EndCorner == e2.EndCorner) return true;
+
+            return false;
+        }
+
         public bool Equals(Edge other)
         {
             if (other == null) return false;

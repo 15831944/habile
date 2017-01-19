@@ -17,10 +17,11 @@ namespace Logic_Reinf
         {
             G.Line main = new G.Line(mainPoint, mainEnd);
 
-            //reinf_geometry_debug.Add(main);
+            reinf_geometry_debug.Add(main);
 
             R.A_Raud reinf = new R.A_Raud(main, _V_.X_REINFORCEMENT_NUMBER, _V_.X_REINFORCEMENT_MAIN_DIAMETER, _V_.X_REINFORCEMENT_MARK);
             keep(reinf, null, null, null);
+
             return true;
         }
 
@@ -29,36 +30,36 @@ namespace Logic_Reinf
         {
             G.Line main = new G.Line(mainPoint, mainEnd);
 
-            if (denier(main)) return false;
-
             //reinf_geometry_debug.Add(main);
 
             R.A_Raud reinf = new R.A_Raud(main, _V_.X_REINFORCEMENT_NUMBER, d, _V_.X_REINFORCEMENT_MARK);
+            if (denier(reinf.makeLine())) return false;
             keep(reinf, e, c, null);
+
             return true;
         }
 
         public bool A_handler_limit(G.Point mainPoint, G.Point mainEnd, G.Edge e, G.Corner c, int d)
         {
             G.Line main = new G.Line(mainPoint, mainEnd);
-
-            if (denier(main)) return false;
-            if (main.Length() < _V_.Y_REINFORCEMENT_MAIN_RADIUS * 2) return false;
+            if (main.Length() < _V_.Y_REINFORCEMENT_MAIN_RADIUS * 1.99) return false;
 
             //reinf_geometry_debug.Add(main);
 
             R.A_Raud reinf = new R.A_Raud(main, _V_.X_REINFORCEMENT_NUMBER, d, _V_.X_REINFORCEMENT_MARK);
+            if (denier(reinf.makeLine() )) return false;
             keep(reinf, e, c, null);
+
             return true;
         }
 
-        private void A_handler_replace(R.A_Raud a, R.A_Raud b)
+        private bool A_handler_replace(R.A_Raud a, R.A_Raud b)
         {
             R.A_Raud new_reinf = R.A_Raud.mergeTwoRebar(a, b);
-
-            if (denier(new_reinf.makeLine())) return;
-
+            if (denier(new_reinf.makeLine())) return false;
             keep_replace(new_reinf, a, b);
+
+            return true;
         }
 
         private void A_remover(R.A_Raud a)
@@ -72,14 +73,16 @@ namespace Logic_Reinf
             G.Line main = new G.Line(mainPoint, mainEnd);
             G.Line side = new G.Line(sideStart, mainPoint);
 
-            if (main.Length() < _V_.Y_REINFORCEMENT_MAIN_RADIUS) return false;
-            if (side.Length() < _V_.Y_REINFORCEMENT_MAIN_RADIUS) return false;
-
+            G.Line temp1 = trimLine_basepoint(main, mainPoint);
+            if (temp1.Length() > main.Length() * _V_.M_TRIM_TOLERANCE) main = temp1.Copy();
             if (denier(main)) return false;
+
+            G.Line temp2 = trimLine_basepoint(side, mainPoint);
+            if (temp2.Length() > side.Length() * _V_.M_TRIM_TOLERANCE) side = temp2.Copy();
             if (denier(side)) return false;
 
-            reinf_geometry_debug.Add(main);
-            reinf_geometry_debug.Add(side);
+            if (main.Length() < _V_.Y_REINFORCEMENT_MAIN_RADIUS) return false;
+            if (side.Length() < _V_.Y_REINFORCEMENT_MAIN_RADIUS) return false;
 
             G.Vector v1 = main.getDirectionVector();
             G.Vector v2 = side.getDirectionVector();
@@ -109,10 +112,11 @@ namespace Logic_Reinf
             if (denier(new_reinf.makeSide2Line())) return false;
 
             if (new_reinf.A < _V_.Y_REINFORCEMENT_MAIN_RADIUS) return false;
-            if (new_reinf.B2 < _V_.Y_REINFORCEMENT_MAIN_RADIUS * 2.01) return false;
+            if (new_reinf.B2 < _V_.Y_REINFORCEMENT_MAIN_RADIUS * 1.99) return false;
             if (new_reinf.C < _V_.Y_REINFORCEMENT_MAIN_RADIUS) return false;
 
             keep_replace(new_reinf, a, b);
+
             return true;
         }
 
@@ -125,33 +129,26 @@ namespace Logic_Reinf
             if (denier(new_reinf.makeSide2Line())) return false;
 
             if (new_reinf.A < _V_.Y_REINFORCEMENT_MAIN_RADIUS) return false;
-            if (new_reinf.B2 < _V_.Y_REINFORCEMENT_MAIN_RADIUS * 2.01) return false;
+            if (new_reinf.B2 < _V_.Y_REINFORCEMENT_MAIN_RADIUS * 1.99) return false;
             if (new_reinf.C < _V_.Y_REINFORCEMENT_MAIN_RADIUS) return false;
 
             keep_replace(new_reinf, a, b);
+
             return true;
         }
 
         //D HANDLE
-        private bool D_vs_E_handler(G.Point mainPoint, G.Point mainEnd, G.Point side1Start, G.Point side2End, G.Edge e, G.Corner c1, G.Corner c2, int parand)
+        private bool D_vs_E_handler(G.Point mainPoint, G.Point mainEnd, G.Point side1Start, G.Point side2End, G.Edge e, G.Corner c1, G.Corner c2, int parand, G.Edge other = null)
         {
             G.Line main = new G.Line(mainPoint, mainEnd);
             G.Line side1 = new G.Line(side1Start, mainPoint);
             G.Line side2 = new G.Line(mainEnd, side2End);
 
-            if (main.Length() < _V_.Y_REINFORCEMENT_MAIN_RADIUS * 2) return false;
+            if (main.Length() < _V_.Y_REINFORCEMENT_MAIN_RADIUS * 1.99) return false;
 
-            reinf_geometry_debug.Add(main);
-            reinf_geometry_debug.Add(side1);
-            reinf_geometry_debug.Add(side2);
-
-            if (denier(main)) return false;
-            if (denier(side1)) return false;
-            if (denier(side2)) return false;
-
-            reinf_geometry_debug.Add(main);
-            reinf_geometry_debug.Add(side1);
-            reinf_geometry_debug.Add(side2);
+            //reinf_geometry_debug.Add(main);
+            //reinf_geometry_debug.Add(side1);
+            //reinf_geometry_debug.Add(side2);
 
             G.Vector v1 = main.getDirectionVector();
             G.Vector v2 = side1.getDirectionVector();
@@ -165,12 +162,24 @@ namespace Logic_Reinf
             if (d1 && d2)
             {
                 R.D_Raud reinf = new R.D_Raud(main, side1, side2, _V_.X_REINFORCEMENT_NUMBER, _V_.X_REINFORCEMENT_MAIN_DIAMETER, _V_.X_REINFORCEMENT_MARK, parand);
+
+                if (denier(reinf.makeMainLine())) return false;
+                if (denier(reinf.makeSide1Line())) return false;
+                if (denier(reinf.makeSide2Line())) return false;
+
                 keep(reinf, e, c1, c2);
+                keep_double(reinf, other);
             }
             else
             {
                 R.E_Raud reinf = new R.E_Raud(main, side1, side2, _V_.X_REINFORCEMENT_NUMBER, _V_.X_REINFORCEMENT_MAIN_DIAMETER, _V_.X_REINFORCEMENT_MARK, parand);
+
+                if (denier(reinf.makeMainLine())) return false;
+                if (denier(reinf.makeSide1Line())) return false;
+                if (denier(reinf.makeSide2Line())) return false;
+
                 keep(reinf, e, c1, c2);
+                keep_double(reinf, other);
             }
 
             return true;
@@ -183,7 +192,7 @@ namespace Logic_Reinf
 
             if (denier(side)) return false;
 
-            reinf_geometry_debug.Add(side);
+            //reinf_geometry_debug.Add(side);
 
             G.Vector o1 = side.getDirectionVector();
             double absX = Math.Abs(o1.X);
@@ -239,7 +248,7 @@ namespace Logic_Reinf
 
             if (denier(side)) return false;
 
-            reinf_geometry_debug.Add(side);
+            //reinf_geometry_debug.Add(side);
 
             R.U_Raud cur = new R.U_Raud(side, _V_.Y_ELEMENT_WIDTH_COVER, 1, _V_.X_REINFORCEMENT_STIRRUP_DIAMETER, _V_.X_REINFORCEMENT_MARK);
 

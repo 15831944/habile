@@ -30,7 +30,7 @@ namespace Logic_Reinf
             else throw new G.EdgeNotInDefinedCornerException();
         }
 
-        public G.Point getCornerPoint(G.Edge e, double offset_main, double offset_side, double alfa = 10000)
+        public G.Point getCornerPoint(G.Edge e, double offset_main, double offset_side, double alfa = 100000)
         {
             G.Line startLine = e.Line.Offset(offset_main);
             G.Line otherLine = getOtherEdge(e).Line.Offset(offset_side);

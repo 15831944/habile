@@ -115,28 +115,48 @@ namespace Reinforcement
 
         public override string ToString()
         {
-            string str = Number.ToString() + "E" + Diameter.ToString() + ((int)(B2 / 10)).ToString() + ((int)(C / 10)).ToString(); // parand magic
+            string str = "";
+            if (A == C)
+            {
+                str = Number.ToString() + "E" + Diameter.ToString() + ((int)(B2 / 10)).ToString() + ((int)(C / 10)).ToString(); // parand magic
+            }
+            else
+            {
+                str = Number.ToString() + "E" + Diameter.ToString() + ((int)(B2 / 10)).ToString() + ((int)(A / 10)).ToString() + ((int)(C / 10)).ToString(); // parand magic
+            }
             return str;
         }
 
         public override string ToStringNoCount()
         {
-            string str = "E" + Diameter.ToString() + ((int)(B2 / 10)).ToString() + ((int)(C / 10)).ToString(); // parand magic
+            string str = "";
+            if (A == C)
+            {
+                str = "E" + Diameter.ToString() + ((int)(B2 / 10)).ToString() + ((int)(C / 10)).ToString(); // parand magic
+            }
+            else
+            {
+                str = "E" + Diameter.ToString() + ((int)(B2 / 10)).ToString() + ((int)(A / 10)).ToString() + ((int)(C / 10)).ToString(); // parand magic
+            }
             return str;
         }
 
         public bool Equals(E_Raud other)
         {
             if (other == null) return false;
-            return (this.A == other.A &&
-                    this.B2 == other.B2 && // parand magic
-                    this.C == other.C &&
-                    this.U == other.U &&
-                    this.V == other.V &&
-                    this.X == other.X &&
-                    this.Y == other.Y &&
-                    this.Diameter == other.Diameter &&
-                    this.Materjal == other.Materjal);
+
+            bool alfa = (this.A == other.A &&
+                        this.B2 == other.B2 && // parand magic
+                        this.C == other.C &&
+                        this.Diameter == other.Diameter &&
+                        this.Materjal == other.Materjal);
+
+            bool a1 = (int)G.Converter.ToDeg(this.U) == (int)G.Converter.ToDeg(other.U) && (int)G.Converter.ToDeg(this.V) == (int)G.Converter.ToDeg(other.V);
+            bool a2 = (int)G.Converter.ToDeg(this.U) == (int)G.Converter.ToDeg(other.V) && (int)G.Converter.ToDeg(this.V) == (int)G.Converter.ToDeg(other.U);
+
+            bool tot = alfa && (a1 || a2);
+
+            return tot;
         }
 
         public override bool Equals(Raud obj)

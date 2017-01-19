@@ -96,7 +96,7 @@ namespace Reinforcement
             if (other == null) return false;
             return (this.A == other.A &&
                     this.B == other.B &&
-                    this.U == other.U &&
+                    (int)G.Converter.ToDeg(this.U) == (int)G.Converter.ToDeg(other.U) &&
                     this.Diameter == other.Diameter &&
                     this.Materjal == other.Materjal);
         }

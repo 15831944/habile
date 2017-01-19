@@ -16,7 +16,7 @@ namespace Logic_Reinf
         {
             if (edge != null)
             {
-                if (emptyEdges.Contains(edge))
+                if (!setEdges.Keys.Contains(edge))
                 {
                     setEdges[edge] = reinf;
                 }
@@ -24,7 +24,7 @@ namespace Logic_Reinf
 
             if (corner1 != null)
             {
-                if (emptyCorners.Contains(corner1))
+                if (!setCorners.Keys.Contains(corner1))
                 {
                     setCorners[corner1] = reinf;
                 }
@@ -32,13 +32,24 @@ namespace Logic_Reinf
 
             if (corner2 != null)
             {
-                if (emptyCorners.Contains(corner2))
+                if (!setCorners.Keys.Contains(corner2))
                 {
                     setCorners[corner2] = reinf;
                 }
             }
 
             knownReinforcement.Add(reinf);
+        }
+
+        private void keep_double(R.Raud reinf, G.Edge edge)
+        {
+            if (edge != null)
+            {
+                if (!setEdges.Keys.Contains(edge))
+                {
+                    setEdges[edge] = reinf;
+                }
+            }
         }
 
         private void keep_array(R.Raud reinf, LineSegment ls)

@@ -86,13 +86,30 @@ namespace Reinforcement
 
         public override string ToString()
         {
-            string str = Number.ToString() + "D" + Diameter.ToString() + ((int)(B2 / 10)).ToString() + ((int)(C / 10)).ToString(); // parand magic
+            string str = "";
+            if (A == C)
+            {
+                str = Number.ToString() + "D" + Diameter.ToString() + ((int)(B2 / 10)).ToString() + ((int)(C / 10)).ToString(); // parand magic
+            }
+            else
+            {
+                str = Number.ToString() + "D" + Diameter.ToString() + ((int)(B2 / 10)).ToString() + ((int)(A / 10)).ToString() + ((int)(C / 10)).ToString(); // parand magic
+            }
+
             return str;
         }
 
         public override string ToStringNoCount()
         {
-            string str = "D" + Diameter.ToString() + ((int)(B2 / 10)).ToString() + ((int)(C / 10)).ToString(); // parand magic
+            string str = "";
+            if (A == C)
+            {
+                str = "D" + Diameter.ToString() + ((int)(B2 / 10)).ToString() + ((int)(C / 10)).ToString(); // parand magic
+            }
+            else
+            {
+                str = "D" + Diameter.ToString() + ((int)(B2 / 10)).ToString() + ((int)(A / 10)).ToString() + ((int)(C / 10)).ToString(); // parand magic
+            }
             return str;
         }
 

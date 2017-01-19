@@ -45,7 +45,7 @@ namespace Logic_Reinf
 
 
         // calculated constants
-        public static double Y_REINFORCEMENT_MAIN_MIN_LENGTH = X_REINFORCEMENT_MAIN_ANCHOR_LENGTH * 2 * 1.2; // A + 2B vs D
+        public static double Y_REINFORCEMENT_MAIN_MIN_LENGTH = X_REINFORCEMENT_MAIN_ANCHOR_LENGTH * 2 * X_FIRST_PASS_CONSTRAINT; // A + 2B vs D
         public static int Y_REINFORCEMENT_MAIN_RADIUS = 1000;
 
         public static int Y_STIRRUP_MAX_LENGTH = X_REINFORCEMENT_STIRRUP_CONSTRAINT * X_ELEMENT_WIDTH;
@@ -56,6 +56,7 @@ namespace Logic_Reinf
         public static int Y_CONCRETE_COVER_2 = X_CONCRETE_COVER_1 + Y_CONCRETE_COVER_DELTA;
         public static int Y_CONCRETE_COVER_3 = Y_CONCRETE_COVER_2 + Y_CONCRETE_COVER_DELTA;
 
+        public static double M_TRIM_TOLERANCE = 0.95;
         public static double M_B_BAR_TOLERANCE = 0.02; // B vs C (1 deg == 0.0017)
         public static double M_LINE_SEGMENTATOR_STEP = 1.0;
     }

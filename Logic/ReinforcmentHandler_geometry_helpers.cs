@@ -16,7 +16,7 @@ namespace Logic_Reinf
         {
             foreach (G.Edge eg in allEdges)
             {
-                double o = _V_.X_CONCRETE_COVER_1 - 5;
+                double o = _V_.X_CONCRETE_COVER_1 - 5.2;
                 G.Line offsetLine = eg.edgeOffset(o, o, o);
                 if (G.Line.hasIntersection(final, offsetLine))
                 {
@@ -32,7 +32,7 @@ namespace Logic_Reinf
             {
                 if (eg == e) continue;
 
-                double o = _V_.X_CONCRETE_COVER_1 - 5;
+                double o = _V_.X_CONCRETE_COVER_1 - 5.2;
                 G.Line offsetLine = eg.edgeOffset(o, o, o);
                 if (G.Line.hasIntersection(final, offsetLine))
                 {
@@ -141,7 +141,7 @@ namespace Logic_Reinf
 
             foreach (G.Edge eg in allEdges)
             {
-                double o = _V_.X_CONCRETE_COVER_1 - 5;
+                double o = _V_.X_CONCRETE_COVER_1 - 5.05;
                 G.Line offsetLine = eg.edgeOffset(o, o, o);
                 if (G.Line.hasIntersection(trimmedLine, offsetLine))
                 {
@@ -164,6 +164,32 @@ namespace Logic_Reinf
             return trimmedLine;
         }
 
+        private G.Line trimLine_basepoint(G.Line extendedLine, G.Point fixedPoint)
+        {
+            G.Line trimmedLine = extendedLine.Copy();
+
+            foreach (G.Edge eg in allEdges)
+            {
+                double o = _V_.X_CONCRETE_COVER_1 - 0.1;
+                G.Line offsetLine = eg.edgeOffset(o, o, o);
+                if (G.Line.hasIntersection(trimmedLine, offsetLine))
+                {
+                    G.Point ip = G.Line.getIntersectionPoint(trimmedLine, offsetLine);
+
+                    if (fixedPoint == extendedLine.End)
+                    {
+                        trimmedLine = new G.Line(ip, extendedLine.End);
+                    }
+                    else
+                    {
+                        trimmedLine = new G.Line(extendedLine.Start, ip);
+                    }
+                }
+            }
+
+            return trimmedLine;
+        }
+
         private G.Line trimLine_basepoint(G.Line extendedLine, G.Point fixedPoint, double offset, G.Edge e, ref G.Edge trimmer)
         {
             G.Line trimmedLine = extendedLine.Copy();
@@ -172,7 +198,7 @@ namespace Logic_Reinf
             {
                 if (eg == e) continue;
 
-                double o = _V_.X_CONCRETE_COVER_1 - 5;
+                double o = _V_.X_CONCRETE_COVER_1 - 5.2;
                 G.Line offsetLine = eg.edgeOffset(o, o, o);
                 if (G.Line.hasIntersection(trimmedLine, offsetLine))
                 {

@@ -40,6 +40,15 @@ namespace Geometry
             return len;
         }
 
+        public Point getClosePoint(Point one, Point two)
+        {
+            double d1 = distanceTo(one);
+            double d2 = distanceTo(two);
+
+            if (d1 < d2) return one;
+            else return two;
+        }
+
         //TODO distanceTo (Line)
 
         public bool Equals(Point other)
