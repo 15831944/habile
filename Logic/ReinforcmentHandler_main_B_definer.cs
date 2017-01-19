@@ -55,8 +55,8 @@ namespace Logic_Reinf
 
             if (startSet == true && endSet == true)
             {
-                cover1 = cover1 + _V_.Y_CONCRETE_COVER_DELTA;
-                cover2 = cover2 + _V_.Y_CONCRETE_COVER_DELTA;
+                cover1 += _V_.Y_CONCRETE_COVER_DELTA;
+                cover2 += _V_.Y_CONCRETE_COVER_DELTA;
 
                 //mainDist == default
                 //sideDist == default
@@ -70,7 +70,7 @@ namespace Logic_Reinf
                 {
                     startSet = true;
 
-                    cover1 = cover1 + _V_.Y_CONCRETE_COVER_DELTA;
+                    cover1 += _V_.Y_CONCRETE_COVER_DELTA;
                     //cover2 == default
 
                     //mainDist == default
@@ -78,7 +78,7 @@ namespace Logic_Reinf
 
                     if (endEdge.StartCorner.Angle > Math.PI)
                     {
-                        sideDist += +_V_.X_REINFORCEMENT_MAIN_ANCHOR_LENGTH;
+                        sideDist += _V_.X_REINFORCEMENT_MAIN_ANCHOR_LENGTH;
                     }
                 }
                 else
@@ -86,7 +86,7 @@ namespace Logic_Reinf
                     endSet = true;
 
                     //cover1 == default
-                    cover2 = cover2 + _V_.Y_CONCRETE_COVER_DELTA;
+                    cover2 += _V_.Y_CONCRETE_COVER_DELTA;
 
                     mainDist = startEdge.edgeOffset(cover1, cover1, cover2).Length();
                     //sideDist == default
@@ -99,18 +99,18 @@ namespace Logic_Reinf
 
                 if (startEdge.EndCorner.Angle > Math.PI)
                 {
-                    startLineLength = startLineLength + _V_.X_REINFORCEMENT_MAIN_ANCHOR_LENGTH;
+                    startLineLength += _V_.X_REINFORCEMENT_MAIN_ANCHOR_LENGTH;
                 }
 
                 if (endEdge.StartCorner.Angle > Math.PI)
                 {
-                    endLineLength = endLineLength + _V_.X_REINFORCEMENT_MAIN_ANCHOR_LENGTH;
+                    endLineLength += _V_.X_REINFORCEMENT_MAIN_ANCHOR_LENGTH;
                 }
             }
             else if (startSet == false && endSet == true)
             {
                 //cover1 == default
-                cover2 = cover2 + _V_.Y_CONCRETE_COVER_DELTA;
+                cover2 += _V_.Y_CONCRETE_COVER_DELTA;
 
                 mainDist = startEdge.edgeOffset(cover1, cover1, cover2).Length();
                 //sideDist == default
@@ -122,7 +122,7 @@ namespace Logic_Reinf
             }
             else if (startSet == true && endSet == false)
             {
-                cover1 = cover1 + _V_.Y_CONCRETE_COVER_DELTA;
+                cover1 += _V_.Y_CONCRETE_COVER_DELTA;
                 //cover2 == defualt
 
                 //mainDist == default
@@ -130,7 +130,7 @@ namespace Logic_Reinf
 
                 if (endEdge.StartCorner.Angle > Math.PI)
                 {
-                    sideDist += + _V_.X_REINFORCEMENT_MAIN_ANCHOR_LENGTH;
+                    sideDist += _V_.X_REINFORCEMENT_MAIN_ANCHOR_LENGTH;
                 }
             }
 
