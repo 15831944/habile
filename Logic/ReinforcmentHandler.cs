@@ -66,7 +66,7 @@ namespace Logic_Reinf
         public void main(ref List<R.Raud> reinf, ref List<R.Raud_Array> reinf_array, ref List<R.Raud> unique_reinf)
         {
             create_all_main_reinforcement();
-            //create_all_side_reinforcement();
+            create_all_side_reinforcement();
 
             //Drawing_Box visu2 = new Drawing_Box(r, reinf_geometry_debug);
             //visu2.Show();
@@ -80,13 +80,14 @@ namespace Logic_Reinf
             //List<G.Edge> setEdgesDebug = allEdges.Where(x => setEdges.Keys.Contains(x)).ToList();
             //List<G.Corner> setCornerDebug = allCorners.Where(x => setCorners.Keys.Contains(x)).ToList();
             //Drawing_Box visu1 = new Drawing_Box(r, emptyEdgesDebug, emptyCornersDebug, setEdgesDebug, setCornerDebug, reinf_geometry_debug);
-            //visu1.Show();
+            //visu1.Show()
         }
 
         private void create_all_main_reinforcement()
         {
             executor(create_all_A);
             remove_short_A();
+            executor(create_valid_A);
 
             executor(create_trimmed_long_A);
 
@@ -164,6 +165,27 @@ namespace Logic_Reinf
             }
         }
 
+        private void create_valid_A()
+        {
+            List<G.Edge> emptyEdges = allEdges.Where(x => !setEdges.Keys.Contains(x)).ToList();
+
+            for (int i = emptyEdges.Count - 1; i >= 0; i--)
+            {
+                G.Edge e = emptyEdges[i];
+                if (narrow_denier(e)) continue;
+
+                bool c1 = e.StartCorner.Angle > Math.PI;
+                bool c2 = e.EndCorner.Angle > Math.PI;
+
+                if (c1 && c2)
+                {
+                    G.Line main = e.edgeOffset(_V_.X_CONCRETE_COVER_1, _V_.X_CONCRETE_COVER_1, _V_.X_CONCRETE_COVER_1);
+                    main = main.extendDouble(_V_.X_REINFORCEMENT_MAIN_ANCHOR_LENGTH);
+                    A_handler(main.Start, main.End, e, null, _V_.X_REINFORCEMENT_MAIN_DIAMETER);
+                }
+            }
+        }
+
         private void create_limited_A()
         {
             List<G.Edge> emptyEdges = allEdges.Where(x => !setEdges.Keys.Contains(x)).ToList();
@@ -193,6 +215,7 @@ namespace Logic_Reinf
             for (int i = emptyEdges.Count - 1; i >= 0; i--)
             {
                 G.Edge e = emptyEdges[i];
+                if (setEdges.Keys.Contains(e)) continue;
                 if (narrow_denier(e)) continue;
 
                 double c1 = _V_.Y_REINFORCEMENT_MAIN_MIN_LENGTH;
@@ -272,10 +295,12 @@ namespace Logic_Reinf
         private void create_trimmed_short_A()
         {
             List<G.Edge> emptyEdges = allEdges.Where(x => !setEdges.Keys.Contains(x)).ToList();
+            emptyEdges = emptyEdges.OrderBy(b => b.Line.Length()).Reverse().ToList();
 
             for (int i = emptyEdges.Count - 1; i >= 0; i--)
             {
                 G.Edge e = emptyEdges[i];
+                if (setEdges.Keys.Contains(e)) continue;
                 if (narrow_denier(e)) continue;
 
                 double c1 = _V_.Y_REINFORCEMENT_MAIN_MIN_LENGTH;

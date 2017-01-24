@@ -45,6 +45,7 @@
             this.pb_visual.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
             this.pb_visual.TabIndex = 0;
             this.pb_visual.TabStop = false;
+            this.pb_visual.Click += new System.EventHandler(this.pb_visual_Click);
             this.pb_visual.Paint += new System.Windows.Forms.PaintEventHandler(this.pb_visual_Paint);
             // 
             // Drawing_Box

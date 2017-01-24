@@ -29,7 +29,7 @@ namespace Geometry
             }
 
             edges = new List<Edge>();
-            
+
             setBoundies(contours);
             setEdges(contours);
 
@@ -39,9 +39,7 @@ namespace Geometry
                 setCorners(contours);
                 bool stop = insanityCheck();
                 if (stop) break;
-            }
-
-            
+            }            
         }
 
         private void setBoundies(List<Line> contours)
@@ -197,5 +195,3 @@ namespace Geometry
         }
     }
 }
-
-

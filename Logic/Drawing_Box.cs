@@ -203,5 +203,10 @@ namespace Logic_Reinf
 
             e.Graphics.DrawLine(ppp, x1, y1, x2, y2);
         }
+
+        private void pb_visual_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

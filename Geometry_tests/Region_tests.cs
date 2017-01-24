@@ -204,6 +204,47 @@ namespace Geometry_tests
             t = new Point(0, -9);
             Assert.IsFalse(r.isPointinRegion(t));
         }
+
+        [TestMethod]
+        public void Region_isPointinRegion_test_bugz()
+        {
+            List<Line> contours = new List<Line>();
+
+            Point a1 = new Point(9270.50355349, 6558.50334822);
+            Point b1 = new Point(11590.50848401, 6558.50331297);
+            Line l1 = new Line(a1, b1);
+            contours.Add(l1);
+
+            Point a2 = new Point(11590.50848401, 6558.50331297);
+            Point b2 = new Point(11590.50851865, 8838.50209879);
+            Line l2 = new Line(a2, b2);
+            contours.Add(l2);
+
+            Point a3 = new Point(11590.5082192, 8838.50209879);
+            Point b3 = new Point(11590.50852169, 9038.50209879);
+            Line l3 = new Line(a3, b3);
+            contours.Add(l3);
+
+            Point a4 = new Point(11590.50852169, 9038.50210220);
+            Point b4 = new Point(11590.50852777, 9438.50356922);
+            Line l4 = new Line(a4, b4);
+            contours.Add(l4);
+
+            Point a5 = new Point(11590.50852777, 9438.50356922);
+            Point b5 = new Point(9270.50359726, 9438.50360448);
+            Line l5 = new Line(a5, b5);
+            contours.Add(l5);
+
+            Point a6 = new Point(9270.50359726, 9438.50360448);
+            Point b6 = new Point(9270.50357837, 6558.50334822);
+            Line l6 = new Line(a6, b6);
+            contours.Add(l6);
+
+            Region r = new Region(contours);
+
+            Assert.AreEqual(r.edges.Count, 4);
+            Assert.AreEqual(r.corners.Count, 4);
+        }
     }
 }
 

@@ -18,7 +18,7 @@ namespace Geometry
         public Edge EndEdge { get { return endEdge; } }
         public double Angle { get { return angle; } }
 
-        public Corner (Point p, Edge ln1, Edge ln2, List<Line> contours)
+        public Corner(Point p, Edge ln1, Edge ln2, List<Line> contours)
         {
             corner = p;
 
@@ -45,7 +45,9 @@ namespace Geometry
             double a = la.Length();
 
             double cosA = (Math.Pow(b, 2) + Math.Pow(c, 2) - Math.Pow(a, 2)) / (2 * b * c);
-            double A = Math.Acos(cosA);
+            double cosAmod = Math.Max(Math.Min(cosA, 0.9999999999999), -0.9999999999999);
+
+            double A = Math.Acos(cosAmod);
 
             Point one = la.getCenterPoint();
             Point two = eb.Line.getCenterPoint();
@@ -58,7 +60,7 @@ namespace Geometry
             {
                 A = 2 * Math.PI - A;
             }
-            
+
             return A;
         }
 
