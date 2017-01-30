@@ -66,7 +66,7 @@ namespace Logic_Reinf
         public void main(ref List<R.Raud> reinf, ref List<R.Raud_Array> reinf_array, ref List<R.Raud> unique_reinf)
         {
             create_all_main_reinforcement();
-            create_all_side_reinforcement();
+            //create_all_side_reinforcement();
 
             //Drawing_Box visu2 = new Drawing_Box(r, reinf_geometry_debug);
             //visu2.Show();
@@ -97,14 +97,14 @@ namespace Logic_Reinf
 
             executor(create_trimmed_short_A);
 
-            create_valid_D();
-            create_oversized_D();
-            executor(create_extended_B);
-            executor(create_long_B);
+            //create_valid_D();
+            //create_oversized_D();
+            //executor(create_extended_B);
+            //executor(create_long_B);
 
-            executor(create_valid_B);
-            executor(create_diagonal_A);
-            executor(create_limited_A);
+            //executor(create_valid_B);
+            //executor(create_diagonal_A);
+            //executor(create_limited_A);
         }
 
         private void executor(Action fn)
@@ -300,6 +300,11 @@ namespace Logic_Reinf
             for (int i = emptyEdges.Count - 1; i >= 0; i--)
             {
                 G.Edge e = emptyEdges[i];
+
+                bool debug = false;
+                if (i == 5) debug = true;
+                if (debug) MessageBox.Show(e.Line.ToString());
+
                 if (setEdges.Keys.Contains(e)) continue;
                 if (narrow_denier(e)) continue;
 
@@ -331,7 +336,7 @@ namespace Logic_Reinf
                     if (trimmed.Length() < main.Length() + _V_.X_REINFORCEMENT_MAIN_ANCHOR_LENGTH * _V_.M_TRIM_TOLERANCE) endTrimmed = true;
                     main = trimmed;
                 }
-
+                 
                 if (main.Length() <= c1)
                 {
                     if (startTrimmed && endTrimmed)
@@ -427,6 +432,7 @@ namespace Logic_Reinf
                             G.Line newMain = trimLine_basepoint(b_line, main.End, _V_.Y_CONCRETE_COVER_2, e, ref sideTrimmerEdge);
 
                             A_handler(main.Start, main.End, e, null, _V_.X_REINFORCEMENT_MAIN_DIAMETER);
+
                             define_D(endTrimmerEdge, e, sideTrimmerEdge);
                         }
                     }
