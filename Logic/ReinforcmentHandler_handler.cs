@@ -39,20 +39,6 @@ namespace Logic_Reinf
             return true;
         }
 
-        public bool A_handler_limit(G.Point mainPoint, G.Point mainEnd, G.Edge e, G.Corner c, int d)
-        {
-            G.Line main = new G.Line(mainPoint, mainEnd);
-            if (main.Length() < _V_.Y_REINFORCEMENT_MAIN_RADIUS * 1.99) return false;
-
-            //reinf_geometry_debug.Add(main);
-
-            R.A_Raud reinf = new R.A_Raud(main, _V_.X_REINFORCEMENT_NUMBER, d, _V_.X_REINFORCEMENT_MARK);
-            if (denier(reinf.makeLine() )) return false;
-            keep(reinf, e, c, null);
-
-            return true;
-        }
-
         private bool A_handler_replace(R.A_Raud a, R.A_Raud b)
         {
             R.A_Raud new_reinf = R.A_Raud.mergeTwoRebar(a, b);

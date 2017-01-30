@@ -136,13 +136,20 @@ namespace Logic_Reinf
             {
                 if (setCorners.Keys.Contains(startCorner))
                 {
-                    if (!ReferenceEquals(setCorners[startCorner], setEdges[mainEdge]))
+                    if (setEdges.Keys.Contains(mainEdge))
                     {
-                        coverMain = coverMain + _V_.Y_CONCRETE_COVER_DELTA;
+                        if (!ReferenceEquals(setCorners[startCorner], setEdges[mainEdge]))
+                        {
+                            coverMain = coverMain + _V_.Y_CONCRETE_COVER_DELTA;
+                        }
                     }
-                    if (!ReferenceEquals(setCorners[startCorner], setEdges[side1Edge]))
+
+                    if (setEdges.Keys.Contains(side1Edge))
                     {
-                        cover1 = cover1 + _V_.Y_CONCRETE_COVER_DELTA;
+                        if (!ReferenceEquals(setCorners[startCorner], setEdges[side1Edge]))
+                        {
+                            cover1 = cover1 + _V_.Y_CONCRETE_COVER_DELTA;
+                        }
                     }
 
                     IP1 = getCornerPoint(side1Edge, mainEdge, cover1, coverMain, ref startCorner);
@@ -158,13 +165,20 @@ namespace Logic_Reinf
             {
                 if (setCorners.Keys.Contains(endCorner))
                 {
-                    if (!ReferenceEquals(setCorners[endCorner], setEdges[mainEdge]))
+                    if (setEdges.Keys.Contains(mainEdge))
                     {
-                        coverMain = coverMain + _V_.Y_CONCRETE_COVER_DELTA;
+                        if (!ReferenceEquals(setCorners[endCorner], setEdges[mainEdge]))
+                        {
+                            coverMain = coverMain + _V_.Y_CONCRETE_COVER_DELTA;
+                        }
                     }
-                    if (!ReferenceEquals(setCorners[endCorner], setEdges[side2Edge]))
+
+                    if (setEdges.Keys.Contains(side2Edge))
                     {
-                        cover2 = cover2 + _V_.Y_CONCRETE_COVER_DELTA;
+                        if (!ReferenceEquals(setCorners[endCorner], setEdges[side2Edge]))
+                        {
+                            cover2 = cover2 + _V_.Y_CONCRETE_COVER_DELTA;
+                        }
                     }
 
                     IP1 = getCornerPoint(side1Edge, mainEdge, cover1, coverMain, ref startCorner);
@@ -184,7 +198,7 @@ namespace Logic_Reinf
 
             //if (mainSet == true)
             //{
-                success = D_vs_E_handler(IP1, IP2, side1Start, side2End, null, startCorner, endCorner, parand); // parand magic
+                 success = D_vs_E_handler(IP1, IP2, side1Start, side2End, null, startCorner, endCorner, parand); // parand magic
             //}
             //else
             //{
@@ -194,6 +208,5 @@ namespace Logic_Reinf
 
             return success;
         }
-
     }
 }

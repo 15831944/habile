@@ -66,7 +66,7 @@ namespace Logic_Reinf
         public void main(ref List<R.Raud> reinf, ref List<R.Raud_Array> reinf_array, ref List<R.Raud> unique_reinf)
         {
             create_all_main_reinforcement();
-            //create_all_side_reinforcement();
+            create_all_side_reinforcement();
 
             //Drawing_Box visu2 = new Drawing_Box(r, reinf_geometry_debug);
             //visu2.Show();
@@ -97,14 +97,13 @@ namespace Logic_Reinf
 
             executor(create_trimmed_short_A);
 
-            //create_valid_D();
-            //create_oversized_D();
-            //executor(create_extended_B);
-            //executor(create_long_B);
+            create_valid_D();
+            create_oversized_D();
+            executor(create_extended_B);
+            executor(create_long_B);
 
-            //executor(create_valid_B);
-            //executor(create_diagonal_A);
-            //executor(create_limited_A);
+            executor(create_valid_B);
+            executor(create_diagonal_A);
         }
 
         private void executor(Action fn)
@@ -183,28 +182,6 @@ namespace Logic_Reinf
                     main = main.extendDouble(_V_.X_REINFORCEMENT_MAIN_ANCHOR_LENGTH);
                     A_handler(main.Start, main.End, e, null, _V_.X_REINFORCEMENT_MAIN_DIAMETER);
                 }
-            }
-        }
-
-        private void create_limited_A()
-        {
-            List<G.Edge> emptyEdges = allEdges.Where(x => !setEdges.Keys.Contains(x)).ToList();
-
-            for (int i = emptyEdges.Count - 1; i >= 0; i--)
-            {
-                G.Edge e = emptyEdges[i];
-                if (narrow_denier(e)) continue;
-
-                G.Line main = e.edgeOffset(_V_.X_CONCRETE_COVER_1, _V_.X_CONCRETE_COVER_1, _V_.X_CONCRETE_COVER_1);
-
-                double c1 = _V_.Y_REINFORCEMENT_MAIN_MIN_LENGTH;
-                bool c2 = e.StartCorner.Angle > Math.PI;
-                bool c3 = e.EndCorner.Angle > Math.PI;
-
-                if (c2) main = main.extendStart(_V_.X_REINFORCEMENT_MAIN_ANCHOR_LENGTH);
-                if (c3) main = main.extendEnd(_V_.X_REINFORCEMENT_MAIN_ANCHOR_LENGTH);
-
-                A_handler_limit(main.Start, main.End, e, null, _V_.X_REINFORCEMENT_MAIN_DIAMETER);
             }
         }
 
@@ -301,9 +278,10 @@ namespace Logic_Reinf
             {
                 G.Edge e = emptyEdges[i];
 
-                bool debug = false;
-                if (i == 5) debug = true;
-                if (debug) MessageBox.Show(e.Line.ToString());
+                //bool debug = false;
+                //if (i == 4) debug = true;
+                //if (debug) MessageBox.Show(e.Line.ToString() + " " + i.ToString());
+                //MessageBox.Show(e.Line.ToString() + " " + i.ToString());
 
                 if (setEdges.Keys.Contains(e)) continue;
                 if (narrow_denier(e)) continue;
@@ -412,8 +390,23 @@ namespace Logic_Reinf
                             G.Edge sideTrimmerEdge = null;
                             G.Line newMain = trimLine_basepoint(b_line, main.Start, _V_.Y_CONCRETE_COVER_2, e, ref sideTrimmerEdge);
 
-                            A_handler(main.Start, main.End, e, null, _V_.X_REINFORCEMENT_MAIN_DIAMETER);
-                            define_D(startTrimmerEdge, sideTrimmerEdge, e);
+                            if (sideTrimmerEdge != null)
+                            {
+                                bool got_D = define_D(startTrimmerEdge, sideTrimmerEdge, e);
+                                if (got_D)
+                                {
+                                    A_handler(main.Start, main.End, e, null, _V_.X_REINFORCEMENT_MAIN_DIAMETER);
+                                }
+                            }
+                            else
+                            {
+                                G.Corner ec = e.EndCorner;
+                                if (ec.Angle < Math.PI)
+                                {
+                                    G.Edge otherEdge = ec.getOtherEdge(e);
+                                    define_D(e, startTrimmerEdge, otherEdge);
+                                }
+                            }
                         }
                     }
                     else if (endTrimmed)
@@ -431,9 +424,23 @@ namespace Logic_Reinf
                             G.Edge sideTrimmerEdge = null;
                             G.Line newMain = trimLine_basepoint(b_line, main.End, _V_.Y_CONCRETE_COVER_2, e, ref sideTrimmerEdge);
 
-                            A_handler(main.Start, main.End, e, null, _V_.X_REINFORCEMENT_MAIN_DIAMETER);
-
-                            define_D(endTrimmerEdge, e, sideTrimmerEdge);
+                            if (sideTrimmerEdge != null)
+                            {
+                                bool got_D = define_D(endTrimmerEdge, e, sideTrimmerEdge);
+                                if (got_D)
+                                {
+                                    A_handler(main.Start, main.End, e, null, _V_.X_REINFORCEMENT_MAIN_DIAMETER);
+                                }                                
+                            }
+                            else
+                            {
+                                G.Corner sc = e.StartCorner;
+                                if (sc.Angle < Math.PI)
+                                {
+                                    G.Edge otherEdge = sc.getOtherEdge(e);
+                                    define_D(e, otherEdge, endTrimmerEdge);
+                                }
+                            }
                         }
                     }
                 }
