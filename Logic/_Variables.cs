@@ -58,6 +58,6 @@ namespace Logic_Reinf
 
         public static double M_TRIM_TOLERANCE = 0.95;
         public static double M_B_BAR_TOLERANCE = 0.02; // B vs C (1 deg == 0.0017)
-        public static double M_LINE_SEGMENTATOR_STEP = 1.0;
+        public static double M_LINE_SEGMENTATOR_STEP = 50.0;
     }
 }

@@ -99,11 +99,11 @@ namespace Logic_Reinf
 
             create_valid_D();
             create_oversized_D();
-            executor(create_extended_B);
-            executor(create_long_B);
+            //executor(create_extended_B);
+            //executor(create_long_B);
 
-            executor(create_valid_B);
-            executor(create_diagonal_A);
+            //executor(create_valid_B);
+            //executor(create_diagonal_A);
         }
 
         private void executor(Action fn)

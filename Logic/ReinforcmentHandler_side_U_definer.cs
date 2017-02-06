@@ -19,7 +19,7 @@ namespace Logic_Reinf
 
             if (setLineSegment.Contains(seg)) return;
             if (isLineRight(mainLine) == false && isLineRight(otherLine) == true) return;
-            
+
             G.Line offsetLine = mainLine.Offset(0);
             G.Line otherOffsetline = otherLine.Offset(0);
 
@@ -32,7 +32,7 @@ namespace Logic_Reinf
 
             double j = nearEdge + equalSpacer;
             double len = mainLine.Length();
-            
+
             if ((len - nearEdge * 2) > spacing)
             {
                 R.Raud_Array rauad = new R.Raud_Array(spacing);
