@@ -42,6 +42,12 @@ namespace Logic_Reinf
             return false;
         }
 
+        public bool checkValid()
+        {
+            if (_start == _end) return false;
+            return true;
+        }
+
         public G.Line getLine()
         {
             return new G.Line(_start, _end);

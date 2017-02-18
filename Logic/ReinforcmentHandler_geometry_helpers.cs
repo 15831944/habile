@@ -63,7 +63,7 @@ namespace Logic_Reinf
         private List<LineSegment> line_segmentator(G.Edge e)
         {
             List<LineSegment> segmentList = new List<LineSegment>();
-            G.Line main = e.Line.Offset(G._Variables.EQUALS_TOLERANCE);
+            G.Line main = e.Line.Offset(G._Variables.EQUALS_TOLERANCE + 0.001);
 
             G.Vector d1 = e.Line.getDirectionVector();
             G.Vector o1 = e.Line.getOffsetVector();

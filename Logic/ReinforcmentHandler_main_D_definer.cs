@@ -21,7 +21,7 @@ namespace Logic_Reinf
             double cover1 = _V_.X_CONCRETE_COVER_1;
             double coverMain = _V_.X_CONCRETE_COVER_1;
             double cover2 = _V_.X_CONCRETE_COVER_1;
-            int parand = 2 * _V_.Y_CONCRETE_COVER_DELTA - 10; // parand magic
+            int parand = 0; //2 * _V_.Y_CONCRETE_COVER_DELTA - 10; // parand magic
 
             double side1Dist = _V_.X_REINFORCEMENT_MAIN_ANCHOR_LENGTH;
             double mainDist = mainEdge.Line.Length();

@@ -32,6 +32,12 @@ namespace commands
             Reinforcer.main();
         }
 
+        [CommandMethod("AEINFO")]
+        public void info()
+        {
+            SW.MessageBox.Show("Versioon: 07.02.2017\n");
+        }
+
         [CommandMethod("AER")]
         public void one()
         {

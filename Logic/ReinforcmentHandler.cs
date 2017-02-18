@@ -99,11 +99,11 @@ namespace Logic_Reinf
 
             create_valid_D();
             create_oversized_D();
-            //executor(create_extended_B);
-            //executor(create_long_B);
+            executor(create_extended_B);
+            executor(create_long_B);
 
-            //executor(create_valid_B);
-            //executor(create_diagonal_A);
+            executor(create_valid_B);
+            executor(create_diagonal_A);
         }
 
         private void executor(Action fn)
@@ -130,13 +130,16 @@ namespace Logic_Reinf
 
                 foreach (LineSegment cur in allSegments)
                 {
-                    if (cur.hasOtherEdge())
+                    if (cur.checkValid()) // TODO: GET RID OF THIS CHECK
                     {
-                        define_side_U(cur);
-                    }
-                    else
-                    {
-                        define_side_D(cur);
+                        if (cur.hasOtherEdge())
+                        {
+                            define_side_U(cur);
+                        }
+                        else
+                        {
+                            define_side_D(cur);
+                        }
                     }
                 }
             }
@@ -641,14 +644,14 @@ namespace Logic_Reinf
                 {
                     if (!c5)
                     {
-                        if (side1Edge.Line.Length() < _V_.X_REINFORCEMENT_MAIN_ANCHOR_LENGTH)
+                        if (side1Edge.Line.Length() < _V_.Y_REINFORCEMENT_MAIN_MIN_LENGTH)
                         {
                             define_simple_D(e, side1Edge, side2Edge);
                         }
                     }
                     else if (!c6)
                     {
-                        if (side2Edge.Line.Length() < _V_.X_REINFORCEMENT_MAIN_ANCHOR_LENGTH)
+                        if (side2Edge.Line.Length() < _V_.Y_REINFORCEMENT_MAIN_MIN_LENGTH)
                         {
                             define_simple_D(e, side1Edge, side2Edge);
                         }
@@ -659,7 +662,7 @@ namespace Logic_Reinf
 
         private void remove_short_A()
         {
-            double c1 = _V_.Y_REINFORCEMENT_MAIN_MIN_LENGTH;
+            double c1 = _V_.Y_REINFORCEMENT_MAIN_MIN_LENGTH * 0.9;
 
             List<R.Raud> onlyA = knownReinforcement.Where(x => x is R.A_Raud).ToList();
             for (int i = onlyA.Count - 1; i >= 0; i--)
