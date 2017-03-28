@@ -35,7 +35,7 @@ namespace commands
         [CommandMethod("AEINFO")]
         public void info()
         {
-            SW.MessageBox.Show("Versioon: 07.02.2017\n");
+            SW.MessageBox.Show("Versioon: 28.03.2017\n");
         }
 
         [CommandMethod("AER")]

@@ -68,17 +68,27 @@ namespace Logic_Tabler
             int tot = mark.Length;
 
             int numCount = 0;
+            bool multiplier = false;
+            int multiplierCount = 0;
+
             int numShape = 0;
             int numDiam = 0;
 
             for (int i = 0; i < tot; i++)
             {
                 char cur = mark[i];
-
                 if (!Char.IsNumber(cur))
                 {
-                    numCount = i;
-                    break;
+                    if (Char.Equals(cur, '*') && multiplier == false)
+                    {
+                        multiplier = true;
+                        multiplierCount = i;
+                    }
+                    else
+                    {
+                        numCount = i;
+                        break;
+                    }
                 }
             }
 
@@ -97,7 +107,7 @@ namespace Logic_Tabler
             for (int k = numShape; k < tot; k++)
             {
                 char cur = mark[k];
-                
+
                 if (Char.IsNumber(cur))
                 {
                     if (cur.Equals('1') && doubleDigit == false)
@@ -118,20 +128,34 @@ namespace Logic_Tabler
                     else
                     {
                         numDiam = k + 1;
-                        break;  
+                        break;
                     }
                 }
             }
 
             int temp = numCount;
-            _Count = Int32.Parse(mark.Substring(0, temp) );
+            if (multiplier == true)
+            {
+                temp = numCount - multiplierCount - 1;
+                int number = Int32.Parse(mark.Substring(0, multiplierCount));
+
+                int count = Int32.Parse(mark.Substring(multiplierCount + 1, temp));
+                _Count = number * count;
+            }
+            else
+            {
+                _Count = Int32.Parse(mark.Substring(0, temp));
+            }
+
             temp = tot - numCount;
             _Position = mark.Substring(numCount, temp);
 
             temp = numShape - numCount;
             _Shape = mark.Substring(numCount, temp);
+
             temp = numDiam - numShape;
             _Diameter = Int32.Parse(mark.Substring(numShape, temp));
+
             temp = tot - numDiam;
             _Other = Int32.Parse(mark.Substring(numDiam, temp));
         }
