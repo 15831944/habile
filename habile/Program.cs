@@ -16,12 +16,12 @@ namespace habile
             {
                 string run = @"C:\Program Files\Bricsys\BricsCAD V16 en_US\bricscad.exe";
 
-                string netload = @"C:\Users\aleksandr.ess\Documents\GitHub\habile\BricsCommands\bin\Debug\BricsCommands.dll";
+                string netload = @"C:\Users\aleksandr.ess\Documents\GitHub\habile\DMTCommands\bin\Debug\DMTCommands.dll";
                 if (!File.Exists(netload))
                 {
-                    netload = @"C:\Users\aleksandr.ess\Documents\GitHub\habile\BricsCommands\bin\Release\BricsCommands.dll";
+                    netload = @"C:\Users\aleksandr.ess\Documents\GitHub\habile\DMTCommands\bin\Release\DMTCommands.dll";
                 }
-                string dwg = @"C:\Users\aleksandr.ess\Dropbox\DMT\Brics_testimine\training3.dwg";
+                string dwg = @"C:\Users\aleksandr.ess\Dropbox\DMT\Brics_testimine\training.dwg";
                 string script = "script1.scr";
 
                 createScriptFile(script, netload, dwg);
@@ -30,10 +30,10 @@ namespace habile
             else if (File.Exists(@"C:\Program Files\Autodesk\AutoCAD 2013\acad.exe"))
             {
                 string run = @"C:\Program Files\Autodesk\AutoCAD 2013\acad.exe";
-                string netload = @"C:\Users\Alex\Documents\GitHub\habile\CadCommands\bin\Debug\CadCommands.dll";
+                string netload = @"C:\Users\Alex\Documents\GitHub\habile\DMTCommands\bin\Debug\DMTCommands.dll";
                 if (!File.Exists(netload))
                 {
-                    netload = @"C:\Users\Alex\Documents\GitHub\habile\BricsCommands\bin\Release\CadCommands.dll";
+                    netload = @"C:\Users\Alex\Documents\GitHub\habile\DMTCommands\bin\Release\DMTCommands.dll";
                 }
                 string dwg = @"C:\Users\Alex\Dropbox\DMT\Brics_testimine\training.dwg";
                 string script = "script1.scr";
@@ -44,10 +44,10 @@ namespace habile
             else if (File.Exists(@"C:\Program Files\Autodesk\AutoCAD 2014\acad.exe"))
             {
                 string run = @"C:\Program Files\Autodesk\AutoCAD 2014\acad.exe";
-                string netload = @"C:\Users\Alex\Documents\GitHub\habile\CadCommands\bin\Debug\CadCommands.dll";
+                string netload = @"C:\Users\Alex\Documents\GitHub\habile\DMTCommands\bin\Debug\DMTCommands.dll";
                 if (!File.Exists(netload))
                 {
-                    netload = @"C:\Users\Alex\Documents\GitHub\habile\BricsCommands\bin\Release\CadCommands.dll";
+                    netload = @"C:\Users\Alex\Documents\GitHub\habile\DMTCommands\bin\Release\DMTCommands.dll";
                 }
                 string dwg = @"C:\Users\Alex\Dropbox\DMT\Brics_testimine\training.dwg";
                 string script = "script1.scr";
@@ -61,6 +61,7 @@ namespace habile
                 Console.ReadLine();
             }
         }
+
 
         public static void createScriptFile(string script, string netload, string dwg)
         {
@@ -77,11 +78,13 @@ namespace habile
             File.AppendAllText(script, scriptText.ToString());
         }
 
+
         public static void runAutocad(string program, string script)
         {
             string excet = program;
             string args = "/b \"" + script + "\" ";
             Process.Start(excet, args);
         }
+
     }
 }

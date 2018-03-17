@@ -5,23 +5,43 @@ using System.Linq;
 using System.IO;
 using System.Diagnostics;
 using System.Collections.Generic;
+using _SWF = System.Windows.Forms;
 
-//ODA
-using Teigha.Runtime;
-using Teigha.DatabaseServices;
-using Teigha.Geometry;
+//using _Ap = Autodesk.AutoCAD.ApplicationServices;
+////using _Br = Autodesk.AutoCAD.BoundaryRepresentation;
+//using _Cm = Autodesk.AutoCAD.Colors;
+//using _Db = Autodesk.AutoCAD.DatabaseServices;
+//using _Ed = Autodesk.AutoCAD.EditorInput;
+//using _Ge = Autodesk.AutoCAD.Geometry;
+//using _Gi = Autodesk.AutoCAD.GraphicsInterface;
+//using _Gs = Autodesk.AutoCAD.GraphicsSystem;
+//using _Pl = Autodesk.AutoCAD.PlottingServices;
+//using _Brx = Autodesk.AutoCAD.Runtime;
+//using _Trx = Autodesk.AutoCAD.Runtime;
+//using _Wnd = Autodesk.AutoCAD.Windows;
 
-//Bricsys
-using Bricscad.ApplicationServices;
-using Bricscad.Runtime;
-using Bricscad.EditorInput;
+using _Ap = Bricscad.ApplicationServices;
+//using _Br = Teigha.BoundaryRepresentation;
+using _Cm = Teigha.Colors;
+using _Db = Teigha.DatabaseServices;
+using _Ed = Bricscad.EditorInput;
+using _Ge = Teigha.Geometry;
+using _Gi = Teigha.GraphicsInterface;
+using _Gs = Teigha.GraphicsSystem;
+using _Gsk = Bricscad.GraphicsSystem;
+using _Pl = Bricscad.PlottingServices;
+using _Brx = Bricscad.Runtime;
+using _Trx = Teigha.Runtime;
+using _Wnd = Bricscad.Windows;
+//using _Int = Bricscad.Internal;
 
 using R = Reinforcement;
 using G = Geometry;
 using L = Logic_Reinf;
 using T = Logic_Tabler;
 
-namespace commands
+
+namespace DMTCommands
 {
     class Tabler
     {
@@ -79,6 +99,7 @@ namespace commands
             bendingNames.Add("Raud_Z9");
         }
 
+
         public void main2()
         {
             List<G.Area> areas = Tabler_Inputs.getAllAreas(boxName);
@@ -110,6 +131,7 @@ namespace commands
 
         }
 
+
         public void main3()
         {
             List<G.Area> areas = Tabler_Inputs.getAllAreas(boxName);
@@ -133,6 +155,7 @@ namespace commands
 
             Universal.writeCadMessage("PROGRAM FINISED");
         }
+
 
         public void main4()
         {
@@ -159,5 +182,6 @@ namespace commands
 
             Universal.writeCadMessage("PROGRAM FINISED");
         }
+
     }
 }

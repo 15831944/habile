@@ -5,32 +5,52 @@ using System.Linq;
 using System.IO;
 using System.Diagnostics;
 using System.Collections.Generic;
+using _SWF = System.Windows.Forms;
 
-//ODA
-using Teigha.Runtime;
-using Teigha.DatabaseServices;
-using Teigha.Geometry;
+//using _Ap = Autodesk.AutoCAD.ApplicationServices;
+////using _Br = Autodesk.AutoCAD.BoundaryRepresentation;
+//using _Cm = Autodesk.AutoCAD.Colors;
+//using _Db = Autodesk.AutoCAD.DatabaseServices;
+//using _Ed = Autodesk.AutoCAD.EditorInput;
+//using _Ge = Autodesk.AutoCAD.Geometry;
+//using _Gi = Autodesk.AutoCAD.GraphicsInterface;
+//using _Gs = Autodesk.AutoCAD.GraphicsSystem;
+//using _Pl = Autodesk.AutoCAD.PlottingServices;
+//using _Brx = Autodesk.AutoCAD.Runtime;
+//using _Trx = Autodesk.AutoCAD.Runtime;
+//using _Wnd = Autodesk.AutoCAD.Windows;
 
-//Bricsys
-using Bricscad.ApplicationServices;
-using Bricscad.Runtime;
-using Bricscad.EditorInput;
+using _Ap = Bricscad.ApplicationServices;
+//using _Br = Teigha.BoundaryRepresentation;
+using _Cm = Teigha.Colors;
+using _Db = Teigha.DatabaseServices;
+using _Ed = Bricscad.EditorInput;
+using _Ge = Teigha.Geometry;
+using _Gi = Teigha.GraphicsInterface;
+using _Gs = Teigha.GraphicsSystem;
+using _Gsk = Bricscad.GraphicsSystem;
+using _Pl = Bricscad.PlottingServices;
+using _Brx = Bricscad.Runtime;
+using _Trx = Teigha.Runtime;
+using _Wnd = Bricscad.Windows;
+//using _Int = Bricscad.Internal;
 
-using L = Logic_Reinf;
 using R = Reinforcement;
 using G = Geometry;
+using L = Logic_Reinf;
 using T = Logic_Tabler;
 
-namespace commands
+
+namespace DMTCommands
 {
     static class Tabler_Outputs
     {
         public static void main(List<T.DrawingArea> fields)
         {
-            Document doc = Application.DocumentManager.MdiActiveDocument;
-            Database db = doc.Database;
+            _Ap.Document doc = _Ap.Application.DocumentManager.MdiActiveDocument;
+            _Db.Database db = doc.Database;
 
-            Transaction trans = db.TransactionManager.StartTransaction();
+            _Db.Transaction trans = db.TransactionManager.StartTransaction();
             try
             {
                 List<string> blockNames = new List<string>() { "Painutustabel_rida" };
@@ -50,7 +70,8 @@ namespace commands
             }
         }
 
-        private static void fieldHandler(List<T.DrawingArea> fields, Transaction trans)
+
+        private static void fieldHandler(List<T.DrawingArea> fields, _Db.Transaction trans)
         {
             foreach (T.DrawingArea f in fields)
             {
@@ -65,7 +86,8 @@ namespace commands
             }
         }
 
-        private static void generateTable(T.DrawingArea field, Transaction trans)
+
+        private static void generateTable(T.DrawingArea field, _Db.Transaction trans)
         {
             G.Point insertPoint = field._tableHeads[0].IP;
             double scale = field._tableHeads[0].Scale;
@@ -85,39 +107,40 @@ namespace commands
             }
         }
 
-        private static void insertRow(G.Point insertion, T.TableRow rowData, double scale, Transaction trans)
+
+        private static void insertRow(G.Point insertion, T.TableRow rowData, double scale, _Db.Transaction trans)
         {
             string blockName = "Painutustabel_rida";
             string layerName = "K004";
 
-            Document doc = Application.DocumentManager.MdiActiveDocument;
-            Database db = doc.Database;
+            _Ap.Document doc = _Ap.Application.DocumentManager.MdiActiveDocument;
+            _Db.Database db = doc.Database;
 
-            BlockTable blockTable = trans.GetObject(db.BlockTableId, OpenMode.ForRead) as BlockTable;
-            BlockTableRecord curSpace = trans.GetObject(db.CurrentSpaceId, OpenMode.ForWrite) as BlockTableRecord;
+            _Db.BlockTable blockTable = trans.GetObject(db.BlockTableId, _Db.OpenMode.ForRead) as _Db.BlockTable;
+            _Db.BlockTableRecord curSpace = trans.GetObject(db.CurrentSpaceId, _Db.OpenMode.ForWrite) as _Db.BlockTableRecord;
 
-            Point3d insertPointBlock = new Point3d(insertion.X, insertion.Y, 0);
-            using (BlockReference newBlockReference = new BlockReference(insertPointBlock, blockTable[blockName]))
+            _Ge.Point3d insertPointBlock = new _Ge.Point3d(insertion.X, insertion.Y, 0);
+            using (_Db.BlockReference newBlockReference = new _Db.BlockReference(insertPointBlock, blockTable[blockName]))
             {
                 newBlockReference.Layer = layerName;
                 curSpace.AppendEntity(newBlockReference);
                 trans.AddNewlyCreatedDBObject(newBlockReference, true);
-                newBlockReference.TransformBy(Matrix3d.Scaling(scale, insertPointBlock));
+                newBlockReference.TransformBy(_Ge.Matrix3d.Scaling(scale, insertPointBlock));
 
-                BlockTableRecord blockBlockTable = trans.GetObject(blockTable[blockName], OpenMode.ForRead) as BlockTableRecord;
+                _Db.BlockTableRecord blockBlockTable = trans.GetObject(blockTable[blockName], _Db.OpenMode.ForRead) as _Db.BlockTableRecord;
                 if (blockBlockTable.HasAttributeDefinitions)
                 {
-                    foreach (ObjectId objID in blockBlockTable)
+                    foreach (_Db.ObjectId objID in blockBlockTable)
                     {
-                        DBObject obj = trans.GetObject(objID, OpenMode.ForRead) as DBObject;
+                        _Db.DBObject obj = trans.GetObject(objID, _Db.OpenMode.ForRead) as _Db.DBObject;
 
-                        if (obj is AttributeDefinition)
+                        if (obj is _Db.AttributeDefinition)
                         {
-                            AttributeDefinition attDef = obj as AttributeDefinition;
+                            _Db.AttributeDefinition attDef = obj as _Db.AttributeDefinition;
 
                             if (!attDef.Constant)
                             {
-                                using (AttributeReference attRef = new AttributeReference())
+                                using (_Db.AttributeReference attRef = new _Db.AttributeReference())
                                 {
                                     attRef.SetAttributeFromBlock(attDef, newBlockReference.BlockTransform);
                                     attRef.Position = attDef.Position.TransformBy(newBlockReference.BlockTransform);
@@ -132,7 +155,8 @@ namespace commands
             }
         }
 
-        private static void setRowParameters(AttributeReference ar, T.TableRow rowData)
+
+        private static void setRowParameters(_Db.AttributeReference ar, T.TableRow rowData)
         {
             if (ar != null)
             {
@@ -155,5 +179,6 @@ namespace commands
                 else if (ar.Tag == "y") { if (rowData.Y != -1) ar.TextString = rowData.Y.ToString(); }
             }
         }
+
     }
 }

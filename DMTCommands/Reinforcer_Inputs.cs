@@ -5,42 +5,64 @@ using System.Linq;
 using System.IO;
 using System.Diagnostics;
 using System.Collections.Generic;
+using _SWF = System.Windows.Forms;
 
-//ODA
-using Teigha.Runtime;
-using Teigha.DatabaseServices;
-using Teigha.Geometry;
+//using _Ap = Autodesk.AutoCAD.ApplicationServices;
+////using _Br = Autodesk.AutoCAD.BoundaryRepresentation;
+//using _Cm = Autodesk.AutoCAD.Colors;
+//using _Db = Autodesk.AutoCAD.DatabaseServices;
+//using _Ed = Autodesk.AutoCAD.EditorInput;
+//using _Ge = Autodesk.AutoCAD.Geometry;
+//using _Gi = Autodesk.AutoCAD.GraphicsInterface;
+//using _Gs = Autodesk.AutoCAD.GraphicsSystem;
+//using _Pl = Autodesk.AutoCAD.PlottingServices;
+//using _Brx = Autodesk.AutoCAD.Runtime;
+//using _Trx = Autodesk.AutoCAD.Runtime;
+//using _Wnd = Autodesk.AutoCAD.Windows;
 
-//Bricsys
-using Bricscad.ApplicationServices;
-using Bricscad.Runtime;
-using Bricscad.EditorInput;
+using _Ap = Bricscad.ApplicationServices;
+//using _Br = Teigha.BoundaryRepresentation;
+using _Cm = Teigha.Colors;
+using _Db = Teigha.DatabaseServices;
+using _Ed = Bricscad.EditorInput;
+using _Ge = Teigha.Geometry;
+using _Gi = Teigha.GraphicsInterface;
+using _Gs = Teigha.GraphicsSystem;
+using _Gsk = Bricscad.GraphicsSystem;
+using _Pl = Bricscad.PlottingServices;
+using _Brx = Bricscad.Runtime;
+using _Trx = Teigha.Runtime;
+using _Wnd = Bricscad.Windows;
+//using _Int = Bricscad.Internal;
 
+using R = Reinforcement;
 using G = Geometry;
 using L = Logic_Reinf;
+using T = Logic_Tabler;
 
-namespace commands
+
+namespace DMTCommands
 {
     static class Reinforcer_Inputs
     {
         public static bool getSettingsVariables()
         {
-            Document doc = Application.DocumentManager.MdiActiveDocument;
-            Database db = doc.Database;
-            Editor ed = doc.Editor;
+            _Ap.Document doc = _Ap.Application.DocumentManager.MdiActiveDocument;
+            _Db.Database db = doc.Database;
+            _Ed.Editor ed = doc.Editor;
 
-            TypedValue[] filterlist = new TypedValue[2];
-            filterlist[0] = new TypedValue(0, "INSERT");
-            filterlist[1] = new TypedValue(2, "Reinf_program_settings");
+            _Db.TypedValue[] filterlist = new _Db.TypedValue[2];
+            filterlist[0] = new _Db.TypedValue(0, "INSERT");
+            filterlist[1] = new _Db.TypedValue(2, "Reinf_program_settings");
 
-            SelectionFilter filter = new SelectionFilter(filterlist);
+            _Ed.SelectionFilter filter = new _Ed.SelectionFilter(filterlist);
 
-            PromptSelectionOptions opts = new PromptSelectionOptions();
+            _Ed.PromptSelectionOptions opts = new _Ed.PromptSelectionOptions();
             opts.MessageForAdding = "\nSelect SETTINGS BLOCK: ";
 
-            PromptSelectionResult selection = ed.GetSelection(opts, filter);
+            _Ed.PromptSelectionResult selection = ed.GetSelection(opts, filter);
 
-            if (selection.Status != PromptStatus.OK)
+            if (selection.Status != _Ed.PromptStatus.OK)
             {
                 ed.WriteMessage("\nERROR - SETTINGS BLOCK not found");
                 return false;
@@ -52,17 +74,17 @@ namespace commands
             }
             else
             {
-                using (Transaction trans = db.TransactionManager.StartTransaction())
+                using (_Db.Transaction trans = db.TransactionManager.StartTransaction())
                 {
-                    ObjectId selectionId = selection.Value.GetObjectIds()[0];
-                    BlockReference selectionBR = trans.GetObject(selectionId, OpenMode.ForWrite) as BlockReference;
+                    _Db.ObjectId selectionId = selection.Value.GetObjectIds()[0];
+                    _Db.BlockReference selectionBR = trans.GetObject(selectionId, _Db.OpenMode.ForWrite) as _Db.BlockReference;
 
                     L._V_.Z_DRAWING_SCALE = selectionBR.ScaleFactors.X;
 
-                    foreach (ObjectId arId in selectionBR.AttributeCollection)
+                    foreach (_Db.ObjectId arId in selectionBR.AttributeCollection)
                     {
-                        DBObject obj = trans.GetObject(arId, OpenMode.ForWrite);
-                        AttributeReference ar = obj as AttributeReference;
+                        _Db.DBObject obj = trans.GetObject(arId, _Db.OpenMode.ForWrite);
+                        _Db.AttributeReference ar = obj as _Db.AttributeReference;
                         if (ar != null)
                         {
                             bool success = setProgramVariables(ar, ed);
@@ -75,7 +97,8 @@ namespace commands
             return true;
         }
 
-        private static bool setProgramVariables(AttributeReference ar, Editor ed)
+
+        private static bool setProgramVariables(_Db.AttributeReference ar, _Ed.Editor ed)
         {
             if (ar.Tag == "ARMATUURI_MARK")
             {
@@ -381,38 +404,39 @@ namespace commands
             return true;
         }
 
+
         public static List<G.Line> getSelectedPolyLines()
         {
             List<G.Line> polys = new List<G.Line>();
 
-            Document doc = Application.DocumentManager.MdiActiveDocument;
-            Database db = doc.Database;
+            _Ap.Document doc = _Ap.Application.DocumentManager.MdiActiveDocument;
+            _Db.Database db = doc.Database;
 
-            using (Transaction trans = db.TransactionManager.StartTransaction())
+            using (_Db.Transaction trans = db.TransactionManager.StartTransaction())
             {
-                PromptSelectionResult userSelection = doc.Editor.GetSelection();
+                _Ed.PromptSelectionResult userSelection = doc.Editor.GetSelection();
 
-                if (userSelection.Status == PromptStatus.OK)
+                if (userSelection.Status == _Ed.PromptStatus.OK)
                 {
-                    SelectionSet selectionSet = userSelection.Value;
+                    _Ed.SelectionSet selectionSet = userSelection.Value;
 
-                    foreach (SelectedObject currentObject in selectionSet)
+                    foreach (_Ed.SelectedObject currentObject in selectionSet)
                     {
                         if (currentObject != null)
                         {
-                            Entity currentEntity = trans.GetObject(currentObject.ObjectId, OpenMode.ForRead) as Entity;
+                            _Db.Entity currentEntity = trans.GetObject(currentObject.ObjectId, _Db.OpenMode.ForRead) as _Db.Entity;
 
                             if (currentEntity != null)
                             {
-                                if (currentEntity is Polyline)
+                                if (currentEntity is _Db.Polyline)
                                 {
-                                    Polyline poly = trans.GetObject(currentEntity.ObjectId, OpenMode.ForRead) as Polyline;
+                                    _Db.Polyline poly = trans.GetObject(currentEntity.ObjectId, _Db.OpenMode.ForRead) as _Db.Polyline;
                                     int points = poly.NumberOfVertices;
 
                                     for (int i = 1; i < points; i++)
                                     {
-                                        Point2d p1 = poly.GetPoint2dAt(i - 1);
-                                        Point2d p2 = poly.GetPoint2dAt(i);
+                                        _Ge.Point2d p1 = poly.GetPoint2dAt(i - 1);
+                                        _Ge.Point2d p2 = poly.GetPoint2dAt(i);
 
                                         G.Point new_p1 = new G.Point(p1.X, p1.Y);
                                         G.Point new_p2 = new G.Point(p2.X, p2.Y);
@@ -425,8 +449,8 @@ namespace commands
 
                                     if (poly.Closed)
                                     {
-                                        Point2d p1 = poly.GetPoint2dAt(points - 1);
-                                        Point2d p2 = poly.GetPoint2dAt(0);
+                                        _Ge.Point2d p1 = poly.GetPoint2dAt(points - 1);
+                                        _Ge.Point2d p2 = poly.GetPoint2dAt(0);
                                         G.Point new_p1 = new G.Point(p1.X, p1.Y);
                                         G.Point new_p2 = new G.Point(p2.X, p2.Y);
 
@@ -450,21 +474,22 @@ namespace commands
         {
             G.Point picked;
 
-            Document doc = Application.DocumentManager.MdiActiveDocument;
-            Database db = doc.Database;
+            _Ap.Document doc = _Ap.Application.DocumentManager.MdiActiveDocument;
+            _Db.Database db = doc.Database;
 
-            using (Transaction trans = db.TransactionManager.StartTransaction())
+            using (_Db.Transaction trans = db.TransactionManager.StartTransaction())
             {
-                PromptPointResult pickedPoint;
-                PromptPointOptions pickedPointOptions = new PromptPointOptions("\nSelect bending INSERTION POINT");
+                _Ed.PromptPointResult pickedPoint;
+                _Ed.PromptPointOptions pickedPointOptions = new _Ed.PromptPointOptions("\nSelect bending INSERTION POINT");
 
                 pickedPoint = doc.Editor.GetPoint(pickedPointOptions);
-                Point3d pt = pickedPoint.Value;
+                _Ge.Point3d pt = pickedPoint.Value;
 
                 picked = new G.Point(pt.X, pt.Y);
             }
 
             return picked;
         }
+
     }
 }

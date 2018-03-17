@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("CadCommands")]
+[assembly: AssemblyTitle("DMTCommands")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("CadCommands")]
+[assembly: AssemblyProduct("DMTCommands")]
 [assembly: AssemblyCopyright("Copyright ©  2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("457dd805-11a8-4b36-8fe6-969a5b3ad632")]
+[assembly: Guid("c972def2-ccc3-42f5-9f5c-c27cf5a0e49d")]
 
 // Version information for an assembly consists of the following four values:
 //

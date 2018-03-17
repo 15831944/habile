@@ -5,7 +5,7 @@ VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "habile", "habile\habile.csproj", "{92A467DD-F975-4A70-A545-CA132A1EAA8E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BricsCommands", "BricsCommands\BricsCommands.csproj", "{C972DEF2-CCC3-42F5-9F5C-C27CF5A0E49D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DMTCommands", "DMTCommands\DMTCommands.csproj", "{C972DEF2-CCC3-42F5-9F5C-C27CF5A0E49D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Geometry", "Geometry\Geometry.csproj", "{EB7AFCC4-42AF-429D-AC54-72F488C0164C}"
 EndProject
@@ -14,8 +14,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Geometry_visual", "Geometry_visual\Geometry_visual.csproj", "{1D554DAE-0B57-4CEE-B8C5-E37984F6DFBC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logic_Reinf", "Logic\Logic_Reinf.csproj", "{0C575E87-472B-4FF8-8B8F-D5554A35D556}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CadCommands", "CadCommands\CadCommands.csproj", "{457DD805-11A8-4B36-8FE6-969A5B3AD632}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reinforcement", "Reinforcement\Reinforcement.csproj", "{1199B856-127E-4F0E-9407-CE40646DC8F4}"
 EndProject
@@ -53,10 +51,6 @@ Global
 		{0C575E87-472B-4FF8-8B8F-D5554A35D556}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0C575E87-472B-4FF8-8B8F-D5554A35D556}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0C575E87-472B-4FF8-8B8F-D5554A35D556}.Release|Any CPU.Build.0 = Release|Any CPU
-		{457DD805-11A8-4B36-8FE6-969A5B3AD632}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{457DD805-11A8-4B36-8FE6-969A5B3AD632}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{457DD805-11A8-4B36-8FE6-969A5B3AD632}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{457DD805-11A8-4B36-8FE6-969A5B3AD632}.Release|Any CPU.Build.0 = Release|Any CPU
 		{1199B856-127E-4F0E-9407-CE40646DC8F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{1199B856-127E-4F0E-9407-CE40646DC8F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1199B856-127E-4F0E-9407-CE40646DC8F4}.Release|Any CPU.ActiveCfg = Release|Any CPU

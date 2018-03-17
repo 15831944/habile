@@ -5,32 +5,51 @@ using System.Linq;
 using System.IO;
 using System.Diagnostics;
 using System.Collections.Generic;
-using DR = System.Drawing;
+using _SWF = System.Windows.Forms;
 
-//ODA
-using PROG = Teigha;
-using Teigha.Runtime;
-using Teigha.DatabaseServices;
-using Teigha.Geometry;
+//using _Ap = Autodesk.AutoCAD.ApplicationServices;
+////using _Br = Autodesk.AutoCAD.BoundaryRepresentation;
+//using _Cm = Autodesk.AutoCAD.Colors;
+//using _Db = Autodesk.AutoCAD.DatabaseServices;
+//using _Ed = Autodesk.AutoCAD.EditorInput;
+//using _Ge = Autodesk.AutoCAD.Geometry;
+//using _Gi = Autodesk.AutoCAD.GraphicsInterface;
+//using _Gs = Autodesk.AutoCAD.GraphicsSystem;
+//using _Pl = Autodesk.AutoCAD.PlottingServices;
+//using _Brx = Autodesk.AutoCAD.Runtime;
+//using _Trx = Autodesk.AutoCAD.Runtime;
+//using _Wnd = Autodesk.AutoCAD.Windows;
 
-//Bricsys
-using Bricscad.ApplicationServices;
-using Bricscad.Runtime;
-using Bricscad.EditorInput;
+using _Ap = Bricscad.ApplicationServices;
+//using _Br = Teigha.BoundaryRepresentation;
+using _Cm = Teigha.Colors;
+using _Db = Teigha.DatabaseServices;
+using _Ed = Bricscad.EditorInput;
+using _Ge = Teigha.Geometry;
+using _Gi = Teigha.GraphicsInterface;
+using _Gs = Teigha.GraphicsSystem;
+using _Gsk = Bricscad.GraphicsSystem;
+using _Pl = Bricscad.PlottingServices;
+using _Brx = Bricscad.Runtime;
+using _Trx = Teigha.Runtime;
+using _Wnd = Bricscad.Windows;
+//using _Int = Bricscad.Internal;
 
-using L = Logic_Reinf;
 using R = Reinforcement;
 using G = Geometry;
+using L = Logic_Reinf;
+using T = Logic_Tabler;
 
-namespace commands
+
+namespace DMTCommands
 {
     static class Reinforcer_Outputs
     {
         public static void main(List<R.Raud> reinf, List<R.Raud_Array> reinf_array, List<R.Raud> unique_reinf, G.Point insertPoint)
         {
-            Document doc = Application.DocumentManager.MdiActiveDocument;
-            Database db = doc.Database;
-            Transaction trans = db.TransactionManager.StartTransaction();
+            _Ap.Document doc = _Ap.Application.DocumentManager.MdiActiveDocument;
+            _Db.Database db = doc.Database;
+            _Db.Transaction trans = db.TransactionManager.StartTransaction();
 
             try
             {
@@ -54,7 +73,8 @@ namespace commands
             }
         }
 
-        private static void reinfHandler(List<R.Raud> reinf, Transaction trans)
+
+        private static void reinfHandler(List<R.Raud> reinf, _Db.Transaction trans)
         {
             foreach (R.Raud re in reinf)
             {
@@ -63,7 +83,8 @@ namespace commands
             }
         }
 
-        private static void reinfArrayHandler(List<R.Raud_Array> reinf, Transaction trans)
+
+        private static void reinfArrayHandler(List<R.Raud_Array> reinf, _Db.Transaction trans)
         {
             foreach (R.Raud_Array rea in reinf)
             {
@@ -79,19 +100,20 @@ namespace commands
             }
         }
 
-        private static void insertReinforcementSingle(R.Raud _ALFA_, bool arrayReinf, Transaction trans)
+
+        private static void insertReinforcementSingle(R.Raud _ALFA_, bool arrayReinf, _Db.Transaction trans)
         {
             string blockName = getReinforcementBlockName(_ALFA_, arrayReinf);
             string layerName = "Armatuur";
 
-            Document doc = Application.DocumentManager.MdiActiveDocument;
-            Database db = doc.Database;
+            _Ap.Document doc = _Ap.Application.DocumentManager.MdiActiveDocument;
+            _Db.Database db = doc.Database;
 
-            BlockTable blockTable = trans.GetObject(db.BlockTableId, OpenMode.ForRead) as BlockTable;
-            BlockTableRecord curSpace = trans.GetObject(db.CurrentSpaceId, OpenMode.ForWrite) as BlockTableRecord;
+            _Db.BlockTable blockTable = trans.GetObject(db.BlockTableId, _Db.OpenMode.ForRead) as _Db.BlockTable;
+            _Db.BlockTableRecord curSpace = trans.GetObject(db.CurrentSpaceId, _Db.OpenMode.ForWrite) as _Db.BlockTableRecord;
 
-            Point3d insertPointBlock = new Point3d(_ALFA_.StartPoint.X, _ALFA_.StartPoint.Y, 0);
-            using (BlockReference newBlockReference = new BlockReference(insertPointBlock, blockTable[blockName]))
+            _Ge.Point3d insertPointBlock = new _Ge.Point3d(_ALFA_.StartPoint.X, _ALFA_.StartPoint.Y, 0);
+            using (_Db.BlockReference newBlockReference = new _Db.BlockReference(insertPointBlock, blockTable[blockName]))
             {
                 newBlockReference.Rotation = _ALFA_.Rotation;
                 newBlockReference.Layer = layerName;
@@ -102,37 +124,38 @@ namespace commands
             }
         }
 
-        private static void insertReinforcmentMark2(string mark, G.Point IP, Transaction trans)
+
+        private static void insertReinforcmentMark2(string mark, G.Point IP, _Db.Transaction trans)
         {
             string layerName = "K023TL";
 
-            Document doc = Application.DocumentManager.MdiActiveDocument;
-            Database db = doc.Database;
+            _Ap.Document doc = _Ap.Application.DocumentManager.MdiActiveDocument;
+            _Db.Database db = doc.Database;
 
-            BlockTableRecord curSpace = trans.GetObject(db.CurrentSpaceId, OpenMode.ForWrite) as BlockTableRecord;
+            _Db.BlockTableRecord curSpace = trans.GetObject(db.CurrentSpaceId, _Db.OpenMode.ForWrite) as _Db.BlockTableRecord;
 
-            Point3d insertPointLeader = new Point3d(IP.X, IP.Y, 0);
-            Point3d insertPointText = new Point3d(IP.X + 7.5 * L._V_.Z_DRAWING_SCALE, IP.Y + 7.5 * L._V_.Z_DRAWING_SCALE, 0);
+            _Ge.Point3d insertPointLeader = new _Ge.Point3d(IP.X, IP.Y, 0);
+            _Ge.Point3d insertPointText = new _Ge.Point3d(IP.X + 7.5 * L._V_.Z_DRAWING_SCALE, IP.Y + 7.5 * L._V_.Z_DRAWING_SCALE, 0);
 
-            MLeader leader = new MLeader();
+            _Db.MLeader leader = new _Db.MLeader();
             leader.SetDatabaseDefaults();
             leader.Layer = layerName;
 
-            BlockTable blockTable = trans.GetObject(db.BlockTableId, OpenMode.ForRead) as BlockTable;
+            _Db.BlockTable blockTable = trans.GetObject(db.BlockTableId, _Db.OpenMode.ForRead) as _Db.BlockTable;
             if (!blockTable.Has("_NONE"))
             {
-                Application.SetSystemVariable("DIMBLK", "_NONE");
+                _Ap.Application.SetSystemVariable("DIMBLK", "_NONE");
             }
             leader.ArrowSymbolId = blockTable["_NONE"];
 
-            leader.SetTextAttachmentType(TextAttachmentType.AttachmentBottomOfTopLine, LeaderDirectionType.LeftLeader); // Left attachment
-            leader.SetTextAttachmentType(TextAttachmentType.AttachmentBottomOfTopLine, LeaderDirectionType.RightLeader); // Right attachment
+            leader.SetTextAttachmentType(_Db.TextAttachmentType.AttachmentBottomOfTopLine, _Db.LeaderDirectionType.LeftLeader); // Left attachment
+            leader.SetTextAttachmentType(_Db.TextAttachmentType.AttachmentBottomOfTopLine, _Db.LeaderDirectionType.RightLeader); // Right attachment
             leader.EnableLanding = false;
-            leader.LeaderLineColor = PROG.Colors.Color.FromColorIndex(PROG.Colors.ColorMethod.None, 155);
+            leader.LeaderLineColor = _Cm.Color.FromColorIndex(_Cm.ColorMethod.None, 155);
             leader.LandingGap = 0;
-            leader.ContentType = ContentType.MTextContent;
+            leader.ContentType = _Db.ContentType.MTextContent;
 
-            MText mText = new MText();
+            _Db.MText mText = new _Db.MText();
             mText.SetDatabaseDefaults();
             mText.TextHeight = 2.5 * L._V_.Z_DRAWING_SCALE;
             mText.Contents = mark;
@@ -146,40 +169,41 @@ namespace commands
             trans.AddNewlyCreatedDBObject(leader, true);
         }
 
-        private static void insertBending(R.Raud _ALFA_, G.Point insertion, Transaction trans)
+
+        private static void insertBending(R.Raud _ALFA_, G.Point insertion, _Db.Transaction trans)
         {
             string blockName = getBendingBlockName(_ALFA_);
             string layerName = "K023TL";
 
-            Document doc = Application.DocumentManager.MdiActiveDocument;
-            Database db = doc.Database;
+            _Ap.Document doc = _Ap.Application.DocumentManager.MdiActiveDocument;
+            _Db.Database db = doc.Database;
 
-            BlockTable blockTable = trans.GetObject(db.BlockTableId, OpenMode.ForRead) as BlockTable;
-            BlockTableRecord curSpace = trans.GetObject(db.CurrentSpaceId, OpenMode.ForWrite) as BlockTableRecord;
+            _Db.BlockTable blockTable = trans.GetObject(db.BlockTableId, _Db.OpenMode.ForRead) as _Db.BlockTable;
+            _Db.BlockTableRecord curSpace = trans.GetObject(db.CurrentSpaceId, _Db.OpenMode.ForWrite) as _Db.BlockTableRecord;
 
-            Point3d insertPointBlock = new Point3d(insertion.X, insertion.Y, 0);
-            using (BlockReference newBlockReference = new BlockReference(insertPointBlock, blockTable[blockName]))
+            _Ge.Point3d insertPointBlock = new _Ge.Point3d(insertion.X, insertion.Y, 0);
+            using (_Db.BlockReference newBlockReference = new _Db.BlockReference(insertPointBlock, blockTable[blockName]))
             {
                 newBlockReference.Layer = layerName;
                 curSpace.AppendEntity(newBlockReference);
                 trans.AddNewlyCreatedDBObject(newBlockReference, true);
 
-                newBlockReference.TransformBy(Matrix3d.Scaling(L._V_.Z_DRAWING_SCALE, insertPointBlock));
+                newBlockReference.TransformBy(_Ge.Matrix3d.Scaling(L._V_.Z_DRAWING_SCALE, insertPointBlock));
 
-                BlockTableRecord blockBlockTable = trans.GetObject(blockTable[blockName], OpenMode.ForRead) as BlockTableRecord;
+                _Db.BlockTableRecord blockBlockTable = trans.GetObject(blockTable[blockName], _Db.OpenMode.ForRead) as _Db.BlockTableRecord;
                 if (blockBlockTable.HasAttributeDefinitions)
                 {
-                    foreach (ObjectId objID in blockBlockTable)
+                    foreach (_Db.ObjectId objID in blockBlockTable)
                     {
-                        DBObject obj = trans.GetObject(objID, OpenMode.ForRead) as DBObject;
+                        _Db.DBObject obj = trans.GetObject(objID, _Db.OpenMode.ForRead) as _Db.DBObject;
 
-                        if (obj is AttributeDefinition)
+                        if (obj is _Db.AttributeDefinition)
                         {
-                            AttributeDefinition attDef = obj as AttributeDefinition;
+                            _Db.AttributeDefinition attDef = obj as _Db.AttributeDefinition;
 
                             if (!attDef.Constant)
                             {
-                                using (AttributeReference attRef = new AttributeReference())
+                                using (_Db.AttributeReference attRef = new _Db.AttributeReference())
                                 {
                                     attRef.SetAttributeFromBlock(attDef, newBlockReference.BlockTransform);
                                     attRef.Position = attDef.Position.TransformBy(newBlockReference.BlockTransform);
@@ -194,7 +218,8 @@ namespace commands
             }
         }
 
-        private static void bendingHandler(List<R.Raud> unique_reinf, G.Point insertPoint, Transaction trans)
+
+        private static void bendingHandler(List<R.Raud> unique_reinf, G.Point insertPoint, _Db.Transaction trans)
         {
             G.Point currentPoint = new G.Point(insertPoint.X, insertPoint.Y);
 
@@ -278,10 +303,11 @@ namespace commands
             }
         }
 
-        private static void setReinforcementBlockParameters(BlockReference newBlockReference, R.Raud _ALFA_)
+
+        private static void setReinforcementBlockParameters(_Db.BlockReference newBlockReference, R.Raud _ALFA_)
         {
-            DynamicBlockReferencePropertyCollection aa = newBlockReference.DynamicBlockReferencePropertyCollection;
-            foreach (DynamicBlockReferenceProperty a in aa)
+            _Db.DynamicBlockReferencePropertyCollection aa = newBlockReference.DynamicBlockReferencePropertyCollection;
+            foreach (_Db.DynamicBlockReferenceProperty a in aa)
             {
                 if (a != null)
                 {
@@ -342,7 +368,8 @@ namespace commands
             }
         }
 
-        private static void setBendingBlockParameters(AttributeReference ar, R.Raud _ALFA_)
+
+        private static void setBendingBlockParameters(_Db.AttributeReference ar, R.Raud _ALFA_)
         {
             if (ar != null)
             {
@@ -463,6 +490,7 @@ namespace commands
             }
         }
 
+
         private static string getReinforcementBlockName(R.Raud _ALFA_, bool arrayReinf)
         {
             if (arrayReinf == false)
@@ -483,6 +511,7 @@ namespace commands
             return "Reinf_A_Raud";
         }
 
+
         private static string getBendingBlockName(R.Raud _ALFA_)
         {
             if (_ALFA_ is R.A_Raud) return "Raud_A";
@@ -493,5 +522,6 @@ namespace commands
             else if (_ALFA_ is R.U_Raud) return "Raud_U";
             else return "Raud_A";
         }
+
     }
 }
