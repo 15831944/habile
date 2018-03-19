@@ -26,6 +26,7 @@ namespace Logic_Reinf
         List<R.Raud> knownUniqueReinforcement;
         List<G.Line> reinf_geometry_debug;
 
+
         public ReinforcmentHandler(List<G.Line> polys)
         {
             r = new G.Region(polys);
@@ -43,7 +44,11 @@ namespace Logic_Reinf
             reinf_geometry_debug = new List<G.Line>();
 
             setCalculatedParameters();
+
+            DebugerWindow _debuger = new DebugerWindow();
+            _debuger.Show();
         }
+
 
         private void setCalculatedParameters()
         {
@@ -62,6 +67,7 @@ namespace Logic_Reinf
             _V_.Y_CONCRETE_COVER_2 = _V_.X_CONCRETE_COVER_1 + _V_.Y_CONCRETE_COVER_DELTA;
             _V_.Y_CONCRETE_COVER_3 = _V_.Y_CONCRETE_COVER_2 + _V_.Y_CONCRETE_COVER_DELTA;
         }
+
 
         public void main(ref List<R.Raud> reinf, ref List<R.Raud_Array> reinf_array, ref List<R.Raud> unique_reinf)
         {
@@ -82,6 +88,7 @@ namespace Logic_Reinf
             //Drawing_Box visu1 = new Drawing_Box(r, emptyEdgesDebug, emptyCornersDebug, setEdgesDebug, setCornerDebug, reinf_geometry_debug);
             //visu1.Show()
         }
+
 
         private void create_all_main_reinforcement()
         {
@@ -106,6 +113,7 @@ namespace Logic_Reinf
             executor(create_diagonal_A);
         }
 
+
         private void executor(Action fn)
         {
             fn();
@@ -113,6 +121,7 @@ namespace Logic_Reinf
             merge_B();
             merge_C();
         }
+
 
         private void create_all_side_reinforcement()
         {
@@ -140,10 +149,11 @@ namespace Logic_Reinf
                         {
                             define_side_D(cur);
                         }
-                    }
+                    }                    
                 }
             }
         }
+
 
         private void create_all_A()
         {
@@ -167,6 +177,7 @@ namespace Logic_Reinf
             }
         }
 
+
         private void create_valid_A()
         {
             List<G.Edge> emptyEdges = allEdges.Where(x => !setEdges.Keys.Contains(x)).ToList();
@@ -187,6 +198,7 @@ namespace Logic_Reinf
                 }
             }
         }
+
 
         private void create_trimmed_long_A()
         {
@@ -271,6 +283,7 @@ namespace Logic_Reinf
                 }
             }
         }
+
 
         private void create_trimmed_short_A()
         {
@@ -450,6 +463,7 @@ namespace Logic_Reinf
             }
         }
 
+
         private void create_diagonal_A()
         {
             List<G.Corner> emptyCorners = allCorners.Where(x => !setCorners.Keys.Contains(x)).ToList();
@@ -482,6 +496,7 @@ namespace Logic_Reinf
             }
         }
 
+
         private void create_valid_B()
         {
             List<G.Corner> emptyCorners = allCorners.Where(x => !setCorners.Keys.Contains(x)).ToList();
@@ -501,6 +516,7 @@ namespace Logic_Reinf
                 }
             }
         }
+
 
         private void create_extended_B()
         {
@@ -532,6 +548,7 @@ namespace Logic_Reinf
             }
         }
 
+
         private void create_oversized_B()
         {
             List<G.Edge> emptyEdges = allEdges.Where(x => !setEdges.Keys.Contains(x)).ToList();
@@ -561,6 +578,7 @@ namespace Logic_Reinf
                 }
             }
         }
+
 
         private void create_long_B()
         {
@@ -593,6 +611,7 @@ namespace Logic_Reinf
             }
         }
 
+
         private void create_valid_D()
         {
             List<G.Edge> emptyEdges = allEdges.Where(x => !setEdges.Keys.Contains(x)).ToList();
@@ -619,6 +638,7 @@ namespace Logic_Reinf
                 }
             }
         }
+
 
         private void create_oversized_D()
         {
@@ -660,6 +680,7 @@ namespace Logic_Reinf
             }
         }
 
+
         private void remove_short_A()
         {
             double c1 = _V_.Y_REINFORCEMENT_MAIN_MIN_LENGTH * 0.9;
@@ -675,6 +696,7 @@ namespace Logic_Reinf
                 }
             }
         }
+
 
         private void merge_A()
         {
@@ -705,6 +727,7 @@ namespace Logic_Reinf
             }
         }
 
+
         private void merge_B()
         {
             bool restartLoop = true;
@@ -733,6 +756,7 @@ namespace Logic_Reinf
                 }
             }
         }
+
 
         private void merge_C()
         {

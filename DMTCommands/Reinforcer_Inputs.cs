@@ -7,33 +7,33 @@ using System.Diagnostics;
 using System.Collections.Generic;
 using _SWF = System.Windows.Forms;
 
-//using _Ap = Autodesk.AutoCAD.ApplicationServices;
-////using _Br = Autodesk.AutoCAD.BoundaryRepresentation;
-//using _Cm = Autodesk.AutoCAD.Colors;
-//using _Db = Autodesk.AutoCAD.DatabaseServices;
-//using _Ed = Autodesk.AutoCAD.EditorInput;
-//using _Ge = Autodesk.AutoCAD.Geometry;
-//using _Gi = Autodesk.AutoCAD.GraphicsInterface;
-//using _Gs = Autodesk.AutoCAD.GraphicsSystem;
-//using _Pl = Autodesk.AutoCAD.PlottingServices;
-//using _Brx = Autodesk.AutoCAD.Runtime;
-//using _Trx = Autodesk.AutoCAD.Runtime;
-//using _Wnd = Autodesk.AutoCAD.Windows;
+using _Ap = Autodesk.AutoCAD.ApplicationServices;
+//using _Br = Autodesk.AutoCAD.BoundaryRepresentation;
+using _Cm = Autodesk.AutoCAD.Colors;
+using _Db = Autodesk.AutoCAD.DatabaseServices;
+using _Ed = Autodesk.AutoCAD.EditorInput;
+using _Ge = Autodesk.AutoCAD.Geometry;
+using _Gi = Autodesk.AutoCAD.GraphicsInterface;
+using _Gs = Autodesk.AutoCAD.GraphicsSystem;
+using _Pl = Autodesk.AutoCAD.PlottingServices;
+using _Brx = Autodesk.AutoCAD.Runtime;
+using _Trx = Autodesk.AutoCAD.Runtime;
+using _Wnd = Autodesk.AutoCAD.Windows;
 
-using _Ap = Bricscad.ApplicationServices;
-//using _Br = Teigha.BoundaryRepresentation;
-using _Cm = Teigha.Colors;
-using _Db = Teigha.DatabaseServices;
-using _Ed = Bricscad.EditorInput;
-using _Ge = Teigha.Geometry;
-using _Gi = Teigha.GraphicsInterface;
-using _Gs = Teigha.GraphicsSystem;
-using _Gsk = Bricscad.GraphicsSystem;
-using _Pl = Bricscad.PlottingServices;
-using _Brx = Bricscad.Runtime;
-using _Trx = Teigha.Runtime;
-using _Wnd = Bricscad.Windows;
-//using _Int = Bricscad.Internal;
+//using _Ap = Bricscad.ApplicationServices;
+////using _Br = Teigha.BoundaryRepresentation;
+//using _Cm = Teigha.Colors;
+//using _Db = Teigha.DatabaseServices;
+//using _Ed = Bricscad.EditorInput;
+//using _Ge = Teigha.Geometry;
+//using _Gi = Teigha.GraphicsInterface;
+//using _Gs = Teigha.GraphicsSystem;
+//using _Gsk = Bricscad.GraphicsSystem;
+//using _Pl = Bricscad.PlottingServices;
+//using _Brx = Bricscad.Runtime;
+//using _Trx = Teigha.Runtime;
+//using _Wnd = Bricscad.Windows;
+////using _Int = Bricscad.Internal;
 
 using R = Reinforcement;
 using G = Geometry;
@@ -43,62 +43,42 @@ using T = Logic_Tabler;
 
 namespace DMTCommands
 {
-    static class Reinforcer_Inputs
+    partial class Reinforcer
     {
-        public static bool getSettingsVariables()
+        private void getSettings()
         {
-            _Ap.Document doc = _Ap.Application.DocumentManager.MdiActiveDocument;
-            _Db.Database db = doc.Database;
-            _Ed.Editor ed = doc.Editor;
-
             _Db.TypedValue[] filterlist = new _Db.TypedValue[2];
             filterlist[0] = new _Db.TypedValue(0, "INSERT");
             filterlist[1] = new _Db.TypedValue(2, "Reinf_program_settings");
-
             _Ed.SelectionFilter filter = new _Ed.SelectionFilter(filterlist);
 
             _Ed.PromptSelectionOptions opts = new _Ed.PromptSelectionOptions();
-            opts.MessageForAdding = "\nSelect SETTINGS BLOCK: ";
+            opts.MessageForAdding = "\nSelect Reinf_program_settings block: ";
 
-            _Ed.PromptSelectionResult selection = ed.GetSelection(opts, filter);
+            _Ed.PromptSelectionResult selection = _c.ed.GetSelection(opts, filter);
+            if (selection.Status != _Ed.PromptStatus.OK) throw new DMTException("\n[ERROR] Reinf_program_settings - cancelled");
+            if (selection.Value.Count != 1) throw new DMTException("\n[ERROR] Reinf_program_settings - too many in selection");
 
-            if (selection.Status != _Ed.PromptStatus.OK)
+
+            _Db.ObjectId selectionId = selection.Value.GetObjectIds()[0];
+            _Db.BlockReference selectionBR = _c.trans.GetObject(selectionId, _Db.OpenMode.ForWrite) as _Db.BlockReference;
+
+            L._V_.Z_DRAWING_SCALE = selectionBR.ScaleFactors.X;
+
+            foreach (_Db.ObjectId arId in selectionBR.AttributeCollection)
             {
-                ed.WriteMessage("\nERROR - SETTINGS BLOCK not found");
-                return false;
-            }
-            if (selection.Value.Count != 1)
-            {
-                ed.WriteMessage("\nERROR - Too many SETTINGS BLOCKs in selection");
-                return false;
-            }
-            else
-            {
-                using (_Db.Transaction trans = db.TransactionManager.StartTransaction())
+                _Db.DBObject obj = _c.trans.GetObject(arId, _Db.OpenMode.ForWrite);
+                _Db.AttributeReference ar = obj as _Db.AttributeReference;
+
+                if (ar != null)
                 {
-                    _Db.ObjectId selectionId = selection.Value.GetObjectIds()[0];
-                    _Db.BlockReference selectionBR = trans.GetObject(selectionId, _Db.OpenMode.ForWrite) as _Db.BlockReference;
-
-                    L._V_.Z_DRAWING_SCALE = selectionBR.ScaleFactors.X;
-
-                    foreach (_Db.ObjectId arId in selectionBR.AttributeCollection)
-                    {
-                        _Db.DBObject obj = trans.GetObject(arId, _Db.OpenMode.ForWrite);
-                        _Db.AttributeReference ar = obj as _Db.AttributeReference;
-                        if (ar != null)
-                        {
-                            bool success = setProgramVariables(ar, ed);
-                            if (!success) return false;
-                        }
-                    }
+                    setProgramVariables(ar);
                 }
             }
-
-            return true;
         }
 
 
-        private static bool setProgramVariables(_Db.AttributeReference ar, _Ed.Editor ed)
+        private void setProgramVariables(_Db.AttributeReference ar)
         {
             if (ar.Tag == "ARMATUURI_MARK")
             {
@@ -120,8 +100,7 @@ namespace DMTCommands
                     }
                     else
                     {
-                        ed.WriteMessage("\nSetting invalid - ELEMENDI_LAIUS");
-                        return false;
+                        throw new DMTException("\n[ERROR] ELEMENDI_LAIUS - Setting invalid");
                     }
                 }
 
@@ -135,8 +114,7 @@ namespace DMTCommands
                     }
                     else
                     {
-                        ed.WriteMessage("\nSetting invalid - KAITSEKIHT");
-                        return false;
+                        throw new DMTException("\n[ERROR] KAITSEKIHT - Setting invalid");
                     }
                 }
                 else if (ar.Tag == "KIHTIDE_ARV")
@@ -147,8 +125,7 @@ namespace DMTCommands
                     }
                     else
                     {
-                        ed.WriteMessage("\nSetting invalid - KIHTIDE_ARV");
-                        return false;
+                        throw new DMTException("\n[ERROR] KIHTIDE_ARV - Setting invalid");
                     }
                 }
 
@@ -162,8 +139,7 @@ namespace DMTCommands
                     }
                     else
                     {
-                        ed.WriteMessage("\nSetting invalid - PÕHIARMATUURI_DIAM");
-                        return false;
+                        throw new DMTException("\n[ERROR] PÕHIARMATUURI_DIAM - Setting invalid");
                     }
                 }
                 else if (ar.Tag == "PÕHIARMATUURI_ANKURDUS")
@@ -174,8 +150,7 @@ namespace DMTCommands
                     }
                     else
                     {
-                        ed.WriteMessage("\nSetting invalid - PÕHIARMATUURI_ANKURDUS");
-                        return false;
+                        throw new DMTException("\n[ERROR] PÕHIARMATUURI_ANKURDUS - Setting invalid");
                     }
                 }
                 else if (ar.Tag == "PÕHIARMATUURI_ABISUURUS")
@@ -186,8 +161,7 @@ namespace DMTCommands
                     }
                     else
                     {
-                        ed.WriteMessage("\nSetting invalid - PÕHIARMATUURI_ABISUURUS");
-                        return false;
+                        throw new DMTException("\n[ERROR] PÕHIARMATUURI_ABISUURUS - Setting invalid");
                     }
                 }
 
@@ -201,8 +175,7 @@ namespace DMTCommands
                     }
                     else
                     {
-                        ed.WriteMessage("\nSetting invalid - DIAGONAALI_DIAM");
-                        return false;
+                        throw new DMTException("\n[ERROR] DIAGONAALI_DIAM - Setting invalid");
                     }
                 }
                 else if (ar.Tag == "DIAGONAALI_ANKURDUS")
@@ -213,8 +186,7 @@ namespace DMTCommands
                     }
                     else
                     {
-                        ed.WriteMessage("\nSetting invalid - DIAGONAALI_ANKURDUS");
-                        return false;
+                        throw new DMTException("\n[ERROR] DIAGONAALI_ANKURDUS - Setting invalid");
                     }
                 }
 
@@ -229,8 +201,7 @@ namespace DMTCommands
                     }
                     else
                     {
-                        ed.WriteMessage("\nSetting invalid - RANGIDE_DIAM");
-                        return false;
+                        throw new DMTException("\n[ERROR] RANGIDE_DIAM - Setting invalid");
                     }
                 }
                 else if (ar.Tag == "RANGIDE_SAMM")
@@ -241,8 +212,7 @@ namespace DMTCommands
                     }
                     else
                     {
-                        ed.WriteMessage("\nSetting invalid - RANGIDE_SAMM");
-                        return false;
+                        throw new DMTException("\n[ERROR] RANGIDE_SAMM - Setting invalid");
                     }
                 }
                 else if (ar.Tag == "RANGIDE_ABISUURUS")
@@ -253,8 +223,7 @@ namespace DMTCommands
                     }
                     else
                     {
-                        ed.WriteMessage("\nSetting invalid - RANGIDE_ABISUURUS");
-                        return false;
+                        throw new DMTException("\n[ERROR] RANGIDE_ABISUURUS - Setting invalid");
                     }
                 }
 
@@ -270,14 +239,12 @@ namespace DMTCommands
                         }
                         else
                         {
-                            ed.WriteMessage("\nSetting invalid - HORISONTAAL_D_IO");
-                            return false;
+                            throw new DMTException("\n[ERROR] HORISONTAAL_D_IO - Setting invalid");
                         }
                     }
                     else
                     {
-                        ed.WriteMessage("\nSetting invalid - HORISONTAAL_D_IO");
-                        return false;
+                        throw new DMTException("\n[ERROR] HORISONTAAL_D_IO - Setting invalid");
                     }
                 }
                 else if (ar.Tag == "HORISONTAAL_D_DIAM")
@@ -288,8 +255,7 @@ namespace DMTCommands
                     }
                     else
                     {
-                        ed.WriteMessage("\nSetting invalid - HORISONTAAL_D_DIAM");
-                        return false;
+                        throw new DMTException("\n[ERROR] HORISONTAAL_D_DIAM - Setting invalid");
                     }
                 }
                 else if (ar.Tag == "HORISONTAAL_D_ANKURDUS")
@@ -300,8 +266,7 @@ namespace DMTCommands
                     }
                     else
                     {
-                        ed.WriteMessage("\nSetting invalid - HORISONTAAL_D_ANKURDUS");
-                        return false;
+                        throw new DMTException("\n[ERROR] HORISONTAAL_D_ANKURDUS - Setting invalid");
                     }
                 }
                 else if (ar.Tag == "HORISONTAAL_D_SAMM")
@@ -312,8 +277,7 @@ namespace DMTCommands
                     }
                     else
                     {
-                        ed.WriteMessage("\nSetting invalid - HORISONTAAL_D_SAMM");
-                        return false;
+                        throw new DMTException("\n[ERROR] HORISONTAAL_D_SAMM - Setting invalid");
                     }
                 }
                 else if (ar.Tag == "HORISONTAAL_D_PARAND")
@@ -324,8 +288,7 @@ namespace DMTCommands
                     }
                     else
                     {
-                        ed.WriteMessage("\nSetting invalid - HORISONTAAL_D_PARAND");
-                        return false;
+                        throw new DMTException("\n[ERROR] HORISONTAAL_D_PARAND - Setting invalid");
                     }
                 }
 
@@ -341,14 +304,12 @@ namespace DMTCommands
                         }
                         else
                         {
-                            ed.WriteMessage("\nSetting invalid - VERTIKAAL_D_IO");
-                            return false;
+                            throw new DMTException("\n[ERROR] VERTIKAAL_D_IO - Setting invalid");
                         }
                     }
                     else
                     {
-                        ed.WriteMessage("\nSetting invalid - VERTIKAAL_D_IO");
-                        return false;
+                        throw new DMTException("\n[ERROR] VERTIKAAL_D_IO - Setting invalid");
                     }
                 }
                 else if (ar.Tag == "VERTIKAAL_D_DIAM")
@@ -359,8 +320,7 @@ namespace DMTCommands
                     }
                     else
                     {
-                        ed.WriteMessage("\nSetting invalid - VERTIKAAL_D_DIAM");
-                        return false;
+                        throw new DMTException("\n[ERROR] VERTIKAAL_D_DIAM - Setting invalid");
                     }
                 }
                 else if (ar.Tag == "VERTIKAAL_D_ANKURDUS")
@@ -371,8 +331,7 @@ namespace DMTCommands
                     }
                     else
                     {
-                        ed.WriteMessage("\nSetting invalid - VERTIKAAL_D_ANKURDUS");
-                        return false;
+                        throw new DMTException("\n[ERROR] VERTIKAAL_D_ANKURDUS - Setting invalid");
                     }
                 }
                 else if (ar.Tag == "VERTIKAAL_D_SAMM")
@@ -383,8 +342,7 @@ namespace DMTCommands
                     }
                     else
                     {
-                        ed.WriteMessage("\nSetting invalid - VERTIKAAL_D_SAMM");
-                        return false;
+                        throw new DMTException("\n[ERROR] VERTIKAAL_D_SAMM - Setting invalid");
                     }
                 }
                 else if (ar.Tag == "VERTIKAAL_D_PARAND")
@@ -395,98 +353,77 @@ namespace DMTCommands
                     }
                     else
                     {
-                        ed.WriteMessage("\nSetting invalid - VERTIKAAL_D_PARAND");
-                        return false;
+                        throw new DMTException("\n[ERROR] VERTIKAAL_D_PARAND - Setting invalid");
                     }
                 }
             }
-
-            return true;
         }
 
 
-        public static List<G.Line> getSelectedPolyLines()
+        private List<G.Line> getGeometry()
         {
             List<G.Line> polys = new List<G.Line>();
 
-            _Ap.Document doc = _Ap.Application.DocumentManager.MdiActiveDocument;
-            _Db.Database db = doc.Database;
+            _Ed.PromptSelectionResult userSelection = _c.doc.Editor.GetSelection();
 
-            using (_Db.Transaction trans = db.TransactionManager.StartTransaction())
+            if (userSelection.Status != _Ed.PromptStatus.OK) throw new DMTException("\n[ERROR] Geometry - cancelled");
+
+            _Ed.SelectionSet selectionSet = userSelection.Value;
+
+            foreach (_Ed.SelectedObject currentObject in selectionSet)
             {
-                _Ed.PromptSelectionResult userSelection = doc.Editor.GetSelection();
+                if (currentObject == null) continue;
+                _Db.Entity currentEntity = _c.trans.GetObject(currentObject.ObjectId, _Db.OpenMode.ForRead) as _Db.Entity;
+                if (currentEntity == null) continue;
 
-                if (userSelection.Status == _Ed.PromptStatus.OK)
+                if (currentEntity is _Db.Polyline)
                 {
-                    _Ed.SelectionSet selectionSet = userSelection.Value;
+                    _Db.Polyline poly = _c.trans.GetObject(currentEntity.ObjectId, _Db.OpenMode.ForRead) as _Db.Polyline;
+                    int points = poly.NumberOfVertices;
 
-                    foreach (_Ed.SelectedObject currentObject in selectionSet)
+                    for (int i = 1; i < points; i++)
                     {
-                        if (currentObject != null)
-                        {
-                            _Db.Entity currentEntity = trans.GetObject(currentObject.ObjectId, _Db.OpenMode.ForRead) as _Db.Entity;
+                        _Ge.Point2d p1 = poly.GetPoint2dAt(i - 1);
+                        _Ge.Point2d p2 = poly.GetPoint2dAt(i);
 
-                            if (currentEntity != null)
-                            {
-                                if (currentEntity is _Db.Polyline)
-                                {
-                                    _Db.Polyline poly = trans.GetObject(currentEntity.ObjectId, _Db.OpenMode.ForRead) as _Db.Polyline;
-                                    int points = poly.NumberOfVertices;
+                        G.Point new_p1 = new G.Point(p1.X, p1.Y);
+                        G.Point new_p2 = new G.Point(p2.X, p2.Y);
 
-                                    for (int i = 1; i < points; i++)
-                                    {
-                                        _Ge.Point2d p1 = poly.GetPoint2dAt(i - 1);
-                                        _Ge.Point2d p2 = poly.GetPoint2dAt(i);
+                        if (new_p1 == new_p2) continue;
 
-                                        G.Point new_p1 = new G.Point(p1.X, p1.Y);
-                                        G.Point new_p2 = new G.Point(p2.X, p2.Y);
+                        G.Line line = new G.Line(new_p1, new_p2);
+                        polys.Add(line);
+                    }
 
-                                        if (new_p1 == new_p2) continue;
+                    if (poly.Closed)
+                    {
+                        _Ge.Point2d p1 = poly.GetPoint2dAt(points - 1);
+                        _Ge.Point2d p2 = poly.GetPoint2dAt(0);
+                        G.Point new_p1 = new G.Point(p1.X, p1.Y);
+                        G.Point new_p2 = new G.Point(p2.X, p2.Y);
 
-                                        G.Line line = new G.Line(new_p1, new_p2);
-                                        polys.Add(line);
-                                    }
+                        if (new_p1 == new_p2) continue;
 
-                                    if (poly.Closed)
-                                    {
-                                        _Ge.Point2d p1 = poly.GetPoint2dAt(points - 1);
-                                        _Ge.Point2d p2 = poly.GetPoint2dAt(0);
-                                        G.Point new_p1 = new G.Point(p1.X, p1.Y);
-                                        G.Point new_p2 = new G.Point(p2.X, p2.Y);
-
-                                        if (new_p1 == new_p2) continue;
-
-                                        G.Line line = new G.Line(new_p1, new_p2);
-                                        polys.Add(line);
-                                    }
-                                }
-                            }
-                        }
+                        G.Line line = new G.Line(new_p1, new_p2);
+                        polys.Add(line);
                     }
                 }
             }
+
+            if (polys.Count < 3) throw new DMTException("\n[ERROR] Geometry - less then 3");
 
             return polys;
         }
 
 
-        public static G.Point getBendingInsertionPoint()
+        private G.Point getBendingInsertionPoint()
         {
-            G.Point picked;
+            _Ed.PromptPointOptions pickedPointOptions = new _Ed.PromptPointOptions("\nSelect Bending insertion point");
+            _Ed.PromptPointResult pickedPoint = _c.doc.Editor.GetPoint(pickedPointOptions);
+            if (pickedPoint.Status != _Ed.PromptStatus.OK) throw new DMTException("\n[ERROR] Bending insertion point - cancelled");
 
-            _Ap.Document doc = _Ap.Application.DocumentManager.MdiActiveDocument;
-            _Db.Database db = doc.Database;
-
-            using (_Db.Transaction trans = db.TransactionManager.StartTransaction())
-            {
-                _Ed.PromptPointResult pickedPoint;
-                _Ed.PromptPointOptions pickedPointOptions = new _Ed.PromptPointOptions("\nSelect bending INSERTION POINT");
-
-                pickedPoint = doc.Editor.GetPoint(pickedPointOptions);
-                _Ge.Point3d pt = pickedPoint.Value;
-
-                picked = new G.Point(pt.X, pt.Y);
-            }
+            _Ge.Point3d pt = pickedPoint.Value;
+            G.Point picked = new G.Point(pt.X, pt.Y);
 
             return picked;
         }

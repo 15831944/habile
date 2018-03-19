@@ -20,9 +20,6 @@ namespace Logic_Reinf
             if (setLineSegment.Contains(seg)) return;
             if (isLineRight(mainLine) == false && isLineRight(otherLine) == true) return;
 
-            G.Line offsetLine = mainLine.Offset(0);
-            G.Line otherOffsetline = otherLine.Offset(0);
-
             G.Vector d1 = mainLine.getDirectionVector();
             G.Vector o1 = mainLine.getOffsetVector();
             int spacing = _V_.X_REINFORCEMENT_STIRRUP_SPACING;
@@ -40,19 +37,19 @@ namespace Logic_Reinf
 
                 while (j < len)
                 {
-                    G.Point start = offsetLine.Start.move(j, d1);
+                    G.Point start = mainLine.Start.move(j, d1);
                     G.Point extended = start.move(_V_.Y_STIRRUP_MAX_LENGTH * 1.1, o1);
                     G.Line temp = new G.Line(start, extended);
-                    G.Point end = G.Line.getIntersectionPoint(temp, otherOffsetline);
+                    G.Point end = G.Line.getIntersectionPoint(temp, otherLine);
 
                     temp = new G.Line(start, end);
 
-                    if (temp.Length() > _V_.X_CONCRETE_COVER_1 * 2)
+                    if (Math.Round(temp.Length(), 1) > _V_.X_CONCRETE_COVER_1 * 2)
                     {
                         temp = temp.extendDouble(-1 * _V_.X_CONCRETE_COVER_1);
-                    }
 
-                    U_side_handler(temp.Start, temp.End, seg);
+                        U_side_handler(temp.Start, temp.End, seg);
+                    }
 
                     j = j + spacing;
                 }

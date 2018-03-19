@@ -80,13 +80,13 @@ namespace Logic_Tabler
         {
             if (Material == "nul")
             {
-                setInvalid("Error - BENDING BLOCK - Material = nul");
+                setInvalid("[ERROR] - BENDING BLOCK - Material = nul");
                 return false;
             }
 
             if (Position == "nul")
             {
-                setInvalid("Error - BENDING BLOCK - Position = nul");
+                setInvalid("[ERROR] - BENDING BLOCK - Position = nul");
                 return false;
             }
 
@@ -154,7 +154,7 @@ namespace Logic_Tabler
 
             if (Length == 0)
             {
-                setInvalid("Error - BENDING BLOCK - \"" + _Position.ToString() + "\" - Length = 0");
+                setInvalid("[ERROR] - BENDING BLOCK - \"" + _Position.ToString() + "\" - Length = 0");
                 return false;
             }
 
@@ -164,7 +164,7 @@ namespace Logic_Tabler
             }
             catch
             {
-                setInvalid("Error - BENDING BLOCK - \"" + _Position.ToString() + "\" - Position invalid");
+                setInvalid("[ERROR] - BENDING BLOCK - \"" + _Position.ToString() + "\" - Position invalid");
                 return false;
             }
 

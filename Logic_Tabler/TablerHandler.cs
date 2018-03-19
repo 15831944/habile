@@ -8,9 +8,15 @@ using G = Geometry;
 
 namespace Logic_Tabler
 {
-    public static class TablerHandler
+    public class TablerHandler
     {
-        public static List<DrawingArea> main(List<G.Area> areas, List<TableHead> heads, List<ReinforcementMark> marks, List<Bending> bendings, List<TableRow> rows)
+        public TablerHandler()
+        {
+
+        }
+
+
+        public List<DrawingArea> main(List<G.Area> areas, List<TableHead> heads, List<ReinforcementMark> marks, List<Bending> bendings, List<TableRow> rows)
         {
             List<DrawingArea> fields = sortData(areas, heads, marks, bendings, rows);
 
@@ -18,17 +24,17 @@ namespace Logic_Tabler
             {
                 if (f._tableHeads.Count < 1)
                 {
-                    f.setInvalid("WARNING - Puudub Painutustabel_pais");
+                    f.setInvalid("[WARNING] - Painutustabel_pais - puudu");
                     continue;
                 }
                 if (f._rows.Count > 0)
                 {
-                    f.setInvalid("WARNING - Tabel on juba koostatud");
+                    f.setInvalid("[WARNING] - Tabel on juba koostatud");
                     continue;
                 }
                 if (f._marks.Count == 0)
                 {
-                    f.setInvalid("WARNING - Ei leia ühtegi raua viidet");
+                    f.setInvalid("[WARNING] - Raamjoone vahel pole ühtegi viidet");
                     continue;
                 }
 
@@ -88,7 +94,7 @@ namespace Logic_Tabler
             return fields;
         }
 
-        private static List<DrawingArea> sortData(List<G.Area> areas, List<TableHead> heads, List<ReinforcementMark> marks, List<Bending> bendings, List<TableRow> rows)
+        private List<DrawingArea> sortData(List<G.Area> areas, List<TableHead> heads, List<ReinforcementMark> marks, List<Bending> bendings, List<TableRow> rows)
         {
             List<DrawingArea> data = new List<DrawingArea>();
 

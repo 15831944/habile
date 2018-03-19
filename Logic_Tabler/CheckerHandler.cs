@@ -19,7 +19,7 @@ namespace Logic_Tabler
             {
                 if (f._tableHeads.Count < 1)
                 {
-                    f.setInvalid("WARNING - Puudub Painutustabel_pais - KONTROLL EI TOIMU SELLEL ALAL");
+                    f.setInvalid("[WARNING] - Painutustabel_pais puudu - kontroll ei toimu sellel alal");
                     continue;
                 }
 
@@ -41,7 +41,7 @@ namespace Logic_Tabler
 
             foreach (TableRow r in dublicateTableRows)
             {
-                ErrorPoint er = new ErrorPoint(r.IP, "VIGA - TABEL - DUBLICATE - " + r.Position, field._tableHeads[0].Scale);
+                ErrorPoint er = new ErrorPoint(r.IP, "[VIGA] - TABEL - DUBLICATE - " + r.Position, field._tableHeads[0].Scale);
                 errors.Add(er);
             }
 
@@ -52,7 +52,7 @@ namespace Logic_Tabler
 
             foreach (Bending b in dublicateBendings)
             {
-                ErrorPoint er = new ErrorPoint(b.IP, "VIGA - PAINUTUS - DUBLICATE - " + b.Position, field._tableHeads[0].Scale);
+                ErrorPoint er = new ErrorPoint(b.IP, "[VIGA] - PAINUTUS - DUBLICATE - " + b.Position, field._tableHeads[0].Scale);
                 errors.Add(er);
             }
 
@@ -60,7 +60,7 @@ namespace Logic_Tabler
             {
                 if (r.Count == 0)
                 {
-                    ErrorPoint er = new ErrorPoint(r.IP, "VIGA - TABEL - KOGUS -> 0", field._tableHeads[0].Scale);
+                    ErrorPoint er = new ErrorPoint(r.IP, "[VIGA] - TABEL - KOGUS -> 0", field._tableHeads[0].Scale);
                     errors.Add(er);
                 }
             }
@@ -79,7 +79,7 @@ namespace Logic_Tabler
 
                 if (found == false)
                 {
-                    ErrorPoint er = new ErrorPoint(m.IP, "VIGA - VIIDE - EI LEIA TABELIST - " + m.Position, field._tableHeads[0].Scale);
+                    ErrorPoint er = new ErrorPoint(m.IP, "[VIGA] - VIIDE - EI LEIA TABELIST - " + m.Position, field._tableHeads[0].Scale);
                     errors.Add(er);
                 }
             }
@@ -98,7 +98,7 @@ namespace Logic_Tabler
 
                 if (found == false && m.Shape != "A")
                 {
-                    ErrorPoint er = new ErrorPoint(m.IP, "VIGA - VIIDE - EI LEIA PAINUTUST - " + m.Position, field._tableHeads[0].Scale);
+                    ErrorPoint er = new ErrorPoint(m.IP, "[VIGA] - VIIDE - EI LEIA PAINUTUST - " + m.Position, field._tableHeads[0].Scale);
                     errors.Add(er);
                 }
             }
@@ -117,7 +117,7 @@ namespace Logic_Tabler
 
                 if (found == false)
                 {
-                    ErrorPoint er = new ErrorPoint(b.IP, "VIGA - PAINUTUS - EI LEIA TABELIST - " + b.Position, field._tableHeads[0].Scale);
+                    ErrorPoint er = new ErrorPoint(b.IP, "[VIGA] - PAINUTUS - EI LEIA TABELIST - " + b.Position, field._tableHeads[0].Scale);
                     errors.Add(er);
                 }
             }
@@ -137,7 +137,7 @@ namespace Logic_Tabler
 
                 if (found == false)
                 {
-                    ErrorPoint er = new ErrorPoint(b.IP, "VIGA - PAINUTUS - EI LEIA VIIDET - " + b.Position, field._tableHeads[0].Scale);
+                    ErrorPoint er = new ErrorPoint(b.IP, "[VIGA] - PAINUTUS - EI LEIA VIIDET - " + b.Position, field._tableHeads[0].Scale);
                     errors.Add(er);
                 }
             }

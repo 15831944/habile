@@ -25,6 +25,7 @@ namespace Logic_Reinf
             return true;
         }
 
+
         //A HANDLE
         public bool A_handler(G.Point mainPoint, G.Point mainEnd, G.Edge e, G.Corner c, int d)
         {
@@ -39,6 +40,7 @@ namespace Logic_Reinf
             return true;
         }
 
+
         private bool A_handler_replace(R.A_Raud a, R.A_Raud b)
         {
             R.A_Raud new_reinf = R.A_Raud.mergeTwoRebar(a, b);
@@ -48,10 +50,12 @@ namespace Logic_Reinf
             return true;
         }
 
+
         private void A_remover(R.A_Raud a)
         {
             keep_remove(a);
         }
+
 
         //B HANDLE
         private bool B_vs_C_handler(G.Point mainPoint, G.Point mainEnd, G.Point sideStart, G.Edge e, G.Corner oc)
@@ -89,6 +93,7 @@ namespace Logic_Reinf
             return true;
         }
 
+
         private bool B_handler_replace(R.B_Raud a, R.B_Raud b)
         {
             R.D_Raud new_reinf = R.B_Raud.mergeTwoRebar(a, b);
@@ -106,6 +111,7 @@ namespace Logic_Reinf
             return true;
         }
 
+
         private bool C_handler_replace(R.C_Raud a, R.C_Raud b)
         {
             R.E_Raud new_reinf = R.C_Raud.mergeTwoRebar(a, b);
@@ -122,6 +128,7 @@ namespace Logic_Reinf
 
             return true;
         }
+
 
         //D HANDLE
         private bool D_vs_E_handler(G.Point mainPoint, G.Point mainEnd, G.Point side1Start, G.Point side2End, G.Edge e, G.Corner c1, G.Corner c2, int parand, G.Edge other = null)
@@ -171,6 +178,7 @@ namespace Logic_Reinf
             return true;
         }
 
+
         //definer
         private bool D_side_handler(G.Point start, G.Point end, int parand)
         {
@@ -217,6 +225,7 @@ namespace Logic_Reinf
             return true;
         }
 
+
         private void D_side_garbage_collector()
         {
             int currentIndex = knownArrayReinforcement.Count - 1;
@@ -226,6 +235,7 @@ namespace Logic_Reinf
                 knownArrayReinforcement.RemoveAt(currentIndex);
             }
         }
+
 
         private bool U_side_handler(G.Point start, G.Point end, LineSegment ls)
         {
@@ -244,6 +254,7 @@ namespace Logic_Reinf
 
             return true;
         }
+
 
         private void U_side_garbage_collector()
         {

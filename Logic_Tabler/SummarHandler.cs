@@ -18,12 +18,12 @@ namespace Logic_Tabler
             {
                 if (f._tableHeads.Count < 1)
                 {
-                    f.setInvalid("WARNING - Puudub Painutustabel_pais");
+                    f.setInvalid("[WARNING] - Puudub [Painutustabel_pais]");
                     continue;
                 }
                 if (f._summarys.Count > 0)
                 {
-                    f.setInvalid("WARNING - Kaalu tabel on juba koostatud");
+                    f.setInvalid("[WARNING] - Kaalu tabel on juba koostatud");
                     continue;
                 }
 

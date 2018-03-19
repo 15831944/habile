@@ -105,19 +105,19 @@ namespace Logic_Tabler
         {
             if (Position == "nul")
             {
-                setInvalid("Error - TABLE ROW - Position = nul");
+                setInvalid("[ERROR] - TABLE ROW - Position = nul");
                 return false;
             }
 
             if (Material == "nul")
             {
-                setInvalid("Error - TABLE ROW - Material = nul");
+                setInvalid("[ERROR] - TABLE ROW - Material = nul");
                 return false;
             }
 
             if (Diameter < 1)
             {
-                setInvalid("Error - TABLE ROW - Diameter");
+                setInvalid("[ERROR] - TABLE ROW - Diameter");
                 return false;
             }
 

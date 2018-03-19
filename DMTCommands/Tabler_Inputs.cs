@@ -7,33 +7,33 @@ using System.Diagnostics;
 using System.Collections.Generic;
 using _SWF = System.Windows.Forms;
 
-//using _Ap = Autodesk.AutoCAD.ApplicationServices;
-////using _Br = Autodesk.AutoCAD.BoundaryRepresentation;
-//using _Cm = Autodesk.AutoCAD.Colors;
-//using _Db = Autodesk.AutoCAD.DatabaseServices;
-//using _Ed = Autodesk.AutoCAD.EditorInput;
-//using _Ge = Autodesk.AutoCAD.Geometry;
-//using _Gi = Autodesk.AutoCAD.GraphicsInterface;
-//using _Gs = Autodesk.AutoCAD.GraphicsSystem;
-//using _Pl = Autodesk.AutoCAD.PlottingServices;
-//using _Brx = Autodesk.AutoCAD.Runtime;
-//using _Trx = Autodesk.AutoCAD.Runtime;
-//using _Wnd = Autodesk.AutoCAD.Windows;
+using _Ap = Autodesk.AutoCAD.ApplicationServices;
+//using _Br = Autodesk.AutoCAD.BoundaryRepresentation;
+using _Cm = Autodesk.AutoCAD.Colors;
+using _Db = Autodesk.AutoCAD.DatabaseServices;
+using _Ed = Autodesk.AutoCAD.EditorInput;
+using _Ge = Autodesk.AutoCAD.Geometry;
+using _Gi = Autodesk.AutoCAD.GraphicsInterface;
+using _Gs = Autodesk.AutoCAD.GraphicsSystem;
+using _Pl = Autodesk.AutoCAD.PlottingServices;
+using _Brx = Autodesk.AutoCAD.Runtime;
+using _Trx = Autodesk.AutoCAD.Runtime;
+using _Wnd = Autodesk.AutoCAD.Windows;
 
-using _Ap = Bricscad.ApplicationServices;
-//using _Br = Teigha.BoundaryRepresentation;
-using _Cm = Teigha.Colors;
-using _Db = Teigha.DatabaseServices;
-using _Ed = Bricscad.EditorInput;
-using _Ge = Teigha.Geometry;
-using _Gi = Teigha.GraphicsInterface;
-using _Gs = Teigha.GraphicsSystem;
-using _Gsk = Bricscad.GraphicsSystem;
-using _Pl = Bricscad.PlottingServices;
-using _Brx = Bricscad.Runtime;
-using _Trx = Teigha.Runtime;
-using _Wnd = Bricscad.Windows;
-//using _Int = Bricscad.Internal;
+//using _Ap = Bricscad.ApplicationServices;
+////using _Br = Teigha.BoundaryRepresentation;
+//using _Cm = Teigha.Colors;
+//using _Db = Teigha.DatabaseServices;
+//using _Ed = Bricscad.EditorInput;
+//using _Ge = Teigha.Geometry;
+//using _Gi = Teigha.GraphicsInterface;
+//using _Gs = Teigha.GraphicsSystem;
+//using _Gsk = Bricscad.GraphicsSystem;
+//using _Pl = Bricscad.PlottingServices;
+//using _Brx = Bricscad.Runtime;
+//using _Trx = Teigha.Runtime;
+//using _Wnd = Bricscad.Windows;
+////using _Int = Bricscad.Internal;
 
 using R = Reinforcement;
 using G = Geometry;
@@ -43,29 +43,24 @@ using T = Logic_Tabler;
 
 namespace DMTCommands
 {
-    static class Tabler_Inputs
+    partial class Tabler
     {
         //
         //DRAWING AREA
         //
-        public static List<G.Area> getAllAreas(string blockName)
+        private List<G.Area> getAllAreas(string blockName)
         {
             List<G.Area> areas = new List<G.Area>();
 
-            _Ap.Document doc = _Ap.Application.DocumentManager.MdiActiveDocument;
-            _Db.Database db = doc.Database;
+            List<_Db.BlockReference> blocks = getAllBlockReference(blockName);
+            areas = getBoxAreas(blocks);
 
-            using (_Db.Transaction trans = db.TransactionManager.StartTransaction())
-            {
-                List<_Db.BlockReference> blocks = getAllBlockReference(blockName, trans);
-                areas = getBoxAreas(blocks, trans);
-            }
-
+            if (areas.Count < 1) throw new DMTException("\n[ERROR] " + blockName + " not found");
             return areas;
         }
 
 
-        private static List<G.Area> getBoxAreas(List<_Db.BlockReference> blocks, _Db.Transaction trans)
+        private List<G.Area> getBoxAreas(List<_Db.BlockReference> blocks)
         {
             List<G.Area> parse = new List<G.Area>();
 
@@ -100,24 +95,19 @@ namespace DMTCommands
         //
         //TABLE HEADS
         //
-        public static List<T.TableHead> getAllTableHeads(string blockName)
+        private List<T.TableHead> getAllTableHeads(string blockName)
         {
             List<T.TableHead> heads = new List<T.TableHead>();
 
-            _Ap.Document doc = _Ap.Application.DocumentManager.MdiActiveDocument;
-            _Db.Database db = doc.Database;
+            List<_Db.BlockReference> blocks = getAllBlockReference(blockName);
+            heads = getTableHeadData(blocks);
 
-            using (_Db.Transaction trans = db.TransactionManager.StartTransaction())
-            {
-                List<_Db.BlockReference> blocks = getAllBlockReference(blockName, trans);
-                heads = getTableHeadData(blocks, trans);
-            }
-
+            if (heads.Count < 1) throw new DMTException("\n[ERROR] " + blockName + " not found");
             return heads;
         }
 
 
-        private static List<T.TableHead> getTableHeadData(List<_Db.BlockReference> blocks, _Db.Transaction trans)
+        private List<T.TableHead> getTableHeadData(List<_Db.BlockReference> blocks)
         {
             List<T.TableHead> parse = new List<T.TableHead>();
 
@@ -134,88 +124,65 @@ namespace DMTCommands
 
 
         //
-        //TABLE ROWS
+        //MARKS
         //
-        public static List<T.TableRow> getAllTableRows(string blockName)
+        private List<T.ReinforcementMark> getAllMarks(string layer)
         {
-            List<T.TableRow> rows = new List<T.TableRow>();
+            List<T.ReinforcementMark> marks = new List<T.ReinforcementMark>();
 
-            _Ap.Document doc = _Ap.Application.DocumentManager.MdiActiveDocument;
-            _Db.Database db = doc.Database;
+            List<_Db.MText> allTexts = getAllText(layer);
+            marks = getMarkData(allTexts);
 
-            using (_Db.Transaction trans = db.TransactionManager.StartTransaction())
-            {
-                List<_Db.BlockReference> blocks = getAllBlockReference(blockName, trans);
-                rows = getRowData(blocks, trans);
-            }
-
-            return rows;
+            if (marks.Count < 1) throw new DMTException("\n[ERROR] Reinforcement marks not found");
+            return marks;
         }
 
 
-        private static List<T.TableRow> getRowData(List<_Db.BlockReference> blocks, _Db.Transaction trans)
+        private List<T.ReinforcementMark> getMarkData(List<_Db.MText> txts)
         {
-            List<T.TableRow> parse = new List<T.TableRow>();
+            List<T.ReinforcementMark> parse = new List<T.ReinforcementMark>();
 
-            foreach (_Db.BlockReference block in blocks)
+            foreach (_Db.MText txt in txts)
             {
-                G.Point insp = new G.Point(block.Position.X, block.Position.Y);
-                T.TableRow current = new T.TableRow(insp);
+                G.Point insp = new G.Point(txt.Location.X, txt.Location.Y);
+                T.ReinforcementMark current = new T.ReinforcementMark(insp, txt.Contents);
 
-                foreach (_Db.ObjectId arId in block.AttributeCollection)
+                if (current.validate())
                 {
-                    _Db.DBObject obj = trans.GetObject(arId, _Db.OpenMode.ForWrite);
-                    _Db.AttributeReference ar = obj as _Db.AttributeReference;
-                    setRowParameters(ar, current);
+                    parse.Add(current);
                 }
-
-                parse.Add(current);
+                else
+                {
+                    write("[WARNING] VIIDE - \"" + txt.Contents + "\" - could not read!");
+                }
             }
 
             return parse;
         }
 
 
-        private static void setRowParameters(_Db.AttributeReference ar, T.TableRow row)
-        {
-            if (ar != null)
-            {
-                if (ar.Tag == "Klass") { row.Material = ar.TextString; }
-                else if (ar.Tag == "Pos") { row.Position = ar.TextString; }
-                else
-                {
-                    int temp = 99999;
-                    Int32.TryParse(ar.TextString, out temp);
-
-                    if (ar.Tag == "Diam") { row.Diameter = temp; }
-                    else if (ar.Tag == "tk") { row.Count = temp; }
-                    else if (ar.Tag == "Pikkus") { row.Length = temp; }
-                }
-            }
-        }
-
 
         //
         //BENDING
         //
-        public static List<T.Bending> getAllBendings(List<string> bendingNames)
+        public List<T.Bending> getAllBendings(List<string> bendingNames)
         {
             List<T.Bending> bendings = new List<T.Bending>();
 
-            _Ap.Document doc = _Ap.Application.DocumentManager.MdiActiveDocument;
-            _Db.Database db = doc.Database;
-
-            using (_Db.Transaction trans = db.TransactionManager.StartTransaction())
+            List<_Db.BlockReference> blocks = new List<_Db.BlockReference>();
+            foreach (string name in bendingNames)
             {
-                List<_Db.BlockReference> blocks = getAllBlockReference(bendingNames, trans);
-                bendings = getBendingData(blocks, trans);
+                List<_Db.BlockReference> block = getAllBlockReference(name);
+                blocks.AddRange(block);
             }
+
+            bendings = getBendingData(blocks);
 
             return bendings;
         }
 
 
-        private static List<T.Bending> getBendingData(List<_Db.BlockReference> blocks, _Db.Transaction trans)
+        private List<T.Bending> getBendingData(List<_Db.BlockReference> blocks)
         {
             List<T.Bending> parse = new List<T.Bending>();
 
@@ -226,7 +193,7 @@ namespace DMTCommands
 
                 foreach (_Db.ObjectId arId in block.AttributeCollection)
                 {
-                    _Db.DBObject obj = trans.GetObject(arId, _Db.OpenMode.ForWrite);
+                    _Db.DBObject obj = _c.trans.GetObject(arId, _Db.OpenMode.ForWrite);
                     _Db.AttributeReference ar = obj as _Db.AttributeReference;
                     setBendingParameters(ar, current);
                 }
@@ -239,7 +206,7 @@ namespace DMTCommands
                 }
                 else
                 {
-                    Universal.writeCadMessage(current.Reason);
+                    write(current.Reason);
                 }
             }
 
@@ -247,7 +214,7 @@ namespace DMTCommands
         }
 
 
-        private static void setBendingParameters(_Db.AttributeReference ar, T.Bending bending)
+        private void setBendingParameters(_Db.AttributeReference ar, T.Bending bending)
         {
             if (ar != null)
             {
@@ -276,69 +243,76 @@ namespace DMTCommands
 
 
         //
-        //MARKS
+        //TABLE ROWS
         //
-        public static List<T.ReinforcementMark> getAllMarks(string layer)
+        public List<T.TableRow> getAllTableRows(string blockName)
         {
-            List<T.ReinforcementMark> marks = new List<T.ReinforcementMark>();
+            List<T.TableRow> rows = new List<T.TableRow>();
 
-            _Ap.Document doc = _Ap.Application.DocumentManager.MdiActiveDocument;
-            _Db.Database db = doc.Database;
+            List<_Db.BlockReference> blocks = getAllBlockReference(blockName);
+            rows = getRowData(blocks);
 
-            using (_Db.Transaction trans = db.TransactionManager.StartTransaction())
-            {
-                List<_Db.MText> allTexts = getAllText(layer, trans);
-                marks = getMarkData(allTexts, trans);
-            }
-
-            return marks;
+            return rows;
         }
 
 
-        private static List<T.ReinforcementMark> getMarkData(List<_Db.MText> txts, _Db.Transaction trans)
+        private List<T.TableRow> getRowData(List<_Db.BlockReference> blocks)
         {
-            List<T.ReinforcementMark> parse = new List<T.ReinforcementMark>();
+            List<T.TableRow> parse = new List<T.TableRow>();
 
-            foreach (_Db.MText txt in txts)
+            foreach (_Db.BlockReference block in blocks)
             {
-                G.Point insp = new G.Point(txt.Location.X, txt.Location.Y);
-                T.ReinforcementMark current = new T.ReinforcementMark(insp, txt.Contents);
+                G.Point insp = new G.Point(block.Position.X, block.Position.Y);
+                T.TableRow current = new T.TableRow(insp);
 
-                if (current.validate())
+                foreach (_Db.ObjectId arId in block.AttributeCollection)
                 {
-                    parse.Add(current);
+                    _Db.DBObject obj = _c.trans.GetObject(arId, _Db.OpenMode.ForWrite);
+                    _Db.AttributeReference ar = obj as _Db.AttributeReference;
+                    setRowAttribute(ar, current);
                 }
-                else
-                {
-                    Universal.writeCadMessage("WARNING - VIIDE - \"" + txt.Contents + "\" - could not read");
-                }
+
+                parse.Add(current);
             }
 
             return parse;
         }
 
 
+        private void setRowAttribute(_Db.AttributeReference ar, T.TableRow row)
+        {
+            if (ar != null)
+            {
+                if (ar.Tag == "Klass") { row.Material = ar.TextString; }
+                else if (ar.Tag == "Pos") { row.Position = ar.TextString; }
+                else
+                {
+                    int temp = 99999;
+                    Int32.TryParse(ar.TextString, out temp);
+
+                    if (ar.Tag == "Diam") { row.Diameter = temp; }
+                    else if (ar.Tag == "tk") { row.Count = temp; }
+                    else if (ar.Tag == "Pikkus") { row.Length = temp; }
+                }
+            }
+        }
+
+
         //
         //SUMMARY
         //        
-        public static List<T.TableSummary> getAllTableSummarys(string blockName)
+        public List<T.TableSummary> getAllTableSummarys(string blockName)
         {
             List<T.TableSummary> sums = new List<T.TableSummary>();
 
-            _Ap.Document doc = _Ap.Application.DocumentManager.MdiActiveDocument;
-            _Db.Database db = doc.Database;
-
-            using (_Db.Transaction trans = db.TransactionManager.StartTransaction())
-            {
-                List<_Db.BlockReference> blocks = getAllBlockReference(blockName, trans);
-                sums = getSummaryData(blocks, trans);
-            }
+            List<_Db.BlockReference> blocks = getAllBlockReference(blockName);
+            sums = getSummaryData(blocks);
 
             return sums;
         }
 
 
-        private static List<T.TableSummary> getSummaryData(List<_Db.BlockReference> blocks, _Db.Transaction trans)
+        private List<T.TableSummary> getSummaryData(List<_Db.BlockReference> blocks)
         {
             List<T.TableSummary> parse = new List<T.TableSummary>();
 
@@ -356,137 +330,34 @@ namespace DMTCommands
         //
         //UNIVERSAL
         //
-        private static List<_Db.MText> getAllText(string layer, _Db.Transaction trans)
-        {
-            List<_Db.MText> txt = new List<_Db.MText>();
-
-            _Ap.Document doc = _Ap.Application.DocumentManager.MdiActiveDocument;
-            _Db.Database db = doc.Database;
-
-            _Db.BlockTableRecord btr = trans.GetObject(_Db.SymbolUtilityServices.GetBlockModelSpaceId(db), _Db.OpenMode.ForWrite) as _Db.BlockTableRecord;
-
-            foreach (_Db.ObjectId id in btr)
-            {
-                _Db.Entity currentEntity = trans.GetObject(id, _Db.OpenMode.ForWrite, false) as _Db.Entity;
-
-                if (currentEntity != null)
-                {
-                    if (currentEntity is _Db.MText)
-                    {
-                        _Db.MText br = currentEntity as _Db.MText;
-                        if (br.Layer == layer)
-                        {
-                            txt.Add(br);
-                        }
-                    }
-
-                    if (currentEntity is _Db.MLeader)
-                    {
-                        _Db.MLeader br = currentEntity as _Db.MLeader;
-                        if (br.Layer == layer)
-                        {
-                            if (br.ContentType == _Db.ContentType.MTextContent)
-                            {
-                                _Db.MText leaderText = br.MText;
-                                txt.Add(leaderText);
-                            }
-                        }
-                    }
-                }
-            }
-
-            return txt;
-        }
-
-
-        private static List<_Db.BlockReference> getAllBlockReference(string blockName, _Db.Transaction trans)
+        private List<_Db.BlockReference> getAllBlockReference(string blockName)
         {
             List<_Db.BlockReference> refs = new List<_Db.BlockReference>();
-
-            _Ap.Document doc = _Ap.Application.DocumentManager.MdiActiveDocument;
-            _Db.Database db = doc.Database;
-
-            _Db.BlockTable bt = trans.GetObject(db.BlockTableId, _Db.OpenMode.ForRead) as _Db.BlockTable;
-
-            if (bt.Has(blockName))
+            
+            if (_c.blockTable.Has(blockName))
             {
-                _Db.BlockTableRecord btr = trans.GetObject(_Db.SymbolUtilityServices.GetBlockModelSpaceId(db), _Db.OpenMode.ForWrite) as _Db.BlockTableRecord;
-
-                foreach (_Db.ObjectId id in btr)
+                foreach (_Db.ObjectId id in _c.modelSpace)
                 {
-                    _Db.DBObject currentEntity = trans.GetObject(id, _Db.OpenMode.ForWrite, false) as _Db.DBObject;
+                    _Db.DBObject currentEntity = _c.trans.GetObject(id, _Db.OpenMode.ForWrite, false) as _Db.DBObject;
+                    if (currentEntity == null) continue;
 
-                    if (currentEntity == null)
-                    {
-                        continue;
-                    }
-
-                    else if (currentEntity is _Db.BlockReference)
+                    if (currentEntity is _Db.BlockReference)
                     {
                         _Db.BlockReference blockRef = currentEntity as _Db.BlockReference;
 
                         _Db.BlockTableRecord block = null;
                         if (blockRef.IsDynamicBlock)
                         {
-                            block = trans.GetObject(blockRef.DynamicBlockTableRecord, _Db.OpenMode.ForRead) as _Db.BlockTableRecord;
+                            block = _c.trans.GetObject(blockRef.DynamicBlockTableRecord, _Db.OpenMode.ForRead) as _Db.BlockTableRecord;
                         }
                         else
                         {
-                            block = trans.GetObject(blockRef.BlockTableRecord, _Db.OpenMode.ForRead) as _Db.BlockTableRecord;
+                            block = _c.trans.GetObject(blockRef.BlockTableRecord, _Db.OpenMode.ForRead) as _Db.BlockTableRecord;
                         }
 
-                        if (block != null)
-                        {
-                            if (block.Name == blockName)
-                            {
-                                refs.Add(blockRef);
-                            }
-                        }
-                    }
-                }
-            }
-
-            return refs;
-        }
-
-
-        private static List<_Db.BlockReference> getAllBlockReference(List<string> blockNames, _Db.Transaction trans)
-        {
-            List<_Db.BlockReference> refs = new List<_Db.BlockReference>();
-
-            _Ap.Document doc = _Ap.Application.DocumentManager.MdiActiveDocument;
-            _Db.Database db = doc.Database;
-
-            _Db.BlockTable bt = trans.GetObject(db.BlockTableId, _Db.OpenMode.ForRead) as _Db.BlockTable;
-
-            _Db.BlockTableRecord btr = trans.GetObject(_Db.SymbolUtilityServices.GetBlockModelSpaceId(db), _Db.OpenMode.ForWrite) as _Db.BlockTableRecord;
-
-            foreach (_Db.ObjectId id in btr)
-            {
-                _Db.DBObject currentEntity = trans.GetObject(id, _Db.OpenMode.ForWrite, false) as _Db.DBObject;
-
-                if (currentEntity == null)
-                {
-                    continue;
-                }
-
-                else if (currentEntity is _Db.BlockReference)
-                {
-                    _Db.BlockReference blockRef = currentEntity as _Db.BlockReference;
-
-                    _Db.BlockTableRecord block = null;
-                    if (blockRef.IsDynamicBlock)
-                    {
-                        block = trans.GetObject(blockRef.DynamicBlockTableRecord, _Db.OpenMode.ForRead) as _Db.BlockTableRecord;
-                    }
-                    else
-                    {
-                        block = trans.GetObject(blockRef.BlockTableRecord, _Db.OpenMode.ForRead) as _Db.BlockTableRecord;
-                    }
-
-                    if (block != null)
-                    {
-                        if (blockNames.Contains(block.Name))
+                        if (block == null) continue;
+                        
+                        if (block.Name == blockName)
                         {
                             refs.Add(blockRef);
                         }
@@ -495,6 +366,43 @@ namespace DMTCommands
             }
 
             return refs;
+        }
+
+
+        private List<_Db.MText> getAllText(string layer)
+        {
+            List<_Db.MText> txt = new List<_Db.MText>();
+
+            foreach (_Db.ObjectId id in _c.modelSpace)
+            {
+                _Db.Entity currentEntity = _c.trans.GetObject(id, _Db.OpenMode.ForWrite, false) as _Db.Entity;
+                if (currentEntity == null) continue;
+
+                if (currentEntity is _Db.MText)
+                {
+                    _Db.MText br = currentEntity as _Db.MText;
+                    if (br.Layer == layer)
+                    {
+                        txt.Add(br);
+                    }
+                }
+
+                if (currentEntity is _Db.MLeader)
+                {
+                    _Db.MLeader br = currentEntity as _Db.MLeader;
+                    if (br.Layer == layer)
+                    {
+                        if (br.ContentType == _Db.ContentType.MTextContent)
+                        {
+                            _Db.MText leaderText = br.MText;
+                            txt.Add(leaderText);
+                        }
+                    }
+                }
+
+            }
+
+            return txt;
         }
 
     }

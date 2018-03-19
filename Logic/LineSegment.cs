@@ -58,11 +58,28 @@ namespace Logic_Reinf
             return new G.Line(_other.Line.Start, _other.Line.End);
         }
 
+        public G.Line getParentLine()
+        {
+            return _parent.Line;
+        }
+
         public bool hasOtherEdge()
         {
             if (_other == null) return false;
             else return true;
         }
+
+
+        public double Length()
+        {
+            double dx = _end.X - _start.X;
+            double dy = _end.Y - _start.Y;
+
+            double len = Math.Sqrt(dx * dx + dy * dy);
+
+            return len;
+        }
+
 
         public bool Equals(LineSegment other)
         {
@@ -74,6 +91,7 @@ namespace Logic_Reinf
             return eq;
         }
 
+
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(null, obj)) return false;
@@ -82,14 +100,25 @@ namespace Logic_Reinf
             return Equals(obj as LineSegment);
         }
 
+
         public static bool operator ==(LineSegment a, LineSegment b)
         {
             return object.Equals(a, b);
         }
 
+
         public static bool operator !=(LineSegment a, LineSegment b)
         {
             return !object.Equals(a, b);
         }
+
+
+        public override string ToString()
+        {
+            string str = "(Start) " + _start.ToString() + " (End) " + _start.ToString() + " (Length) " + Length().ToString();
+
+            return str;
+        }
+
     }
 }

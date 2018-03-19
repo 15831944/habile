@@ -42,6 +42,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DebugerWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DebugerWindow.Designer.cs">
+      <DependentUpon>DebugerWindow.cs</DependentUpon>
+    </Compile>
     <Compile Include="LineSegment.cs" />
     <Compile Include="PseudoCorner.cs" />
     <Compile Include="ReinforcmentHandler_side_D_definer.cs" />
@@ -64,6 +70,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Drawing_Box.resx">
       <DependentUpon>Drawing_Box.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DebugerWindow.resx">
+      <DependentUpon>DebugerWindow.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

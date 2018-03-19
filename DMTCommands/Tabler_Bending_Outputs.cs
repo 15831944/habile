@@ -7,33 +7,33 @@ using System.Diagnostics;
 using System.Collections.Generic;
 using _SWF = System.Windows.Forms;
 
-//using _Ap = Autodesk.AutoCAD.ApplicationServices;
-////using _Br = Autodesk.AutoCAD.BoundaryRepresentation;
-//using _Cm = Autodesk.AutoCAD.Colors;
-//using _Db = Autodesk.AutoCAD.DatabaseServices;
-//using _Ed = Autodesk.AutoCAD.EditorInput;
-//using _Ge = Autodesk.AutoCAD.Geometry;
-//using _Gi = Autodesk.AutoCAD.GraphicsInterface;
-//using _Gs = Autodesk.AutoCAD.GraphicsSystem;
-//using _Pl = Autodesk.AutoCAD.PlottingServices;
-//using _Brx = Autodesk.AutoCAD.Runtime;
-//using _Trx = Autodesk.AutoCAD.Runtime;
-//using _Wnd = Autodesk.AutoCAD.Windows;
+using _Ap = Autodesk.AutoCAD.ApplicationServices;
+//using _Br = Autodesk.AutoCAD.BoundaryRepresentation;
+using _Cm = Autodesk.AutoCAD.Colors;
+using _Db = Autodesk.AutoCAD.DatabaseServices;
+using _Ed = Autodesk.AutoCAD.EditorInput;
+using _Ge = Autodesk.AutoCAD.Geometry;
+using _Gi = Autodesk.AutoCAD.GraphicsInterface;
+using _Gs = Autodesk.AutoCAD.GraphicsSystem;
+using _Pl = Autodesk.AutoCAD.PlottingServices;
+using _Brx = Autodesk.AutoCAD.Runtime;
+using _Trx = Autodesk.AutoCAD.Runtime;
+using _Wnd = Autodesk.AutoCAD.Windows;
 
-using _Ap = Bricscad.ApplicationServices;
-//using _Br = Teigha.BoundaryRepresentation;
-using _Cm = Teigha.Colors;
-using _Db = Teigha.DatabaseServices;
-using _Ed = Bricscad.EditorInput;
-using _Ge = Teigha.Geometry;
-using _Gi = Teigha.GraphicsInterface;
-using _Gs = Teigha.GraphicsSystem;
-using _Gsk = Bricscad.GraphicsSystem;
-using _Pl = Bricscad.PlottingServices;
-using _Brx = Bricscad.Runtime;
-using _Trx = Teigha.Runtime;
-using _Wnd = Bricscad.Windows;
-//using _Int = Bricscad.Internal;
+//using _Ap = Bricscad.ApplicationServices;
+////using _Br = Teigha.BoundaryRepresentation;
+//using _Cm = Teigha.Colors;
+//using _Db = Teigha.DatabaseServices;
+//using _Ed = Bricscad.EditorInput;
+//using _Ge = Teigha.Geometry;
+//using _Gi = Teigha.GraphicsInterface;
+//using _Gs = Teigha.GraphicsSystem;
+//using _Gsk = Bricscad.GraphicsSystem;
+//using _Pl = Bricscad.PlottingServices;
+//using _Brx = Bricscad.Runtime;
+//using _Trx = Teigha.Runtime;
+//using _Wnd = Bricscad.Windows;
+////using _Int = Bricscad.Internal;
 
 using R = Reinforcement;
 using G = Geometry;
@@ -43,51 +43,38 @@ using T = Logic_Tabler;
 
 namespace DMTCommands
 {
-    static class Tabler_Outputs
+    partial class Tabler
     {
-        public static void main(List<T.DrawingArea> fields)
+
+        public void bending_output(List<T.DrawingArea> fields)
         {
-            _Ap.Document doc = _Ap.Application.DocumentManager.MdiActiveDocument;
-            _Db.Database db = doc.Database;
+            List<string> blockNames = new List<string>() { "Painutustabel_rida" };
+            List<string> layerNames = new List<string>() { "K004" };
 
-            _Db.Transaction trans = db.TransactionManager.StartTransaction();
-            try
-            {
-                List<string> blockNames = new List<string>() { "Painutustabel_rida" };
-                List<string> layerNames = new List<string>() { "K004" };
-                Universal.programInit(blockNames, layerNames, trans);
+            Universal init = new Universal(ref _c);
+            init.start(blockNames, layerNames);
 
-                fieldHandler(fields, trans);
-                trans.Commit();
-            }
-            catch (System.Exception ex)
-            {
-                Universal.writeCadMessage("Program stopped with ERROR:\n" + ex.Message + "\n" + ex.TargetSite);
-            }
-            finally
-            {
-                trans.Dispose();
-            }
+            bendingFieldHandler(fields);
         }
 
 
-        private static void fieldHandler(List<T.DrawingArea> fields, _Db.Transaction trans)
+        private void bendingFieldHandler(List<T.DrawingArea> fields)
         {
             foreach (T.DrawingArea f in fields)
             {
                 if (f.Valid)
                 {
-                    generateTable(f, trans);
+                    generateBendingTable(f);
                 }
                 else
                 {
-                    Universal.writeCadMessage(f.Reason);
+                    write(f.Reason);
                 }
             }
         }
 
 
-        private static void generateTable(T.DrawingArea field, _Db.Transaction trans)
+        private void generateBendingTable(T.DrawingArea field)
         {
             G.Point insertPoint = field._tableHeads[0].IP;
             double scale = field._tableHeads[0].Scale;
@@ -100,7 +87,7 @@ namespace DMTCommands
 
             foreach (T.TableRow b in field._rows)
             {
-                insertRow(currentPoint, b, scale, trans);
+                insertRow(currentPoint, b, scale);
 
                 currentPoint.X = insertPoint.X;
                 currentPoint.Y -= 4 * scale;
@@ -108,31 +95,25 @@ namespace DMTCommands
         }
 
 
-        private static void insertRow(G.Point insertion, T.TableRow rowData, double scale, _Db.Transaction trans)
+        private void insertRow(G.Point insertion, T.TableRow rowData, double scale)
         {
-            string blockName = "Painutustabel_rida";
             string layerName = "K004";
-
-            _Ap.Document doc = _Ap.Application.DocumentManager.MdiActiveDocument;
-            _Db.Database db = doc.Database;
-
-            _Db.BlockTable blockTable = trans.GetObject(db.BlockTableId, _Db.OpenMode.ForRead) as _Db.BlockTable;
-            _Db.BlockTableRecord curSpace = trans.GetObject(db.CurrentSpaceId, _Db.OpenMode.ForWrite) as _Db.BlockTableRecord;
+            string blockName = "Painutustabel_rida";
 
             _Ge.Point3d insertPointBlock = new _Ge.Point3d(insertion.X, insertion.Y, 0);
-            using (_Db.BlockReference newBlockReference = new _Db.BlockReference(insertPointBlock, blockTable[blockName]))
+            using (_Db.BlockReference newBlockReference = new _Db.BlockReference(insertPointBlock, _c.blockTable[blockName]))
             {
                 newBlockReference.Layer = layerName;
-                curSpace.AppendEntity(newBlockReference);
-                trans.AddNewlyCreatedDBObject(newBlockReference, true);
+                _c.modelSpace.AppendEntity(newBlockReference);
+                _c.trans.AddNewlyCreatedDBObject(newBlockReference, true);
                 newBlockReference.TransformBy(_Ge.Matrix3d.Scaling(scale, insertPointBlock));
 
-                _Db.BlockTableRecord blockBlockTable = trans.GetObject(blockTable[blockName], _Db.OpenMode.ForRead) as _Db.BlockTableRecord;
+                _Db.BlockTableRecord blockBlockTable = _c.trans.GetObject(_c.blockTable[blockName], _Db.OpenMode.ForRead) as _Db.BlockTableRecord;
                 if (blockBlockTable.HasAttributeDefinitions)
                 {
                     foreach (_Db.ObjectId objID in blockBlockTable)
                     {
-                        _Db.DBObject obj = trans.GetObject(objID, _Db.OpenMode.ForRead) as _Db.DBObject;
+                        _Db.DBObject obj = _c.trans.GetObject(objID, _Db.OpenMode.ForRead) as _Db.DBObject;
 
                         if (obj is _Db.AttributeDefinition)
                         {
@@ -146,7 +127,7 @@ namespace DMTCommands
                                     attRef.Position = attDef.Position.TransformBy(newBlockReference.BlockTransform);
                                     setRowParameters(attRef, rowData);
                                     newBlockReference.AttributeCollection.AppendAttribute(attRef);
-                                    trans.AddNewlyCreatedDBObject(attRef, true);
+                                    _c.trans.AddNewlyCreatedDBObject(attRef, true);
                                 }
                             }
                         }
@@ -156,7 +137,7 @@ namespace DMTCommands
         }
 
 
-        private static void setRowParameters(_Db.AttributeReference ar, T.TableRow rowData)
+        private void setRowParameters(_Db.AttributeReference ar, T.TableRow rowData)
         {
             if (ar != null)
             {

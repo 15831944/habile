@@ -7,33 +7,33 @@ using System.Diagnostics;
 using System.Collections.Generic;
 using _SWF = System.Windows.Forms;
 
-//using _Ap = Autodesk.AutoCAD.ApplicationServices;
-////using _Br = Autodesk.AutoCAD.BoundaryRepresentation;
-//using _Cm = Autodesk.AutoCAD.Colors;
-//using _Db = Autodesk.AutoCAD.DatabaseServices;
-//using _Ed = Autodesk.AutoCAD.EditorInput;
-//using _Ge = Autodesk.AutoCAD.Geometry;
-//using _Gi = Autodesk.AutoCAD.GraphicsInterface;
-//using _Gs = Autodesk.AutoCAD.GraphicsSystem;
-//using _Pl = Autodesk.AutoCAD.PlottingServices;
-//using _Brx = Autodesk.AutoCAD.Runtime;
-//using _Trx = Autodesk.AutoCAD.Runtime;
-//using _Wnd = Autodesk.AutoCAD.Windows;
+using _Ap = Autodesk.AutoCAD.ApplicationServices;
+//using _Br = Autodesk.AutoCAD.BoundaryRepresentation;
+using _Cm = Autodesk.AutoCAD.Colors;
+using _Db = Autodesk.AutoCAD.DatabaseServices;
+using _Ed = Autodesk.AutoCAD.EditorInput;
+using _Ge = Autodesk.AutoCAD.Geometry;
+using _Gi = Autodesk.AutoCAD.GraphicsInterface;
+using _Gs = Autodesk.AutoCAD.GraphicsSystem;
+using _Pl = Autodesk.AutoCAD.PlottingServices;
+using _Brx = Autodesk.AutoCAD.Runtime;
+using _Trx = Autodesk.AutoCAD.Runtime;
+using _Wnd = Autodesk.AutoCAD.Windows;
 
-using _Ap = Bricscad.ApplicationServices;
-//using _Br = Teigha.BoundaryRepresentation;
-using _Cm = Teigha.Colors;
-using _Db = Teigha.DatabaseServices;
-using _Ed = Bricscad.EditorInput;
-using _Ge = Teigha.Geometry;
-using _Gi = Teigha.GraphicsInterface;
-using _Gs = Teigha.GraphicsSystem;
-using _Gsk = Bricscad.GraphicsSystem;
-using _Pl = Bricscad.PlottingServices;
-using _Brx = Bricscad.Runtime;
-using _Trx = Teigha.Runtime;
-using _Wnd = Bricscad.Windows;
-//using _Int = Bricscad.Internal;
+//using _Ap = Bricscad.ApplicationServices;
+////using _Br = Teigha.BoundaryRepresentation;
+//using _Cm = Teigha.Colors;
+//using _Db = Teigha.DatabaseServices;
+//using _Ed = Bricscad.EditorInput;
+//using _Ge = Teigha.Geometry;
+//using _Gi = Teigha.GraphicsInterface;
+//using _Gs = Teigha.GraphicsSystem;
+//using _Gsk = Bricscad.GraphicsSystem;
+//using _Pl = Bricscad.PlottingServices;
+//using _Brx = Bricscad.Runtime;
+//using _Trx = Teigha.Runtime;
+//using _Wnd = Bricscad.Windows;
+////using _Int = Bricscad.Internal;
 
 using R = Reinforcement;
 using G = Geometry;
@@ -43,8 +43,10 @@ using T = Logic_Tabler;
 
 namespace DMTCommands
 {
-    class Tabler
+    partial class Tabler
     {
+        _CONNECTION _c;
+
         string boxName;
 
         string tableHeadName;
@@ -55,8 +57,11 @@ namespace DMTCommands
 
         List<string> bendingNames;
 
-        public Tabler()
+
+        public Tabler(ref _CONNECTION c)
         {
+            _c = c;
+
             boxName = "Drawing_Area";
 
             tableHeadName = "Painutustabel_pais";
@@ -100,88 +105,61 @@ namespace DMTCommands
         }
 
 
-        public void main2()
+        public void bending()
         {
-            List<G.Area> areas = Tabler_Inputs.getAllAreas(boxName);
-            if (areas.Count < 1)
-            {
-                Universal.writeCadMessage("ERROR - " + boxName + " not found");
-            }
+            List<G.Area> areas = getAllAreas(boxName);
+            List<T.TableHead> heads = getAllTableHeads(tableHeadName);
+            List<T.ReinforcementMark> marks = getAllMarks(markLayerName);
 
-            List<T.TableHead> heads = Tabler_Inputs.getAllTableHeads(tableHeadName);
-            if (heads.Count < 1)
-            {
-                Universal.writeCadMessage("ERROR - " + tableHeadName + " not found");
-            }
+            List<T.Bending> bendings = getAllBendings(bendingNames);
+            List<T.TableRow> rows = getAllTableRows(tableRowName);
 
-            List<T.ReinforcementMark> marks = Tabler_Inputs.getAllMarks(markLayerName);
-            if (marks.Count < 1)
-            {
-                Universal.writeCadMessage("ERROR - " + "Reinforcement marks" + " not found");
-            }
+            T.TablerHandler logic = new T.TablerHandler();
+            List<T.DrawingArea> data = logic.main(areas, heads, marks, bendings, rows);
 
-            List<T.Bending> bendings = Tabler_Inputs.getAllBendings(bendingNames);
-            List<T.TableRow> rows = Tabler_Inputs.getAllTableRows(tableRowName);
+            bending_output(data);
 
-            List<T.DrawingArea> data = T.TablerHandler.main(areas, heads, marks, bendings, rows);
-
-            Tabler_Outputs.main(data);
-
-            Universal.writeCadMessage("PROGRAM FINISED");
-
+            write("[OK]");
         }
 
 
-        public void main3()
+        public void material()
         {
-            List<G.Area> areas = Tabler_Inputs.getAllAreas(boxName);
-            if (areas.Count < 1)
-            {
-                Universal.writeCadMessage("ERROR - " + boxName + " not found");
-            }
+            List<G.Area> areas = getAllAreas(boxName);
+            List<T.TableHead> heads = getAllTableHeads(tableHeadName);
 
-            List<T.TableHead> heads = Tabler_Inputs.getAllTableHeads(tableHeadName);
-            if (heads.Count < 1)
-            {
-                Universal.writeCadMessage("ERROR - " + tableHeadName + " not found");
-            }
-
-            List<T.TableRow> rows = Tabler_Inputs.getAllTableRows(tableRowName);
-            List<T.TableSummary> summarys = Tabler_Inputs.getAllTableSummarys(tableSummaryName);
+            List<T.TableRow> rows = getAllTableRows(tableRowName);
+            List<T.TableSummary> summarys = getAllTableSummarys(tableSummaryName);
 
             List<T.DrawingArea> data = T.SummarHandler.main(areas, heads, rows, summarys);
 
-            Summar_Outputs.main(data);
+            material_output(data);
 
-            Universal.writeCadMessage("PROGRAM FINISED");
+            write("[OK]");
         }
 
 
-        public void main4()
+        public void check()
         {
-            List<G.Area> areas = Tabler_Inputs.getAllAreas(boxName);
-            if (areas.Count < 1)
-            {
-                Universal.writeCadMessage("ERROR - " + boxName + " not found");
-            }
+            List<G.Area> areas = getAllAreas(boxName);
+            List<T.TableHead> heads = getAllTableHeads(tableHeadName);
+            List<T.ReinforcementMark> marks = getAllMarks(markLayerName);
 
-            List<T.TableHead> heads = Tabler_Inputs.getAllTableHeads(tableHeadName);
-            if (heads.Count < 1)
-            {
-                Universal.writeCadMessage("ERROR - " + tableHeadName + " not found");
-            }
-
-            List<T.ReinforcementMark> marks = Tabler_Inputs.getAllMarks(markLayerName);
-            List<T.Bending> bendings = Tabler_Inputs.getAllBendings(bendingNames);
-            List<T.TableRow> rows = Tabler_Inputs.getAllTableRows(tableRowName);
-            List<T.TableSummary> summarys = Tabler_Inputs.getAllTableSummarys(tableSummaryName);
+            List<T.Bending> bendings = getAllBendings(bendingNames);
+            List<T.TableRow> rows = getAllTableRows(tableRowName);
+            List<T.TableSummary> summarys = getAllTableSummarys(tableSummaryName);
 
             List<T.ErrorPoint> errors = T.CheckerHandler.main(areas, heads, marks, bendings, rows, summarys);
 
-            Checker_Outputs.main(errors);
+            checker_output(errors);
 
-            Universal.writeCadMessage("PROGRAM FINISED");
+            write("[OK]");
         }
 
+
+        private void write(string message)
+        {
+            _c.ed.WriteMessage("\n" + message);
+        }
     }
 }

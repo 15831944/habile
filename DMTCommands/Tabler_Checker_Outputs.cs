@@ -43,39 +43,43 @@ using T = Logic_Tabler;
 
 namespace DMTCommands
 {
-    partial class Reinforcer
+    partial class Tabler
     {
-        _CONNECTION _c;
-
-
-        public Reinforcer(ref _CONNECTION c)
+        public void checker_output(List<T.ErrorPoint> errors)
         {
-            _c = c;
+            errorHandler(errors);
         }
 
 
-        public void run()
+        private void errorHandler(List<T.ErrorPoint> errors)
         {
-            getSettings();
-            List<G.Line> polys = getGeometry();
-            G.Point insertPoint = getBendingInsertionPoint();
+            write(" ");
+            write("----- VIGADE LOETELU ALGUS -----");
+            foreach (T.ErrorPoint e in errors)
+            {
+                double scale = e.Scale;
+                _Ge.Point3d insertPoint = new _Ge.Point3d(e.IP.X, e.IP.Y, 0);
+                createCircle(5 * scale, insertPoint);
+                createCircle(40 * scale, insertPoint);
 
-            List<R.Raud> reinf = new List<R.Raud>();
-            List<R.Raud_Array> reinf_array = new List<R.Raud_Array>();
-            List<R.Raud> unique_reinf = new List<R.Raud>();
-
-            L.ReinforcmentHandler logic = new L.ReinforcmentHandler(polys);
-            logic.main(ref reinf, ref reinf_array, ref unique_reinf);
-            
-            output(reinf, reinf_array, unique_reinf, insertPoint);
-
-            write("[OK]");
+                write(e.ErrorMessage);
+            }
+            write("----- VIGADE LOETELU LÕPP -----");
+            write(" ");
+            write("VIGADE ARV - " + errors.Count.ToString());
         }
-        
 
-        private void write(string message)
+
+        private void createCircle(double radius, _Ge.Point3d ip)
         {
-            _c.ed.WriteMessage("\n" + message);
+            using (_Db.Circle circle = new _Db.Circle())
+            {
+                circle.Center = ip;
+                circle.Radius = radius;
+                circle.ColorIndex = 1;
+                _c.modelSpace.AppendEntity(circle);
+                _c.trans.AddNewlyCreatedDBObject(circle, true);
+            }
         }
 
     }
