@@ -47,18 +47,6 @@ namespace DMTCommands
     {
         public void material_output(List<T.DrawingArea> fields)
         {
-            List<string> blockNames = new List<string>() { "PainutusKokkuvõte" };
-            List<string> layerNames = new List<string>() { "K004" };
-
-            Universal init = new Universal(ref _c);
-            init.start(blockNames, layerNames);
-
-            materialFieldHandler(fields);
-        }
-
-
-        private void materialFieldHandler(List<T.DrawingArea> fields)
-        {
             foreach (T.DrawingArea f in fields)
             {
                 if (f.Valid)

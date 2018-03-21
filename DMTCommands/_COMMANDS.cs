@@ -66,6 +66,7 @@ namespace DMTCommands
                 {
                     string version = String.Format("{0}", System.IO.File.GetLastWriteTime(System.Reflection.Assembly.GetExecutingAssembly().Location).ToShortDateString());
                     c.ed.WriteMessage("\nDMT armeerimis programmi versioon: " + version + "\n");
+                    c.ed.WriteMessage("\n[DONE]");
                 }
                 catch (Exception ex)
                 {
@@ -96,10 +97,11 @@ namespace DMTCommands
                 {
                     Reinforcer program = new Reinforcer(ref c);
                     program.run();
+                    c.ed.WriteMessage("\n[DONE]");
                 }
                 catch (DMTException de)
                 {
-                    c.ed.WriteMessage(de.Message);
+                    c.ed.WriteMessage("\n" + de.Message);
                 }
                 catch (Exception ex)
                 {
@@ -130,10 +132,11 @@ namespace DMTCommands
                 {
                     Tabler program = new Tabler(ref c);
                     program.bending();
+                    c.ed.WriteMessage("\n[DONE]");
                 }
                 catch (DMTException de)
                 {
-                    c.ed.WriteMessage(de.Message);
+                    c.ed.WriteMessage("\n" + de.Message);
                 }
                 catch (Exception ex)
                 {
@@ -164,10 +167,11 @@ namespace DMTCommands
                 {
                     Tabler program = new Tabler(ref c);
                     program.material();
+                    c.ed.WriteMessage("\n[DONE]");
                 }
                 catch (DMTException de)
                 {
-                    c.ed.WriteMessage(de.Message);
+                    c.ed.WriteMessage("\n" + de.Message);
                 }
                 catch (Exception ex)
                 {
@@ -198,10 +202,12 @@ namespace DMTCommands
                 {
                     Tabler program = new Tabler(ref c);
                     program.check();
+                    c.ed.WriteMessage("\n[DONE]");
+
                 }
                 catch (DMTException de)
                 {
-                    c.ed.WriteMessage(de.Message);
+                    c.ed.WriteMessage("\n" + de.Message);
                 }
                 catch (Exception ex)
                 {

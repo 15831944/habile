@@ -56,8 +56,8 @@ namespace DMTCommands
             opts.MessageForAdding = "\nSelect Reinf_program_settings block: ";
 
             _Ed.PromptSelectionResult selection = _c.ed.GetSelection(opts, filter);
-            if (selection.Status != _Ed.PromptStatus.OK) throw new DMTException("\n[ERROR] Reinf_program_settings - cancelled");
-            if (selection.Value.Count != 1) throw new DMTException("\n[ERROR] Reinf_program_settings - too many in selection");
+            if (selection.Status != _Ed.PromptStatus.OK) throw new DMTException("[ERROR] Reinf_program_settings - cancelled");
+            if (selection.Value.Count != 1) throw new DMTException("[ERROR] Reinf_program_settings - too many in selection");
 
 
             _Db.ObjectId selectionId = selection.Value.GetObjectIds()[0];
@@ -100,7 +100,7 @@ namespace DMTCommands
                     }
                     else
                     {
-                        throw new DMTException("\n[ERROR] ELEMENDI_LAIUS - Setting invalid");
+                        throw new DMTException("[ERROR] ELEMENDI_LAIUS - Setting invalid");
                     }
                 }
 
@@ -114,7 +114,7 @@ namespace DMTCommands
                     }
                     else
                     {
-                        throw new DMTException("\n[ERROR] KAITSEKIHT - Setting invalid");
+                        throw new DMTException("[ERROR] KAITSEKIHT - Setting invalid");
                     }
                 }
                 else if (ar.Tag == "KIHTIDE_ARV")
@@ -125,7 +125,7 @@ namespace DMTCommands
                     }
                     else
                     {
-                        throw new DMTException("\n[ERROR] KIHTIDE_ARV - Setting invalid");
+                        throw new DMTException("[ERROR] KIHTIDE_ARV - Setting invalid");
                     }
                 }
 
@@ -139,7 +139,7 @@ namespace DMTCommands
                     }
                     else
                     {
-                        throw new DMTException("\n[ERROR] PÕHIARMATUURI_DIAM - Setting invalid");
+                        throw new DMTException("[ERROR] PÕHIARMATUURI_DIAM - Setting invalid");
                     }
                 }
                 else if (ar.Tag == "PÕHIARMATUURI_ANKURDUS")
@@ -150,7 +150,7 @@ namespace DMTCommands
                     }
                     else
                     {
-                        throw new DMTException("\n[ERROR] PÕHIARMATUURI_ANKURDUS - Setting invalid");
+                        throw new DMTException("[ERROR] PÕHIARMATUURI_ANKURDUS - Setting invalid");
                     }
                 }
                 else if (ar.Tag == "PÕHIARMATUURI_ABISUURUS")
@@ -161,7 +161,7 @@ namespace DMTCommands
                     }
                     else
                     {
-                        throw new DMTException("\n[ERROR] PÕHIARMATUURI_ABISUURUS - Setting invalid");
+                        throw new DMTException("[ERROR] PÕHIARMATUURI_ABISUURUS - Setting invalid");
                     }
                 }
 
@@ -175,7 +175,7 @@ namespace DMTCommands
                     }
                     else
                     {
-                        throw new DMTException("\n[ERROR] DIAGONAALI_DIAM - Setting invalid");
+                        throw new DMTException("[ERROR] DIAGONAALI_DIAM - Setting invalid");
                     }
                 }
                 else if (ar.Tag == "DIAGONAALI_ANKURDUS")
@@ -186,7 +186,7 @@ namespace DMTCommands
                     }
                     else
                     {
-                        throw new DMTException("\n[ERROR] DIAGONAALI_ANKURDUS - Setting invalid");
+                        throw new DMTException("[ERROR] DIAGONAALI_ANKURDUS - Setting invalid");
                     }
                 }
 
@@ -201,7 +201,7 @@ namespace DMTCommands
                     }
                     else
                     {
-                        throw new DMTException("\n[ERROR] RANGIDE_DIAM - Setting invalid");
+                        throw new DMTException("[ERROR] RANGIDE_DIAM - Setting invalid");
                     }
                 }
                 else if (ar.Tag == "RANGIDE_SAMM")
@@ -212,7 +212,7 @@ namespace DMTCommands
                     }
                     else
                     {
-                        throw new DMTException("\n[ERROR] RANGIDE_SAMM - Setting invalid");
+                        throw new DMTException("[ERROR] RANGIDE_SAMM - Setting invalid");
                     }
                 }
                 else if (ar.Tag == "RANGIDE_ABISUURUS")
@@ -223,7 +223,7 @@ namespace DMTCommands
                     }
                     else
                     {
-                        throw new DMTException("\n[ERROR] RANGIDE_ABISUURUS - Setting invalid");
+                        throw new DMTException("[ERROR] RANGIDE_ABISUURUS - Setting invalid");
                     }
                 }
 
@@ -239,12 +239,12 @@ namespace DMTCommands
                         }
                         else
                         {
-                            throw new DMTException("\n[ERROR] HORISONTAAL_D_IO - Setting invalid");
+                            throw new DMTException("[ERROR] HORISONTAAL_D_IO - Setting invalid");
                         }
                     }
                     else
                     {
-                        throw new DMTException("\n[ERROR] HORISONTAAL_D_IO - Setting invalid");
+                        throw new DMTException("[ERROR] HORISONTAAL_D_IO - Setting invalid");
                     }
                 }
                 else if (ar.Tag == "HORISONTAAL_D_DIAM")
@@ -255,7 +255,7 @@ namespace DMTCommands
                     }
                     else
                     {
-                        throw new DMTException("\n[ERROR] HORISONTAAL_D_DIAM - Setting invalid");
+                        throw new DMTException("[ERROR] HORISONTAAL_D_DIAM - Setting invalid");
                     }
                 }
                 else if (ar.Tag == "HORISONTAAL_D_ANKURDUS")
@@ -266,7 +266,7 @@ namespace DMTCommands
                     }
                     else
                     {
-                        throw new DMTException("\n[ERROR] HORISONTAAL_D_ANKURDUS - Setting invalid");
+                        throw new DMTException("[ERROR] HORISONTAAL_D_ANKURDUS - Setting invalid");
                     }
                 }
                 else if (ar.Tag == "HORISONTAAL_D_SAMM")
@@ -277,7 +277,7 @@ namespace DMTCommands
                     }
                     else
                     {
-                        throw new DMTException("\n[ERROR] HORISONTAAL_D_SAMM - Setting invalid");
+                        throw new DMTException("[ERROR] HORISONTAAL_D_SAMM - Setting invalid");
                     }
                 }
                 else if (ar.Tag == "HORISONTAAL_D_PARAND")
@@ -288,7 +288,7 @@ namespace DMTCommands
                     }
                     else
                     {
-                        throw new DMTException("\n[ERROR] HORISONTAAL_D_PARAND - Setting invalid");
+                        throw new DMTException("[ERROR] HORISONTAAL_D_PARAND - Setting invalid");
                     }
                 }
 
@@ -304,12 +304,12 @@ namespace DMTCommands
                         }
                         else
                         {
-                            throw new DMTException("\n[ERROR] VERTIKAAL_D_IO - Setting invalid");
+                            throw new DMTException("[ERROR] VERTIKAAL_D_IO - Setting invalid");
                         }
                     }
                     else
                     {
-                        throw new DMTException("\n[ERROR] VERTIKAAL_D_IO - Setting invalid");
+                        throw new DMTException("[ERROR] VERTIKAAL_D_IO - Setting invalid");
                     }
                 }
                 else if (ar.Tag == "VERTIKAAL_D_DIAM")
@@ -320,7 +320,7 @@ namespace DMTCommands
                     }
                     else
                     {
-                        throw new DMTException("\n[ERROR] VERTIKAAL_D_DIAM - Setting invalid");
+                        throw new DMTException("[ERROR] VERTIKAAL_D_DIAM - Setting invalid");
                     }
                 }
                 else if (ar.Tag == "VERTIKAAL_D_ANKURDUS")
@@ -331,7 +331,7 @@ namespace DMTCommands
                     }
                     else
                     {
-                        throw new DMTException("\n[ERROR] VERTIKAAL_D_ANKURDUS - Setting invalid");
+                        throw new DMTException("[ERROR] VERTIKAAL_D_ANKURDUS - Setting invalid");
                     }
                 }
                 else if (ar.Tag == "VERTIKAAL_D_SAMM")
@@ -342,7 +342,7 @@ namespace DMTCommands
                     }
                     else
                     {
-                        throw new DMTException("\n[ERROR] VERTIKAAL_D_SAMM - Setting invalid");
+                        throw new DMTException("[ERROR] VERTIKAAL_D_SAMM - Setting invalid");
                     }
                 }
                 else if (ar.Tag == "VERTIKAAL_D_PARAND")
@@ -353,7 +353,7 @@ namespace DMTCommands
                     }
                     else
                     {
-                        throw new DMTException("\n[ERROR] VERTIKAAL_D_PARAND - Setting invalid");
+                        throw new DMTException("[ERROR] VERTIKAAL_D_PARAND - Setting invalid");
                     }
                 }
             }
@@ -366,7 +366,7 @@ namespace DMTCommands
 
             _Ed.PromptSelectionResult userSelection = _c.doc.Editor.GetSelection();
 
-            if (userSelection.Status != _Ed.PromptStatus.OK) throw new DMTException("\n[ERROR] Geometry - cancelled");
+            if (userSelection.Status != _Ed.PromptStatus.OK) throw new DMTException("[ERROR] Geometry - cancelled");
 
             _Ed.SelectionSet selectionSet = userSelection.Value;
 
@@ -410,7 +410,7 @@ namespace DMTCommands
                 }
             }
 
-            if (polys.Count < 3) throw new DMTException("\n[ERROR] Geometry - less then 3");
+            if (polys.Count < 3) throw new DMTException("[ERROR] Geometry - less then 3");
 
             return polys;
         }
@@ -420,7 +420,7 @@ namespace DMTCommands
         {
             _Ed.PromptPointOptions pickedPointOptions = new _Ed.PromptPointOptions("\nSelect Bending insertion point");
             _Ed.PromptPointResult pickedPoint = _c.doc.Editor.GetPoint(pickedPointOptions);
-            if (pickedPoint.Status != _Ed.PromptStatus.OK) throw new DMTException("\n[ERROR] Bending insertion point - cancelled");
+            if (pickedPoint.Status != _Ed.PromptStatus.OK) throw new DMTException("[ERROR] Bending insertion point - cancelled");
 
             _Ge.Point3d pt = pickedPoint.Value;
             G.Point picked = new G.Point(pt.X, pt.Y);

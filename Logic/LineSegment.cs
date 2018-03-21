@@ -85,7 +85,7 @@ namespace Logic_Reinf
         {
             if (other == null) return false;
 
-            bool one = (this._parent == other._parent) && (this._other == other._other);
+            bool one = (this._parent == other._parent) && (this._other == other._other) && (this._start == other._start) && (this._end == other._end);
             bool two = (this._parent == other._other) && (this._other == other._parent);
             bool eq = one || two;
             return eq;

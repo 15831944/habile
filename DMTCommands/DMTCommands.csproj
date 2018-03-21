@@ -62,7 +62,7 @@
     <Compile Include="Tabler.cs" />
     <Compile Include="Tabler_Inputs.cs" />
     <Compile Include="Tabler_Bending_Outputs.cs" />
-    <Compile Include="Universal_Outputs.cs" />
+    <Compile Include="_SETUP.cs" />
     <Compile Include="_EXCEPTIONS.cs" />
   </ItemGroup>
   <ItemGroup>

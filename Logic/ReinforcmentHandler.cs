@@ -45,8 +45,6 @@ namespace Logic_Reinf
 
             setCalculatedParameters();
 
-            DebugerWindow _debuger = new DebugerWindow();
-            _debuger.Show();
         }
 
 
@@ -71,6 +69,9 @@ namespace Logic_Reinf
 
         public void main(ref List<R.Raud> reinf, ref List<R.Raud_Array> reinf_array, ref List<R.Raud> unique_reinf)
         {
+            //DebugerWindow _debuger = new DebugerWindow();
+            //_debuger.Show();
+
             create_all_main_reinforcement();
             create_all_side_reinforcement();
 

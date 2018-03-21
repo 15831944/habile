@@ -43,11 +43,12 @@ using T = Logic_Tabler;
 
 namespace DMTCommands
 {
-    class Universal
+    class _SETUP
     {
         _CONNECTION _c;
 
-        public Universal(ref _CONNECTION c)
+
+        public _SETUP(ref _CONNECTION c)
         {
             _c = c;
         }
@@ -57,13 +58,22 @@ namespace DMTCommands
         {
             _Db.LayerTable layerTable = _c.trans.GetObject(_c.db.LayerTableId, _Db.OpenMode.ForWrite) as _Db.LayerTable;
 
+            List<string> missingBlocks = new List<string>();
             foreach (string blockName in blockNames)
             {
-                if (!_c.blockTable.Has(blockName))
+                if (!_c.blockTable.Has(blockName)) missingBlocks.Add(blockName);
+            }
+
+            if (missingBlocks.Count > 0)
+            {
+                bool success = getBlockFromMaster(ref missingBlocks);
+
+                foreach (string block in missingBlocks)
                 {
-                    //throw new DMTException("[ERROR] Selles failis puuduvad vajalikud blokkid!");
-                    getBlockFromMaster(blockName);
+                    write("[ERROR] Setup - " + block + " not found!");
                 }
+
+                if (!success) throw new DMTException("[ERROR] Setup - Selles failis puuduvad vajalikud blokkid!");
             }
 
             foreach (string layerName in layerNames)
@@ -96,7 +106,7 @@ namespace DMTCommands
         }
 
 
-        private void getBlockFromMaster(string blockName)
+        private bool getBlockFromMaster(ref List<string> missingBlocks)
         {
             _Db.Database sourceDb = new _Db.Database(false, true);
             string sourceFileName = @"C:\Brics_pealeehitus\master.dwg";
@@ -123,10 +133,11 @@ namespace DMTCommands
 
                     if (!btr.IsAnonymous && !btr.IsLayout)
                     {
-                        if (btr.Name == blockName)
+                        if (missingBlocks.Contains(btr.Name))
                         {
                             blockIds.Add(sourceObject);
-                            _c.ed.WriteMessage("\n" + blockName + " added");
+                            missingBlocks.Remove(btr.Name);
+                            write("[SETUP] " + btr.Name); // TODO REMOVE
                         }
                     }
 
@@ -134,10 +145,20 @@ namespace DMTCommands
                 }
             }
 
+            if (missingBlocks.Count > 0) return false;
+
             _Db.IdMapping mapping = new _Db.IdMapping();
             sourceDb.WblockCloneObjects(blockIds, _c.blockTable.Id, mapping, _Db.DuplicateRecordCloning.Replace, false);
             sourceDb.Dispose();
+
+            write("[SETUP] Kõik puuduvad blockid on lisatud 'master' failist");
+            return true;
         }
 
+
+        private void write(string message)
+        {
+            _c.ed.WriteMessage("\n" + message);
+        }
     }
 }

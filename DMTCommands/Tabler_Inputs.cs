@@ -55,7 +55,7 @@ namespace DMTCommands
             List<_Db.BlockReference> blocks = getAllBlockReference(blockName);
             areas = getBoxAreas(blocks);
 
-            if (areas.Count < 1) throw new DMTException("\n[ERROR] " + blockName + " not found");
+            if (areas.Count < 1) throw new DMTException("[ERROR] " + blockName + " not found");
             return areas;
         }
 
@@ -102,7 +102,7 @@ namespace DMTCommands
             List<_Db.BlockReference> blocks = getAllBlockReference(blockName);
             heads = getTableHeadData(blocks);
 
-            if (heads.Count < 1) throw new DMTException("\n[ERROR] " + blockName + " not found");
+            if (heads.Count < 1) throw new DMTException("[ERROR] " + blockName + " not found");
             return heads;
         }
 
@@ -133,7 +133,7 @@ namespace DMTCommands
             List<_Db.MText> allTexts = getAllText(layer);
             marks = getMarkData(allTexts);
 
-            if (marks.Count < 1) throw new DMTException("\n[ERROR] Reinforcement marks not found");
+            if (marks.Count < 1) throw new DMTException("[ERROR] Reinforcement marks not found");
             return marks;
         }
 

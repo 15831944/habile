@@ -47,12 +47,6 @@ namespace DMTCommands
     {
         public void checker_output(List<T.ErrorPoint> errors)
         {
-            errorHandler(errors);
-        }
-
-
-        private void errorHandler(List<T.ErrorPoint> errors)
-        {
             write(" ");
             write("----- VIGADE LOETELU ALGUS -----");
             foreach (T.ErrorPoint e in errors)
@@ -68,7 +62,7 @@ namespace DMTCommands
             write(" ");
             write("VIGADE ARV - " + errors.Count.ToString());
         }
-
+        
 
         private void createCircle(double radius, _Ge.Point3d ip)
         {

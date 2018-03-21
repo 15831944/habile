@@ -47,24 +47,18 @@ namespace DMTCommands
     {
         private void output(List<R.Raud> reinf, List<R.Raud_Array> reinf_array, List<R.Raud> unique_reinf, G.Point insertPoint)
         {
-            List<string> blockNames = new List<string>() { "Raud_A", "Raud_B", "Raud_C", "Raud_D", "Raud_E", "Raud_U", "Reinf_A_Raud", "Reinf_B_Raud", "Reinf_C_Raud", "Reinf_D_Raud", "Reinf_D_Raud_side", "Reinf_E_Raud", "Reinf_U_Raud_side" };
-            List<string> layerNames = new List<string>() { "K023TL", "Armatuur" };
-
-            Universal init = new Universal(ref _c);
-            init.start(blockNames, layerNames);
-
-            reinfHandler(reinf);
+            reinfSingleHandler(reinf);
             reinfArrayHandler(reinf_array);
             bendingHandler(unique_reinf, insertPoint);
         }
 
 
-        private void reinfHandler(List<R.Raud> reinf)
+        private void reinfSingleHandler(List<R.Raud> reinf)
         {
             foreach (R.Raud re in reinf)
             {
                 insertReinforcementSingle(re, false);
-                insertReinforcmentMark2(re.ToString(), re.IP);
+                insertReinforcmentMark(re.ToString(), re.IP);
             }
         }
 
@@ -80,7 +74,7 @@ namespace DMTCommands
                         insertReinforcementSingle(re, true);
                     }
 
-                    insertReinforcmentMark2(rea.ToString(), rea.IP);
+                    insertReinforcmentMark(rea.ToString(), rea.IP);
                 }
             }
         }
@@ -104,7 +98,7 @@ namespace DMTCommands
         }
 
 
-        private void insertReinforcmentMark2(string mark, G.Point IP)
+        private void insertReinforcmentMark(string mark, G.Point IP)
         {
             string layerName = "K023TL";
             
@@ -118,7 +112,7 @@ namespace DMTCommands
             if (!_c.blockTable.Has("_NONE")) _Ap.Application.SetSystemVariable("DIMBLK", "_NONE");
             leader.ArrowSymbolId = _c.blockTable["_NONE"];
 
-            //leader.SetTextAttachmentType(_Db.TextAttachmentType.AttachmentBottomOfTopLine, _Db.LeaderDirectionType.LeftLeader); // Left attachment
+            leader.SetTextAttachmentType(_Db.TextAttachmentType.AttachmentBottomOfTopLine, _Db.LeaderDirectionType.LeftLeader); // Left attachment
             leader.SetTextAttachmentType(_Db.TextAttachmentType.AttachmentBottomOfTopLine, _Db.LeaderDirectionType.RightLeader); // Right attachment
             leader.EnableLanding = false;
             leader.LeaderLineColor = _Cm.Color.FromColorIndex(_Cm.ColorMethod.None, 155);

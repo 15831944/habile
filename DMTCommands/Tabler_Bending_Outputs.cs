@@ -48,18 +48,6 @@ namespace DMTCommands
 
         public void bending_output(List<T.DrawingArea> fields)
         {
-            List<string> blockNames = new List<string>() { "Painutustabel_rida" };
-            List<string> layerNames = new List<string>() { "K004" };
-
-            Universal init = new Universal(ref _c);
-            init.start(blockNames, layerNames);
-
-            bendingFieldHandler(fields);
-        }
-
-
-        private void bendingFieldHandler(List<T.DrawingArea> fields)
-        {
             foreach (T.DrawingArea f in fields)
             {
                 if (f.Valid)

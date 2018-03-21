@@ -107,6 +107,12 @@ namespace DMTCommands
 
         public void bending()
         {
+            List<string> blockNames = new List<string>() { "Painutustabel_rida" };
+            List<string> layerNames = new List<string>() { "K004" };
+            _SETUP init = new _SETUP(ref _c);
+            init.start(blockNames, layerNames);
+
+
             List<G.Area> areas = getAllAreas(boxName);
             List<T.TableHead> heads = getAllTableHeads(tableHeadName);
             List<T.ReinforcementMark> marks = getAllMarks(markLayerName);
@@ -118,13 +124,17 @@ namespace DMTCommands
             List<T.DrawingArea> data = logic.main(areas, heads, marks, bendings, rows);
 
             bending_output(data);
-
-            write("[OK]");
         }
 
 
         public void material()
         {
+            List<string> blockNames = new List<string>() { "PainutusKokkuvõte" };
+            List<string> layerNames = new List<string>() { "K004" };
+            _SETUP init = new _SETUP(ref _c);
+            init.start(blockNames, layerNames);
+
+
             List<G.Area> areas = getAllAreas(boxName);
             List<T.TableHead> heads = getAllTableHeads(tableHeadName);
 
@@ -134,8 +144,6 @@ namespace DMTCommands
             List<T.DrawingArea> data = T.SummarHandler.main(areas, heads, rows, summarys);
 
             material_output(data);
-
-            write("[OK]");
         }
 
 
@@ -152,8 +160,6 @@ namespace DMTCommands
             List<T.ErrorPoint> errors = T.CheckerHandler.main(areas, heads, marks, bendings, rows, summarys);
 
             checker_output(errors);
-
-            write("[OK]");
         }
 
 
