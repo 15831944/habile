@@ -44,7 +44,7 @@ namespace Logic_Reinf
 
                     temp = new G.Line(start, end);
 
-                    if (Math.Round(temp.Length(), 1) > _V_.X_CONCRETE_COVER_1 * 2)
+                    if (Math.Round(temp.Length(), 0) > _V_.X_CONCRETE_COVER_1 * 2)
                     {
                         temp = temp.extendDouble(-1 * _V_.X_CONCRETE_COVER_1);
 
