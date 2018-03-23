@@ -401,8 +401,8 @@ namespace Geometry
 
         public override string ToString()
         {
-            string str = "(Start) " + Start.ToString() + " \n(End) " + End.ToString() + " \n(Length) " + Length().ToString();
-
+            //string str = "(Start) " + Start.ToString() + " \n(End) " + End.ToString() + " \n(Length) " + Length().ToString();
+            string str = Start.ToString() + " " + End.ToString() + " ";
             return str;
         }
 

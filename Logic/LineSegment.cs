@@ -17,6 +17,7 @@ namespace Logic_Reinf
         G.Edge _parent;
         G.Edge _other;
 
+
         public LineSegment(G.Point start, G.Edge parent, G.Edge other = null)
         {
             _start = start;
@@ -26,10 +27,12 @@ namespace Logic_Reinf
             _other = other;
         }
 
+
         public void updateSegment(G.Point end)
         {
             _end = end;
         }
+
 
         public bool compareSegments(G.Edge other)
         {
@@ -42,26 +45,31 @@ namespace Logic_Reinf
             return false;
         }
 
+
         public bool checkValid()
         {
             if (_start == _end) return false;
             return true;
         }
 
+
         public G.Line getLine()
         {
             return new G.Line(_start, _end);
         }
+
 
         public G.Line getOtherLine()
         {
             return new G.Line(_other.Line.Start, _other.Line.End);
         }
 
+
         public G.Line getParentLine()
         {
             return _parent.Line;
         }
+
 
         public bool hasOtherEdge()
         {

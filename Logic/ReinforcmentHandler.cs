@@ -69,11 +69,11 @@ namespace Logic_Reinf
 
         public void main(ref List<R.Raud> reinf, ref List<R.Raud_Array> reinf_array, ref List<R.Raud> unique_reinf)
         {
-            //DebugerWindow _debuger = new DebugerWindow();
-            //_debuger.Show();
+            DebugerWindow _debuger = new DebugerWindow();
+            _debuger.Show();
 
             create_all_main_reinforcement();
-            create_all_side_reinforcement();
+            //create_all_side_reinforcement();
 
             //Drawing_Box visu2 = new Drawing_Box(r, reinf_geometry_debug);
             //visu2.Show();
@@ -99,19 +99,22 @@ namespace Logic_Reinf
 
             executor(create_trimmed_long_A);
 
-            create_valid_D();
-            executor(create_extended_B);
-            executor(create_long_B);
+            //create_valid_D();
+            //create_oversized_D();
 
-            executor(create_trimmed_short_A);
+            //executor(create_extended_B);
+            //executor(create_long_B);
 
-            create_valid_D();
-            create_oversized_D();
-            executor(create_extended_B);
-            executor(create_long_B);
+            //executor(create_trimmed_short_A);
 
-            executor(create_valid_B);
-            executor(create_diagonal_A);
+            //create_valid_D();
+            //create_oversized_D();
+            //executor(create_extended_B);
+            //executor(create_long_B);
+
+
+            //executor(create_valid_B);
+            //executor(create_diagonal_A);
         }
 
 
@@ -140,17 +143,14 @@ namespace Logic_Reinf
 
                 foreach (LineSegment cur in allSegments)
                 {
-                    if (cur.checkValid()) // TODO: GET RID OF THIS CHECK
+                    if (cur.hasOtherEdge())
                     {
-                        if (cur.hasOtherEdge())
-                        {
-                            define_side_U(cur);
-                        }
-                        else
-                        {
-                            define_side_D(cur);
-                        }
-                    }                    
+                        define_side_U(cur);
+                    }
+                    else
+                    {
+                        define_side_D(cur);
+                    }
                 }
             }
         }
@@ -211,6 +211,9 @@ namespace Logic_Reinf
                 if (setEdges.Keys.Contains(e)) continue;
                 if (narrow_denier(e)) continue;
 
+                Debuger.Print("");
+                Debuger.Print(e.Line.ToString());
+
                 double c1 = _V_.Y_REINFORCEMENT_MAIN_MIN_LENGTH;
                 bool c2 = e.StartCorner.Angle > Math.PI;
                 bool c3 = e.EndCorner.Angle > Math.PI;
@@ -219,26 +222,36 @@ namespace Logic_Reinf
                 bool endTrimmed = false;
                 G.Edge startTrimmerEdge = null;
                 G.Edge endTrimmerEdge = null;
-
+                
                 G.Edge temp = null;
                 G.Line main = e.edgeOffset(_V_.X_CONCRETE_COVER_1, _V_.X_CONCRETE_COVER_1, _V_.X_CONCRETE_COVER_1);
+                Debuger.Print(main.ToString());
                 main = trimLine_baseline(main, main.Copy(), _V_.Y_CONCRETE_COVER_2, ref temp);
+                Debuger.Print(main.ToString());
 
                 if (c2)
                 {
+                    Debuger.Print("c2");
                     G.Line extended = main.extendStart(_V_.X_REINFORCEMENT_MAIN_ANCHOR_LENGTH);
+                    Debuger.Print(extended.ToString());
                     G.Line trimmed = trimLine_basepoint(extended, main.End, _V_.Y_CONCRETE_COVER_2, e, ref startTrimmerEdge);
+                    Debuger.Print(trimmed.ToString());
                     if (trimmed.Length() < main.Length() + _V_.X_REINFORCEMENT_MAIN_ANCHOR_LENGTH * _V_.M_TRIM_TOLERANCE) startTrimmed = true;
                     main = trimmed;
                 }
 
                 if (c3)
                 {
+                    Debuger.Print("c3");
                     G.Line extended = main.extendEnd(_V_.X_REINFORCEMENT_MAIN_ANCHOR_LENGTH);
+                    Debuger.Print(extended.ToString());
                     G.Line trimmed = trimLine_basepoint(extended, main.Start, _V_.Y_CONCRETE_COVER_2, e, ref endTrimmerEdge);
+                    Debuger.Print(trimmed.ToString());
                     if (trimmed.Length() < main.Length() + _V_.X_REINFORCEMENT_MAIN_ANCHOR_LENGTH * _V_.M_TRIM_TOLERANCE) endTrimmed = true;
                     main = trimmed;
                 }
+
+                Debuger.Print(main.ToString());
 
                 if (main.Length() > c1)
                 {
@@ -266,22 +279,24 @@ namespace Logic_Reinf
                     if (endTrimmed)
                     {
                         bool got_B = define_simple_B(endTrimmerEdge, e);
-
+                        
                         if (got_B == false)
                         {
                             G.Vector v1 = e.Line.getOffsetVector();
                             G.Vector v2 = endTrimmerEdge.Line.getCoolVector(v1);
-
+                            
                             G.Point AP = main.End.move(_V_.X_REINFORCEMENT_MAIN_ANCHOR_LENGTH * 1.5, v2);
                             G.Line b_line = new G.Line(main.End, AP);
-
+                            
                             G.Edge sideTrimmerEdge = null;
                             G.Line newMain = trimLine_basepoint(b_line, main.End, _V_.Y_CONCRETE_COVER_2, e, ref sideTrimmerEdge);
-
+                            
                             define_D(endTrimmerEdge, e, sideTrimmerEdge);
+                            
                         }
                     }
                 }
+                Debuger.Print("");
             }
         }
 
@@ -661,9 +676,19 @@ namespace Logic_Reinf
                 bool c5 = setEdges.Keys.Contains(side1Edge);
                 bool c6 = setEdges.Keys.Contains(side2Edge);
 
-                if (c1 && c2 && c3 && c4 && (c5 || c6))
+                if (c1 && c2 && c3 && c4)// && (c5 || c6))
                 {
-                    if (!c5)
+                    if (!c5 && !c6)
+                    {
+                        if (side1Edge.Line.Length() < _V_.Y_REINFORCEMENT_MAIN_MIN_LENGTH)
+                        {
+                            if (side2Edge.Line.Length() < _V_.Y_REINFORCEMENT_MAIN_MIN_LENGTH)
+                            {
+                                define_simple_D(e, side1Edge, side2Edge);
+                            }                                
+                        }
+                    }
+                    else if (!c5)
                     {
                         if (side1Edge.Line.Length() < _V_.Y_REINFORCEMENT_MAIN_MIN_LENGTH)
                         {

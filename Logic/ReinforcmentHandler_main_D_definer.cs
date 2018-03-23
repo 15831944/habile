@@ -21,7 +21,7 @@ namespace Logic_Reinf
             double cover1 = _V_.X_CONCRETE_COVER_1;
             double coverMain = _V_.X_CONCRETE_COVER_1;
             double cover2 = _V_.X_CONCRETE_COVER_1;
-            int parand = 0; //2 * _V_.Y_CONCRETE_COVER_DELTA - 10; // parand magic
+            int parand = 0;
 
             double side1Dist = _V_.X_REINFORCEMENT_MAIN_ANCHOR_LENGTH;
             double mainDist = mainEdge.Line.Length();
@@ -52,13 +52,9 @@ namespace Logic_Reinf
 
             if (side1Dist != side2Dist)
             {
-                double delta = Math.Abs(side1Dist - side2Dist);
-                if (delta < _V_.X_REINFORCEMENT_MAIN_ANCHOR_LENGTH / 2 )
-                {
-                    double max = Math.Max(side1Dist, side2Dist);
-                    side1Dist = max;
-                    side2Dist = max;
-                }
+                double max = Math.Max(side1Dist, side2Dist);
+                side1Dist = max;
+                side2Dist = max;
             }
 
             G.Corner startCorner = null;

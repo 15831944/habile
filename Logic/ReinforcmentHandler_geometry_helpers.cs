@@ -26,6 +26,7 @@ namespace Logic_Reinf
             return false;
         }
 
+
         private bool denier(G.Line final, G.Edge e)
         {
             foreach (G.Edge eg in allEdges)
@@ -41,6 +42,7 @@ namespace Logic_Reinf
             }
             return false;
         }
+
 
         private bool narrow_denier(G.Edge e)
         {
@@ -60,9 +62,12 @@ namespace Logic_Reinf
             return false;
         }
 
+
         private List<LineSegment> line_segmentator(G.Edge e)
         {
+            List<LineSegment> tempList = new List<LineSegment>();
             List<LineSegment> segmentList = new List<LineSegment>();
+
             G.Line main = e.Line.Offset(G._Variables.EQUALS_TOLERANCE + 0.001);
 
             G.Vector d1 = e.Line.getDirectionVector();
@@ -70,8 +75,8 @@ namespace Logic_Reinf
 
             double delta = _V_.M_LINE_SEGMENTATOR_STEP;
             double j = 1;
-            double len = main.Length() - 1;
-            
+            double len = main.Length() - (j * 2);
+
             while (j < len)
             {
                 G.Point checkStartPoint = main.Start.move(j, d1);
@@ -81,29 +86,36 @@ namespace Logic_Reinf
                 G.Edge trimmerEdge = null;
                 bool check = trimmer_basepoint(checkLine, checkStartPoint, ref trimmerEdge);
 
-                if (segmentList.Count == 0)
+                if (tempList.Count == 0)
                 {
                     LineSegment temp = new LineSegment(checkStartPoint, e, trimmerEdge);
-                    segmentList.Add(temp);
+                    tempList.Add(temp);
                 }
                 else
                 {
-                    if (segmentList[segmentList.Count - 1].compareSegments(trimmerEdge))
+                    if (tempList[tempList.Count - 1].compareSegments(trimmerEdge))
                     {
-                        segmentList[segmentList.Count - 1].updateSegment(checkStartPoint);
+                        tempList[tempList.Count - 1].updateSegment(checkStartPoint);
                     }
                     else
                     {
                         LineSegment temp = new LineSegment(checkStartPoint, e, trimmerEdge);
-                        segmentList.Add(temp);
+                        tempList.Add(temp);
                     }
                 }
 
                 j = j + delta;
             }
 
+            foreach (LineSegment temp in tempList)
+            {
+                if (temp.checkValid()) segmentList.Add(temp);
+            }
+
             return segmentList;
         }
+
+
 
         private bool trimmer_basepoint(G.Line extendedLine, G.Point fixedPoint, ref G.Edge trimmer)
         {

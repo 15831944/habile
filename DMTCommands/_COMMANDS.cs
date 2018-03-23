@@ -1,4 +1,7 @@
-﻿using System;
+﻿//#define BRX_APP
+#define ARX_APP
+
+using System;
 using System.Text;
 using System.Collections;
 using System.Linq;
@@ -7,33 +10,35 @@ using System.Diagnostics;
 using System.Collections.Generic;
 using _SWF = System.Windows.Forms;
 
-using _Ap = Autodesk.AutoCAD.ApplicationServices;
-//using _Br = Autodesk.AutoCAD.BoundaryRepresentation;
-using _Cm = Autodesk.AutoCAD.Colors;
-using _Db = Autodesk.AutoCAD.DatabaseServices;
-using _Ed = Autodesk.AutoCAD.EditorInput;
-using _Ge = Autodesk.AutoCAD.Geometry;
-using _Gi = Autodesk.AutoCAD.GraphicsInterface;
-using _Gs = Autodesk.AutoCAD.GraphicsSystem;
-using _Pl = Autodesk.AutoCAD.PlottingServices;
-using _Brx = Autodesk.AutoCAD.Runtime;
-using _Trx = Autodesk.AutoCAD.Runtime;
-using _Wnd = Autodesk.AutoCAD.Windows;
-
-//using _Ap = Bricscad.ApplicationServices;
-////using _Br = Teigha.BoundaryRepresentation;
-//using _Cm = Teigha.Colors;
-//using _Db = Teigha.DatabaseServices;
-//using _Ed = Bricscad.EditorInput;
-//using _Ge = Teigha.Geometry;
-//using _Gi = Teigha.GraphicsInterface;
-//using _Gs = Teigha.GraphicsSystem;
-//using _Gsk = Bricscad.GraphicsSystem;
-//using _Pl = Bricscad.PlottingServices;
-//using _Brx = Bricscad.Runtime;
-//using _Trx = Teigha.Runtime;
-//using _Wnd = Bricscad.Windows;
-////using _Int = Bricscad.Internal;
+#if BRX_APP
+    using _Ap = Bricscad.ApplicationServices;
+    //using _Br = Teigha.BoundaryRepresentation;
+    using _Cm = Teigha.Colors;
+    using _Db = Teigha.DatabaseServices;
+    using _Ed = Bricscad.EditorInput;
+    using _Ge = Teigha.Geometry;
+    using _Gi = Teigha.GraphicsInterface;
+    using _Gs = Teigha.GraphicsSystem;
+    using _Gsk = Bricscad.GraphicsSystem;
+    using _Pl = Bricscad.PlottingServices;
+    using _Brx = Bricscad.Runtime;
+    using _Trx = Teigha.Runtime;
+    using _Wnd = Bricscad.Windows;
+    //using _Int = Bricscad.Internal;
+#elif ARX_APP
+    using _Ap = Autodesk.AutoCAD.ApplicationServices;
+    //using _Br = Autodesk.AutoCAD.BoundaryRepresentation;
+    using _Cm = Autodesk.AutoCAD.Colors;
+    using _Db = Autodesk.AutoCAD.DatabaseServices;
+    using _Ed = Autodesk.AutoCAD.EditorInput;
+    using _Ge = Autodesk.AutoCAD.Geometry;
+    using _Gi = Autodesk.AutoCAD.GraphicsInterface;
+    using _Gs = Autodesk.AutoCAD.GraphicsSystem;
+    using _Pl = Autodesk.AutoCAD.PlottingServices;
+    using _Brx = Autodesk.AutoCAD.Runtime;
+    using _Trx = Autodesk.AutoCAD.Runtime;
+    using _Wnd = Autodesk.AutoCAD.Windows;
+#endif
 
 using R = Reinforcement;
 using G = Geometry;
@@ -46,6 +51,7 @@ namespace DMTCommands
 {
     public class CadCommands
     {
+        //TODO
         [_Trx.CommandMethod("qqq")]
         public void qqq()
         {
@@ -226,5 +232,90 @@ namespace DMTCommands
             }
         }
 
+
+        //TODO
+        [_Trx.CommandMethod("qq")]
+        public void test()
+        {
+            _CONNECTION c = new _CONNECTION();
+
+            try
+            {
+                _Db.Database sourceDb = new _Db.Database(false, true);
+                string sourceFileName = @"C:\Brics_pealeehitus\master.dwg";
+
+                sourceDb.ReadDwgFile(sourceFileName, System.IO.FileShare.Read, true, "");
+                _Db.ObjectIdCollection blockIds = new _Db.ObjectIdCollection();
+
+                c.ed.WriteMessage("\n");
+
+                using (_Db.Transaction sourceTrans = sourceDb.TransactionManager.StartTransaction())
+                {
+                    _Db.BlockTable sourceBlockTable = sourceTrans.GetObject(sourceDb.BlockTableId, _Db.OpenMode.ForWrite, false) as _Db.BlockTable;
+
+                    foreach (_Db.ObjectId sourceObject in sourceBlockTable)
+                    {
+                        _Db.BlockTableRecord btr = sourceTrans.GetObject(sourceObject, _Db.OpenMode.ForWrite, false) as _Db.BlockTableRecord;
+
+                        c.ed.WriteMessage("\n");
+                        if (btr.IsLayout) continue;
+                        //if (btr.IsAnonymous) continue;
+                        if (btr.IsDynamicBlock) c.ed.WriteMessage("[dyn] ");
+
+                        c.ed.WriteMessage(btr.Name + " " + btr.Comments);
+
+                        btr.Dispose();
+                    }
+                }
+
+                _Db.IdMapping mapping = new _Db.IdMapping();
+                sourceDb.WblockCloneObjects(blockIds, c.blockTable.Id, mapping, _Db.DuplicateRecordCloning.Replace, false);
+                sourceDb.Dispose();
+            }
+            catch
+            {
+
+            }
+            finally
+            {
+                c.close();
+            }
+
+        }
+
+
+        //TODO
+        [_Trx.CommandMethod("ww")]
+        public void test2()
+        {
+            _CONNECTION c = new _CONNECTION();
+
+            try
+            {
+
+                foreach (_Db.ObjectId sourceObject in c.blockTable)
+                {
+                    _Db.BlockTableRecord btr = c.trans.GetObject(sourceObject, _Db.OpenMode.ForWrite, false) as _Db.BlockTableRecord;
+
+                    c.ed.WriteMessage("\n");
+                    if (btr.IsLayout) continue;
+                    //if (btr.IsAnonymous) continue;
+                    if (btr.IsDynamicBlock) c.ed.WriteMessage("[dyn] ");
+
+                    c.ed.WriteMessage(btr.Name);
+
+                    btr.Dispose();
+                }
+
+            }
+            catch
+            {
+
+            }
+            finally
+            {
+                c.close();
+            }
+        }
     }
 }

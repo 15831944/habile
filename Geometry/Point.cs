@@ -84,7 +84,8 @@ namespace Geometry
 
         public override string ToString()
         {
-            string str = "X: " + X.ToString("f2") + "  Y: " + Y.ToString("f2");
+            //string str = "X: " + X.ToString("f2") + "  Y: " + Y.ToString("f2");
+            string str = "pl " + X.ToString("f5") + "," + Y.ToString("f5");
 
             return str;
         }
