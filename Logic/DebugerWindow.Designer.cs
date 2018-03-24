@@ -40,14 +40,16 @@
             this.txt_messages.Multiline = true;
             this.txt_messages.Name = "txt_messages";
             this.txt_messages.ReadOnly = true;
-            this.txt_messages.Size = new System.Drawing.Size(784, 763);
+            this.txt_messages.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.txt_messages.Size = new System.Drawing.Size(558, 763);
             this.txt_messages.TabIndex = 0;
             // 
             // DebugerWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(808, 787);
+            this.AutoScroll = true;
+            this.ClientSize = new System.Drawing.Size(582, 787);
             this.Controls.Add(this.txt_messages);
             this.Name = "DebugerWindow";
             this.Text = "Debuger";

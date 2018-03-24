@@ -18,6 +18,7 @@ namespace Geometry
         public Edge EndEdge { get { return endEdge; } }
         public double Angle { get { return angle; } }
 
+
         public Corner(Point p, Edge ln1, Edge ln2, List<Line> contours)
         {
             corner = p;
@@ -35,6 +36,7 @@ namespace Geometry
 
             angle = calcAngle(ln1, ln2, contours);
         }
+
 
         private double calcAngle(Edge eb, Edge ec, List<Line> contours)
         {
@@ -64,12 +66,14 @@ namespace Geometry
             return A;
         }
 
+
         public Edge getOtherEdge(Edge one)
         {
             if (one == StartEdge) return EndEdge;
             else if (one == EndEdge) return StartEdge;
             else throw new EdgeNotInDefinedCornerException();
         }
+
 
         public Point getCornerPoint(Edge e, double offset_main, double offset_side, double alfa = 1000)
         {
@@ -84,11 +88,13 @@ namespace Geometry
             return ip;
         }
 
+
         public bool Equals(Corner other)
         {
             if (other == null) return false;
             return (this.corner == other.corner && this.angle == other.angle);
         }
+
 
         public override bool Equals(object obj)
         {
@@ -98,14 +104,17 @@ namespace Geometry
             return Equals(obj as Corner);
         }
 
+
         public static bool operator ==(Corner a, Corner b)
         {
             return object.Equals(a, b);
         }
 
+
         public static bool operator !=(Corner a, Corner b)
         {
             return !object.Equals(a, b);
         }
+
     }
 }

@@ -36,7 +36,7 @@ namespace Logic_Reinf
     {
         public static void Print(string s)
         {
-            DebugerWindow._form.print(s);
+            DebugerWindow._form.print(s.Replace(",", ".").Replace("<",","));
         }
     }
 }

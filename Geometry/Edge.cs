@@ -16,10 +16,12 @@ namespace Geometry
         public Corner StartCorner { get { return startCorner; } }
         public Corner EndCorner { get { return endCorner; } }
 
+
         public Edge(Line line)
         {
             this.line = line;
         }
+
 
         public void setCorner(Corner one)
         {
@@ -37,12 +39,14 @@ namespace Geometry
             }
         }
 
+
         public Corner getOtherCorner(Corner one)
         {
             if (one == startCorner) return endCorner;
             else if (one == endCorner) return startCorner;
             else throw new CornerNotInDefinedEdgeException();
         }
+
 
         public Line edgeOffset(double offset_main, double offset_side1, double offset_side2)
         {
@@ -53,6 +57,7 @@ namespace Geometry
 
             return offset_line;
         }
+
 
         public Line edgeTrimmer(double offset_main, double offset_side1, double offset_side2)
         {
@@ -66,6 +71,7 @@ namespace Geometry
 
             return offset_line;
         }
+
 
         public static bool getSharedCorner(Edge e1, Edge e2, ref Corner c)
         {
@@ -94,6 +100,7 @@ namespace Geometry
             return false;
         }
 
+
         public static bool haveSharedCorner(Edge e1, Edge e2)
         {
             if (e1.StartCorner == e2.EndCorner) return true;
@@ -104,11 +111,24 @@ namespace Geometry
             return false;
         }
 
+
+        public static Corner getSharedCorner(Edge e1, Edge e2)
+        {
+            if (e1.StartCorner == e2.EndCorner) return e1.StartCorner;
+            else if (e1.EndCorner == e2.StartCorner) return e1.EndCorner;
+            else if (e1.StartCorner == e2.StartCorner) return e1.StartCorner;
+            else if (e1.EndCorner == e2.EndCorner) return e1.EndCorner;
+
+            return null;
+        }
+
+
         public bool Equals(Edge other)
         {
             if (other == null) return false;
             return (this.line == other.line);
         }
+
 
         public override bool Equals(object obj)
         {
@@ -118,10 +138,12 @@ namespace Geometry
             return Equals(obj as Edge);
         }
 
+
         public static bool operator ==(Edge a, Edge b)
         {
             return object.Equals(a, b);
         }
+
 
         public static bool operator !=(Edge a, Edge b)
         {

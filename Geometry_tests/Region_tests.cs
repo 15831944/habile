@@ -69,6 +69,106 @@ namespace Geometry_tests
             Assert.AreEqual(r.corners.Count, 4);
         }
 
+
+        [TestMethod]
+        public void Region_init_test_3()
+        {
+            List<Line> contours = new List<Line>();
+
+            Point aa = new Point(14818.69595, 12854.88943);
+            Point ab = new Point(14818.69595, 12504.88943);
+            Line a = new Line(aa, ab);
+            contours.Add(a);
+
+            Point ba = new Point(14818.69595, 12504.88943);
+            Point bb = new Point(15168.69595, 12504.88943);
+            Line b = new Line(ba, bb);
+            contours.Add(b);
+
+            Point ca = new Point(15168.69595, 12504.88943);
+            Point cb = new Point(15168.69595, 12809.88897);
+            Line c = new Line(ca, cb);
+            contours.Add(c);
+
+            Point da = new Point(15168.69595, 12809.88897);
+            Point db = new Point(15708.38971, 12809.88897);
+            Line d = new Line(da, db);
+            contours.Add(d);
+
+            Point fa = new Point(15708.38971, 12809.88897);
+            Point fb = new Point(15708.38971, 13509.88897);
+            Line f = new Line(fa, fb);
+            contours.Add(f);
+
+            Point ga = new Point(15708.38971, 13509.88897);
+            Point gb = new Point(15008.38971, 13509.88897);
+            Line g = new Line(ga, gb);
+            contours.Add(g);
+
+            Point ha = new Point(15008.38971, 13509.88897);
+            Point hb = new Point(15008.38971, 12854.88943);
+            Line h = new Line(ha, hb);
+            contours.Add(h);
+
+            Point ia = new Point(15008.38971, 12854.88943);
+            Point ib = new Point(14818.69595, 12854.88943);
+            Line i = new Line(ia, ib);
+            contours.Add(i);
+
+            Point ja = new Point(14818.69595, 12854.88943);
+            Point jb = new Point(14818.69595, 12504.88943);
+            Line j = new Line(ja, jb);
+            contours.Add(j);
+
+            Point ka = new Point(13273.73650, 10520.88317);
+            Point kb = new Point(18273.76503, 10520.88317);
+            Line k = new Line(ka, kb);
+            contours.Add(k);
+
+            Point la = new Point(18273.76503, 10520.88317);
+            Point lb = new Point(18273.76503, 14295.88317);
+            Line l = new Line(la, lb);
+            contours.Add(l);
+
+            Point ma = new Point(18273.76503, 14295.88317);
+            Point mb = new Point(14238.75604, 14295.88317);
+            Line m = new Line(ma, mb);
+            contours.Add(m);
+
+            Point na = new Point(14238.75604, 14295.88317);
+            Point nb = new Point(14238.75604, 14100.88360);
+            Line n = new Line(na, nb);
+            contours.Add(n);
+
+            Point oa = new Point(14238.75604, 14100.88360);
+            Point ob = new Point(13908.75604, 14100.88317);
+            Line o = new Line(oa, ob);
+            contours.Add(o);
+
+            Point pa = new Point(13908.75604, 14100.88317);
+            Point pb = new Point(13908.75604, 14295.88317);
+            Line p = new Line(pa, pb);
+            contours.Add(p);
+
+            Point ra = new Point(13908.75604, 14295.88317);
+            Point rb = new Point(13273.73650, 14295.88317);
+            Line r = new Line(ra, rb);
+            contours.Add(r);
+
+            Point sa = new Point(13273.73650, 14295.88317);
+            Point sb = new Point(13273.73650, 10520.88317);
+            Line s = new Line(sa, sb);
+            contours.Add(s);
+
+
+
+            contours.Add(k);
+
+            Region reg = new Region(contours);
+            
+        }
+
+
         [TestMethod]
         [ExpectedException(typeof(RegionNotValidException))]
         public void Region_init_fail_test()

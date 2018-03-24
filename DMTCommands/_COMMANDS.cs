@@ -1,5 +1,5 @@
-﻿//#define BRX_APP
-#define ARX_APP
+﻿#define BRX_APP
+//#define BRX_APP
 
 using System;
 using System.Text;
@@ -52,7 +52,7 @@ namespace DMTCommands
     public class CadCommands
     {
         //TODO
-        [_Trx.CommandMethod("qqq")]
+        [_Trx.CommandMethod("qqq1")]
         public void qqq()
         {
             _CONNECTION c = new _CONNECTION();

@@ -40,6 +40,7 @@ namespace Logic_Reinf
             return success;
         }
 
+
         public bool define_B(G.Edge startEdge, G.Edge endEdge)
         {
             bool startSet = setEdges.Keys.Contains(startEdge);
@@ -52,6 +53,11 @@ namespace Logic_Reinf
             double sideDist = _V_.X_REINFORCEMENT_MAIN_ANCHOR_LENGTH;
 
             bool realCorner = G.Edge.haveSharedCorner(startEdge, endEdge);
+            if (realCorner)
+            {
+                G.Corner cor = G.Edge.getSharedCorner(startEdge, endEdge);
+                if (cor.Angle > Math.PI) return false;
+            }
 
             if (startSet == true && endSet == true)
             {
@@ -169,8 +175,6 @@ namespace Logic_Reinf
             G.Point mainEndPoint = IP.move(mainDist, v2);
             G.Point sidePoint = IP.move(sideDist, v4);
 
-            //A_handler_debug(IP, mainEndPoint);
-            //A_handler_debug(sidePoint, IP);
 
             bool success = false;
 

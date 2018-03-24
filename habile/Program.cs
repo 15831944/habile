@@ -21,7 +21,7 @@ namespace habile
                 {
                     netload = @"C:\Users\aleksandr.ess\Documents\GitHub\habile\DMTCommands\bin\Release\DMTCommands.dll";
                 }
-                string dwg = @"C:\Users\aleksandr.ess\Dropbox\DMT\Brics_testimine\training.dwg";
+                string dwg = @"C:\Users\aleksandr.ess\Dropbox\DMT\Brics_testimine\training2.dwg";
                 string script = "script1.scr";
 
                 createScriptFile(script, netload, dwg);

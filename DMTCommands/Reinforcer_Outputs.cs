@@ -1,5 +1,5 @@
-﻿//#define BRX_APP
-#define ARX_APP
+﻿#define BRX_APP
+//#define BRX_APP
 
 using System;
 using System.Text;
@@ -54,7 +54,7 @@ namespace DMTCommands
         {
             reinfSingleHandler(reinf);
             reinfArrayHandler(reinf_array);
-            bendingHandler(unique_reinf, insertPoint);
+            //bendingHandler(unique_reinf, insertPoint);
         }
 
 
@@ -63,7 +63,7 @@ namespace DMTCommands
             foreach (R.Raud re in reinf)
             {
                 insertReinforcementSingle(re, false);
-                insertReinforcmentMark(re.ToString(), re.IP);
+                //insertReinforcmentMark(re.ToString(), re.IP);
             }
         }
 
@@ -79,7 +79,7 @@ namespace DMTCommands
                         insertReinforcementSingle(re, true);
                     }
 
-                    insertReinforcmentMark(rea.ToString(), rea.IP);
+                    //insertReinforcmentMark(rea.ToString(), rea.IP);
                 }
             }
         }
