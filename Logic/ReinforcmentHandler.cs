@@ -32,10 +32,10 @@ namespace Logic_Reinf
             DebugerWindow _debuger = new DebugerWindow();
             _debuger.Show();
 
-            foreach (G.Line ln in polys)
-            {
-                Debuger.Print(ln.ToString());
-            }
+            //foreach (G.Line ln in polys)
+            //{
+            //    Debuger.Print(ln.ToString());
+            //}
 
             r = new G.Region(polys);
 
@@ -112,13 +112,13 @@ namespace Logic_Reinf
 
             executor(create_trimmed_short_A);
 
-            create_valid_D();
-            create_oversized_D();
-            executor(create_extended_B);
-            executor(create_long_B);
+            //create_valid_D();
+            //create_oversized_D();
+            //executor(create_extended_B);
+            //executor(create_long_B);
 
-            executor(create_valid_B);
-            executor(create_diagonal_A);
+            //executor(create_valid_B);
+            //executor(create_diagonal_A);
         }
 
 
@@ -212,9 +212,10 @@ namespace Logic_Reinf
             for (int i = emptyEdges.Count - 1; i >= 0; i--)
             {
                 G.Edge e = emptyEdges[i];
+
                 if (setEdges.Keys.Contains(e)) continue;
                 if (narrow_denier(e)) continue;
-                
+
                 double c1 = _V_.Y_REINFORCEMENT_MAIN_MIN_LENGTH;
                 bool c2 = e.StartCorner.Angle > Math.PI;
                 bool c3 = e.EndCorner.Angle > Math.PI;
@@ -226,7 +227,7 @@ namespace Logic_Reinf
                 
                 G.Edge temp = null;
                 G.Line main = e.edgeOffset(_V_.X_CONCRETE_COVER_1, _V_.X_CONCRETE_COVER_1, _V_.X_CONCRETE_COVER_1);
-                main = trimLine_baseline(main, main.Copy(), _V_.Y_CONCRETE_COVER_2, e, ref temp);
+                main = trimLine_baseline(main, main.Copy(), _V_.X_CONCRETE_COVER_1, e, ref temp);
 
                 if (c2)
                 {
@@ -308,6 +309,11 @@ namespace Logic_Reinf
                 if (setEdges.Keys.Contains(e)) continue;
                 if (narrow_denier(e)) continue;
 
+
+                Debuger.Print("");
+                Debuger.Print("e");
+                Debuger.Print(e.Line.ToString());
+
                 double c1 = _V_.Y_REINFORCEMENT_MAIN_MIN_LENGTH;
                 bool c2 = e.StartCorner.Angle > Math.PI;
                 bool c3 = e.EndCorner.Angle > Math.PI;
@@ -319,7 +325,7 @@ namespace Logic_Reinf
 
                 G.Edge temp = null;
                 G.Line main = e.edgeOffset(_V_.X_CONCRETE_COVER_1, _V_.X_CONCRETE_COVER_1, _V_.X_CONCRETE_COVER_1);
-                main = trimLine_baseline(main, main.Copy(), _V_.Y_CONCRETE_COVER_2, e, ref temp);
+                main = trimLine_baseline(main, main.Copy(), _V_.X_CONCRETE_COVER_1, e, ref temp);
 
                 if (c2)
                 {
@@ -336,7 +342,10 @@ namespace Logic_Reinf
                     if (trimmed.Length() < main.Length() + _V_.X_REINFORCEMENT_MAIN_ANCHOR_LENGTH * _V_.M_TRIM_TOLERANCE) endTrimmed = true;
                     main = trimmed;
                 }
-                
+
+
+                Debuger.Print(main.ToString());
+
 
                 if (main.Length() <= c1)
                 {
@@ -434,6 +443,7 @@ namespace Logic_Reinf
                     }
                     else if (endTrimmed)
                     {
+                        Debuger.Print("end");
                         bool got_B = define_B(endTrimmerEdge, e);
 
                         if (got_B == false)
@@ -443,6 +453,7 @@ namespace Logic_Reinf
 
                             G.Point AP = main.End.move(_V_.X_REINFORCEMENT_MAIN_ANCHOR_LENGTH * 2, v2);
                             G.Line b_line = new G.Line(main.End, AP);
+                            Debuger.Print(b_line.ToString());
 
                             G.Edge sideTrimmerEdge = null;
                             G.Line newMain = trimLine_basepoint(b_line, main.End, _V_.Y_CONCRETE_COVER_2, e, ref sideTrimmerEdge);

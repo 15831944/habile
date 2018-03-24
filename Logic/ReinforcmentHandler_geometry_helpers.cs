@@ -156,6 +156,7 @@ namespace Logic_Reinf
             {
                 double o = _V_.X_CONCRETE_COVER_1 - 0.49;
                 G.Line offsetLine = eg.edgeOffset(o, o, o);
+
                 if (G.Line.hasIntersection(trimmedLine, offsetLine))
                 {
                     G.Point ip = G.Line.getIntersectionPoint(trimmedLine, offsetLine);
@@ -178,12 +179,13 @@ namespace Logic_Reinf
         private G.Line trimLine_baseline(G.Line extendedLine, G.Line startLine, double offset, G.Edge e, ref G.Edge trimmer)
         {
             G.Line trimmedLine = extendedLine.Copy();
+            Debuger.Print(trimmedLine.ToString());
 
             foreach (G.Edge eg in allEdges)
             {
                 if (eg == e) continue;
 
-                double o = offset - 0.49;
+                double o = offset - 5.49;
                 G.Line offsetLine = eg.edgeTrimmer(o, o, o);
 
                 if (G.Line.hasIntersection(trimmedLine, offsetLine))
@@ -211,12 +213,16 @@ namespace Logic_Reinf
         {
             G.Line trimmedLine = extendedLine.Copy();
 
+            Debuger.Print(trimmedLine.ToString());
+
             foreach (G.Edge eg in allEdges)
             {
                 if (eg == e) continue;
 
-                double o = offset - 0.49;
+                double o = offset - 5.49;
                 G.Line offsetLine = eg.edgeTrimmer(o, o, o);
+
+                Debuger.Print(offsetLine.ToString());
 
                 if (G.Line.hasIntersection(trimmedLine, offsetLine))
                 {

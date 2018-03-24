@@ -257,12 +257,8 @@ namespace DMTCommands
                     {
                         _Db.BlockTableRecord btr = sourceTrans.GetObject(sourceObject, _Db.OpenMode.ForWrite, false) as _Db.BlockTableRecord;
 
-                        c.ed.WriteMessage("\n");
                         if (btr.IsLayout) continue;
-                        //if (btr.IsAnonymous) continue;
-                        if (btr.IsDynamicBlock) c.ed.WriteMessage("[dyn] ");
-
-                        c.ed.WriteMessage(btr.Name + " " + btr.Comments);
+                        if (btr.IsDynamicBlock) c.ed.WriteMessage("\n[dyn] " + btr.Name);
 
                         btr.Dispose();
                     }
@@ -292,21 +288,15 @@ namespace DMTCommands
 
             try
             {
-
                 foreach (_Db.ObjectId sourceObject in c.blockTable)
                 {
                     _Db.BlockTableRecord btr = c.trans.GetObject(sourceObject, _Db.OpenMode.ForWrite, false) as _Db.BlockTableRecord;
 
-                    c.ed.WriteMessage("\n");
                     if (btr.IsLayout) continue;
-                    //if (btr.IsAnonymous) continue;
-                    if (btr.IsDynamicBlock) c.ed.WriteMessage("[dyn] ");
-
-                    c.ed.WriteMessage(btr.Name);
+                    if (btr.IsDynamicBlock) c.ed.WriteMessage("\n[dyn] " + btr.Name);
 
                     btr.Dispose();
                 }
-
             }
             catch
             {

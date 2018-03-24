@@ -85,7 +85,7 @@ namespace Geometry
         public override string ToString()
         {
             //string str = "X: " + X.ToString("f2") + "  Y: " + Y.ToString("f2");
-            string str = "Point a = new Point(" + X.ToString("F5") + "<" + Y.ToString("F5") + ")";
+            string str = X.ToString("F5") + "<" + Y.ToString("F5");
 
             return str;
         }
