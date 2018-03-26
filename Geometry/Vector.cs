@@ -34,12 +34,16 @@ namespace Geometry
 
         public bool Equals(Vector other)
         {
-
             if (other == null) return false;
-            double dX = Math.Abs(this.X - other.X);
-            double dY = Math.Abs(this.Y - other.Y);
 
-            return (dX < _Variables.EQUALS_TOLERANCE && dY < _Variables.EQUALS_TOLERANCE);
+            Polar _this = Converter.xy_to_la(this);
+            Polar _other = Converter.xy_to_la(other);
+
+            double dA = Converter.AngleDelta(_this.angle, _other.angle);
+            double dL = Math.Abs(_this.L - _other.L);
+
+            if (dA < _Variables.VECTOR_ANGLE_TOLERANCE && dL < _Variables.EQUALS_TOLERANCE) return true;
+            return false;
         }
 
         public override bool Equals(object obj)

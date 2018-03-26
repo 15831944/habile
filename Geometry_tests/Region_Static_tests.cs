@@ -29,32 +29,34 @@ namespace Geometry_tests
             contours.Add(m);
             contours.Add(n);
 
+            Vector v = new Vector(1.1, 1);
+
             Point t = new Point(0, 3);
-            Assert.IsFalse(Region_Static.isPointinRegion(t, contours));
+            Assert.IsFalse(Region_Static.isPointinRegion(t, v, contours));
 
             t = new Point(8, 3);
-            Assert.IsFalse(Region_Static.isPointinRegion(t, contours));
+            Assert.IsFalse(Region_Static.isPointinRegion(t, v, contours));
 
             t = new Point(3, -1);
-            Assert.IsFalse(Region_Static.isPointinRegion(t, contours));
+            Assert.IsFalse(Region_Static.isPointinRegion(t, v, contours));
 
             t = new Point(3, 8);
-            Assert.IsFalse(Region_Static.isPointinRegion(t, contours));
+            Assert.IsFalse(Region_Static.isPointinRegion(t, v, contours));
 
             t = new Point(1.5, 4.5);
-            Assert.IsFalse(Region_Static.isPointinRegion(t, contours));
+            Assert.IsFalse(Region_Static.isPointinRegion(t, v, contours));
 
             t = new Point(4, 1);
-            Assert.IsFalse(Region_Static.isPointinRegion(t, contours));
+            Assert.IsFalse(Region_Static.isPointinRegion(t, v, contours));
 
             t = new Point(6.5, 4);
-            Assert.IsFalse(Region_Static.isPointinRegion(t, contours));
+            Assert.IsFalse(Region_Static.isPointinRegion(t, v, contours));
 
             t = new Point(5, 5.5);
-            Assert.IsFalse(Region_Static.isPointinRegion(t, contours));
+            Assert.IsFalse(Region_Static.isPointinRegion(t, v, contours));
 
             t = new Point(4, 4);
-            Assert.IsTrue(Region_Static.isPointinRegion(t, contours));
+            Assert.IsTrue(Region_Static.isPointinRegion(t, v, contours));
         }
 
         [TestMethod]
@@ -92,23 +94,25 @@ namespace Geometry_tests
             contours.Add(m2);
             contours.Add(n2);
 
+            Vector v = new Vector(1.1, 1);
+
             Point t = new Point(3, 7);
-            Assert.IsTrue(Region_Static.isPointinRegion(t, contours));
+            Assert.IsTrue(Region_Static.isPointinRegion(t, v, contours));
 
             t = new Point(3, 3);
-            Assert.IsTrue(Region_Static.isPointinRegion(t, contours));
+            Assert.IsTrue(Region_Static.isPointinRegion(t, v, contours));
 
             t = new Point(7, 3);
-            Assert.IsTrue(Region_Static.isPointinRegion(t, contours));
+            Assert.IsTrue(Region_Static.isPointinRegion(t, v, contours));
 
             t = new Point(7, 7);
-            Assert.IsFalse(Region_Static.isPointinRegion(t, contours));
+            Assert.IsFalse(Region_Static.isPointinRegion(t, v, contours));
 
             t = new Point(11, 9);
-            Assert.IsFalse(Region_Static.isPointinRegion(t, contours));
+            Assert.IsFalse(Region_Static.isPointinRegion(t, v, contours));
 
             t = new Point(0, -9);
-            Assert.IsFalse(Region_Static.isPointinRegion(t, contours));
+            Assert.IsFalse(Region_Static.isPointinRegion(t, v, contours));
         }
     }
 }

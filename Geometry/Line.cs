@@ -112,7 +112,7 @@ namespace Geometry
         {
             Vector other = getDirectionVector();
 
-            if (Converter.AngleDeltaClockwise(one, other) > Math.PI)
+            if (Converter.AngleDeltaCW(one, other) > Math.PI)
             {
                 other = other.rotate(Math.PI);
             }
@@ -124,7 +124,7 @@ namespace Geometry
         {
             Vector other = getDirectionVector();
 
-            if (Converter.AngleDeltaClockwise(other, one) > Math.PI)
+            if (Converter.AngleDeltaCW(other, one) > Math.PI)
             {
                 other = other.rotate(Math.PI);
             }

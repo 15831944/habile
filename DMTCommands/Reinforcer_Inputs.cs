@@ -1,5 +1,5 @@
-﻿#define BRX_APP
-//#define BRX_APP
+﻿//#define BRX_APP
+#define ARX_APP
 
 using System;
 using System.Text;
@@ -397,7 +397,7 @@ namespace DMTCommands
                         if (new_p1 == new_p2) continue;
 
                         G.Line line = new G.Line(new_p1, new_p2);
-                        polys.Add(line);
+                        if (!polys.Contains(line)) polys.Add(line);
                     }
 
                     if (poly.Closed)
@@ -410,7 +410,7 @@ namespace DMTCommands
                         if (new_p1 == new_p2) continue;
 
                         G.Line line = new G.Line(new_p1, new_p2);
-                        polys.Add(line);
+                        if (!polys.Contains(line)) polys.Add(line);
                     }
                 }
             }

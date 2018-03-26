@@ -31,14 +31,9 @@ namespace Logic_Reinf
         {
             DebugerWindow _debuger = new DebugerWindow();
             _debuger.Show();
-
-            //foreach (G.Line ln in polys)
-            //{
-            //    Debuger.Print(ln.ToString());
-            //}
-
+            
             r = new G.Region(polys);
-
+            
             allEdges = new List<G.Edge>(r.edges);
             allCorners = new List<G.Corner>(r.corners);
 
@@ -52,7 +47,6 @@ namespace Logic_Reinf
             reinf_geometry_debug = new List<G.Line>();
 
             setCalculatedParameters();
-
         }
 
 
@@ -70,8 +64,8 @@ namespace Logic_Reinf
             _V_.Y_ELEMENT_WIDTH_COVER = _V_.X_ELEMENT_WIDTH - _V_.X_CONCRETE_COVER_1 * 2;
 
             _V_.Y_CONCRETE_COVER_DELTA = (int)(Math.Ceiling(_V_.X_REINFORCEMENT_MAIN_DIAMETER / 5.0 + 0.01) * 5) + 5;
-            _V_.Y_CONCRETE_COVER_2 = _V_.X_CONCRETE_COVER_1 + _V_.Y_CONCRETE_COVER_DELTA;
-            _V_.Y_CONCRETE_COVER_3 = _V_.Y_CONCRETE_COVER_2 + _V_.Y_CONCRETE_COVER_DELTA;
+            _V_.X_CONCRETE_COVER_2 = _V_.X_CONCRETE_COVER_1 + _V_.Y_CONCRETE_COVER_DELTA;
+            _V_.Y_CONCRETE_COVER_3 = _V_.X_CONCRETE_COVER_2 + _V_.Y_CONCRETE_COVER_DELTA;
         }
 
 
@@ -107,18 +101,21 @@ namespace Logic_Reinf
             create_valid_D();
             create_oversized_D();
 
+            create_valid_D();
+            create_oversized_D();
+
             executor(create_extended_B);
             executor(create_long_B);
 
             executor(create_trimmed_short_A);
 
-            //create_valid_D();
-            //create_oversized_D();
-            //executor(create_extended_B);
-            //executor(create_long_B);
+            create_valid_D();
+            create_oversized_D();
+            executor(create_extended_B);
+            executor(create_long_B);
 
-            //executor(create_valid_B);
-            //executor(create_diagonal_A);
+            executor(create_valid_B);
+            executor(create_diagonal_A);
         }
 
 
@@ -163,12 +160,14 @@ namespace Logic_Reinf
         private void create_all_A()
         {
             List<G.Edge> emptyEdges = allEdges.Where(x => !setEdges.Keys.Contains(x)).ToList();
+            emptyEdges = emptyEdges.OrderBy(b => b.Line.Length()).ToList();
 
             for (int i = emptyEdges.Count - 1; i >= 0; i--)
             {
                 G.Edge e = emptyEdges[i];
-                if (narrow_denier(e)) continue;
 
+                if (narrow_denier(e)) continue;
+                
                 G.Line main = e.edgeOffset(_V_.X_CONCRETE_COVER_1, _V_.X_CONCRETE_COVER_1, _V_.X_CONCRETE_COVER_1);
 
                 double c1 = _V_.Y_REINFORCEMENT_MAIN_MIN_LENGTH;
@@ -186,12 +185,13 @@ namespace Logic_Reinf
         private void create_valid_A()
         {
             List<G.Edge> emptyEdges = allEdges.Where(x => !setEdges.Keys.Contains(x)).ToList();
+            emptyEdges = emptyEdges.OrderBy(b => b.Line.Length()).ToList();
 
             for (int i = emptyEdges.Count - 1; i >= 0; i--)
             {
                 G.Edge e = emptyEdges[i];
                 if (narrow_denier(e)) continue;
-
+                
                 bool c1 = e.StartCorner.Angle > Math.PI;
                 bool c2 = e.EndCorner.Angle > Math.PI;
 
@@ -208,11 +208,12 @@ namespace Logic_Reinf
         private void create_trimmed_long_A()
         {
             List<G.Edge> emptyEdges = allEdges.Where(x => !setEdges.Keys.Contains(x)).ToList();
+            emptyEdges = emptyEdges.OrderBy(b => b.Line.Length()).ToList();
 
             for (int i = emptyEdges.Count - 1; i >= 0; i--)
             {
                 G.Edge e = emptyEdges[i];
-
+                
                 if (setEdges.Keys.Contains(e)) continue;
                 if (narrow_denier(e)) continue;
 
@@ -232,7 +233,7 @@ namespace Logic_Reinf
                 if (c2)
                 {
                     G.Line extended = main.extendStart(_V_.X_REINFORCEMENT_MAIN_ANCHOR_LENGTH);
-                    G.Line trimmed = trimLine_basepoint(extended, main.End, _V_.X_CONCRETE_COVER_1, e, ref startTrimmerEdge);
+                    G.Line trimmed = trimLine_basepoint(extended, main.End, _V_.X_CONCRETE_COVER_2, e, ref startTrimmerEdge); ///////GGGG
                     if (trimmed.Length() < main.Length() + _V_.X_REINFORCEMENT_MAIN_ANCHOR_LENGTH * _V_.M_TRIM_TOLERANCE) startTrimmed = true;
                     main = trimmed;
                 }
@@ -240,7 +241,7 @@ namespace Logic_Reinf
                 if (c3)
                 {
                     G.Line extended = main.extendEnd(_V_.X_REINFORCEMENT_MAIN_ANCHOR_LENGTH);
-                    G.Line trimmed = trimLine_basepoint(extended, main.Start, _V_.X_CONCRETE_COVER_1, e, ref endTrimmerEdge);
+                    G.Line trimmed = trimLine_basepoint(extended, main.Start, _V_.X_CONCRETE_COVER_2, e, ref endTrimmerEdge); ///////GGGG
                     if (trimmed.Length() < main.Length() + _V_.X_REINFORCEMENT_MAIN_ANCHOR_LENGTH * _V_.M_TRIM_TOLERANCE) endTrimmed = true;
                     main = trimmed;
                 }
@@ -262,7 +263,7 @@ namespace Logic_Reinf
                             G.Line b_line = new G.Line(main.Start, AP);
 
                             G.Edge sideTrimmerEdge = null;
-                            G.Line newMain = trimLine_basepoint(b_line, main.Start, _V_.Y_CONCRETE_COVER_2, e, ref sideTrimmerEdge);
+                            G.Line newMain = trimLine_basepoint(b_line, main.Start, _V_.X_CONCRETE_COVER_2, e, ref sideTrimmerEdge);
 
                             if (sideTrimmerEdge != null)
                             {
@@ -284,7 +285,7 @@ namespace Logic_Reinf
                             G.Line b_line = new G.Line(main.End, AP);
 
                             G.Edge sideTrimmerEdge = null;
-                            G.Line newMain = trimLine_basepoint(b_line, main.End, _V_.Y_CONCRETE_COVER_2, e, ref sideTrimmerEdge);
+                            G.Line newMain = trimLine_basepoint(b_line, main.End, _V_.X_CONCRETE_COVER_2, e, ref sideTrimmerEdge);
 
                             if (sideTrimmerEdge != null)
                             {
@@ -301,19 +302,14 @@ namespace Logic_Reinf
         {
             List<G.Edge> emptyEdges = allEdges.Where(x => !setEdges.Keys.Contains(x)).ToList();
             emptyEdges = emptyEdges.OrderBy(b => b.Line.Length()).Reverse().ToList();
-
+            
             for (int i = emptyEdges.Count - 1; i >= 0; i--)
             {
                 G.Edge e = emptyEdges[i];
 
                 if (setEdges.Keys.Contains(e)) continue;
                 if (narrow_denier(e)) continue;
-
-
-                Debuger.Print("");
-                Debuger.Print("e");
-                Debuger.Print(e.Line.ToString());
-
+                
                 double c1 = _V_.Y_REINFORCEMENT_MAIN_MIN_LENGTH;
                 bool c2 = e.StartCorner.Angle > Math.PI;
                 bool c3 = e.EndCorner.Angle > Math.PI;
@@ -325,12 +321,12 @@ namespace Logic_Reinf
 
                 G.Edge temp = null;
                 G.Line main = e.edgeOffset(_V_.X_CONCRETE_COVER_1, _V_.X_CONCRETE_COVER_1, _V_.X_CONCRETE_COVER_1);
-                main = trimLine_baseline(main, main.Copy(), _V_.X_CONCRETE_COVER_1, e, ref temp);
+                main = trimLine_baseline(main, main.Copy(), _V_.X_CONCRETE_COVER_2, e, ref temp);
 
                 if (c2)
                 {
                     G.Line extended = main.extendStart(_V_.X_REINFORCEMENT_MAIN_ANCHOR_LENGTH);
-                    G.Line trimmed = trimLine_basepoint(extended, main.End, _V_.X_CONCRETE_COVER_1, e, ref startTrimmerEdge);
+                    G.Line trimmed = trimLine_basepoint(extended, main.End, _V_.X_CONCRETE_COVER_2, e, ref startTrimmerEdge);
                     if (trimmed.Length() < main.Length() + _V_.X_REINFORCEMENT_MAIN_ANCHOR_LENGTH * _V_.M_TRIM_TOLERANCE) startTrimmed = true;
                     main = trimmed;
                 }
@@ -338,15 +334,11 @@ namespace Logic_Reinf
                 if (c3)
                 {
                     G.Line extended = main.extendEnd(_V_.X_REINFORCEMENT_MAIN_ANCHOR_LENGTH);
-                    G.Line trimmed = trimLine_basepoint(extended, main.Start, _V_.X_CONCRETE_COVER_1, e, ref endTrimmerEdge);
+                    G.Line trimmed = trimLine_basepoint(extended, main.Start, _V_.X_CONCRETE_COVER_2, e, ref endTrimmerEdge);
                     if (trimmed.Length() < main.Length() + _V_.X_REINFORCEMENT_MAIN_ANCHOR_LENGTH * _V_.M_TRIM_TOLERANCE) endTrimmed = true;
                     main = trimmed;
                 }
-
-
-                Debuger.Print(main.ToString());
-
-
+                
                 if (main.Length() <= c1)
                 {
                     if (startTrimmed && endTrimmed)
@@ -360,7 +352,7 @@ namespace Logic_Reinf
                             G.Vector v3 = endTrimmerEdge.Line.getCoolVector(v1);
 
                             G.Point side1Point = main.Start.move(_V_.X_REINFORCEMENT_MAIN_ANCHOR_LENGTH * 1.05, v2);
-                            G.Point side2Point = main.End.move(_V_.X_REINFORCEMENT_MAIN_ANCHOR_LENGTH, v3);
+                            G.Point side2Point = main.End.move(_V_.X_REINFORCEMENT_MAIN_ANCHOR_LENGTH * 1.05, v3);
 
                             G.Line side1 = new G.Line(side1Point, main.Start);
                             G.Line side2 = new G.Line(main.End, side2Point);
@@ -371,13 +363,13 @@ namespace Logic_Reinf
                                 G.Line b_line = new G.Line(main.Start, AP);
 
                                 G.Edge side1TrimmerEdge = null;
-                                G.Line side1Main = trimLine_basepoint(b_line, main.Start, _V_.Y_CONCRETE_COVER_2, e, ref side1TrimmerEdge);
+                                G.Line side1Main = trimLine_basepoint(b_line, main.Start, _V_.X_CONCRETE_COVER_2, e, ref side1TrimmerEdge);
 
                                 G.Point AP2 = main.End.move(_V_.X_REINFORCEMENT_MAIN_ANCHOR_LENGTH * 1.5, v3);
                                 G.Line b_line2 = new G.Line(main.End, AP2);
 
                                 G.Edge side2TrimmerEdge = null;
-                                G.Line side2Main = trimLine_basepoint(b_line2, main.End, _V_.Y_CONCRETE_COVER_2, e, ref side2TrimmerEdge);
+                                G.Line side2Main = trimLine_basepoint(b_line2, main.End, _V_.X_CONCRETE_COVER_2, e, ref side2TrimmerEdge);
 
                                 A_handler(main.Start, main.End, e, null, _V_.X_REINFORCEMENT_MAIN_DIAMETER);
                                 define_D(startTrimmerEdge, side1TrimmerEdge, e);
@@ -389,7 +381,7 @@ namespace Logic_Reinf
                                 G.Line b_line = new G.Line(main.Start, AP);
 
                                 G.Edge sideTrimmerEdge = null;
-                                G.Line newMain = trimLine_basepoint(b_line, main.Start, _V_.Y_CONCRETE_COVER_2, e, ref sideTrimmerEdge);
+                                G.Line newMain = trimLine_basepoint(b_line, main.Start, _V_.X_CONCRETE_COVER_2, e, ref sideTrimmerEdge);
 
                                 B_vs_C_handler(main.End, side2Point, main.Start, e, null);
                                 define_D(startTrimmerEdge, sideTrimmerEdge, e);
@@ -400,7 +392,7 @@ namespace Logic_Reinf
                                 G.Line b_line = new G.Line(main.End, AP);
 
                                 G.Edge sideTrimmerEdge = null;
-                                G.Line newMain = trimLine_basepoint(b_line, main.End, _V_.Y_CONCRETE_COVER_2, e, ref sideTrimmerEdge);
+                                G.Line newMain = trimLine_basepoint(b_line, main.End, _V_.X_CONCRETE_COVER_2, e, ref sideTrimmerEdge);
 
                                 define_D(endTrimmerEdge, e, sideTrimmerEdge);
                                 B_vs_C_handler(main.Start, main.End, side1Point, e, null);
@@ -420,7 +412,7 @@ namespace Logic_Reinf
                             G.Line b_line = new G.Line(main.Start, AP);
 
                             G.Edge sideTrimmerEdge = null;
-                            G.Line newMain = trimLine_basepoint(b_line, main.Start, _V_.Y_CONCRETE_COVER_2, e, ref sideTrimmerEdge);
+                            G.Line newMain = trimLine_basepoint(b_line, main.Start, _V_.X_CONCRETE_COVER_2, e, ref sideTrimmerEdge);
 
                             if (sideTrimmerEdge != null)
                             {
@@ -443,7 +435,6 @@ namespace Logic_Reinf
                     }
                     else if (endTrimmed)
                     {
-                        Debuger.Print("end");
                         bool got_B = define_B(endTrimmerEdge, e);
 
                         if (got_B == false)
@@ -453,10 +444,9 @@ namespace Logic_Reinf
 
                             G.Point AP = main.End.move(_V_.X_REINFORCEMENT_MAIN_ANCHOR_LENGTH * 2, v2);
                             G.Line b_line = new G.Line(main.End, AP);
-                            Debuger.Print(b_line.ToString());
 
                             G.Edge sideTrimmerEdge = null;
-                            G.Line newMain = trimLine_basepoint(b_line, main.End, _V_.Y_CONCRETE_COVER_2, e, ref sideTrimmerEdge);
+                            G.Line newMain = trimLine_basepoint(b_line, main.End, _V_.X_CONCRETE_COVER_2, e, ref sideTrimmerEdge);
 
                             if (sideTrimmerEdge != null)
                             {
@@ -539,7 +529,7 @@ namespace Logic_Reinf
         private void create_extended_B()
         {
             List<G.Edge> emptyEdges = allEdges.Where(x => !setEdges.Keys.Contains(x)).ToList();
-            emptyEdges = emptyEdges.OrderBy(b => b.Line.Length()).Reverse().ToList();
+            emptyEdges = emptyEdges.OrderBy(b => b.Line.Length()).ToList();
 
             for (int i = emptyEdges.Count - 1; i >= 0; i--)
             {
@@ -570,7 +560,7 @@ namespace Logic_Reinf
         private void create_oversized_B()
         {
             List<G.Edge> emptyEdges = allEdges.Where(x => !setEdges.Keys.Contains(x)).ToList();
-            emptyEdges = emptyEdges.OrderBy(b => b.Line.Length()).Reverse().ToList();
+            emptyEdges = emptyEdges.OrderBy(b => b.Line.Length()).ToList();
 
             for (int i = emptyEdges.Count - 1; i >= 0; i--)
             {
@@ -601,6 +591,7 @@ namespace Logic_Reinf
         private void create_long_B()
         {
             List<G.Edge> emptyEdges = allEdges.Where(x => !setEdges.Keys.Contains(x)).ToList();
+            emptyEdges = emptyEdges.OrderBy(b => b.Line.Length()).ToList();
 
             for (int i = emptyEdges.Count - 1; i >= 0; i--)
             {
@@ -633,6 +624,7 @@ namespace Logic_Reinf
         private void create_valid_D()
         {
             List<G.Edge> emptyEdges = allEdges.Where(x => !setEdges.Keys.Contains(x)).ToList();
+            emptyEdges = emptyEdges.OrderBy(b => b.Line.Length()).ToList();
 
             for (int i = emptyEdges.Count - 1; i >= 0; i--)
             {
@@ -661,6 +653,7 @@ namespace Logic_Reinf
         private void create_oversized_D()
         {
             List<G.Edge> emptyEdges = allEdges.Where(x => !setEdges.Keys.Contains(x)).ToList();
+            emptyEdges = emptyEdges.OrderBy(b => b.Line.Length()).ToList();
 
             for (int i = emptyEdges.Count - 1; i >= 0; i--)
             {
@@ -705,7 +698,9 @@ namespace Logic_Reinf
                         }
                     }
                 }
+                
             }
+
         }
 
 

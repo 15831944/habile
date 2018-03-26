@@ -58,7 +58,7 @@ namespace Geometry
             Line centerLine_offset = centerLine.extendEnd(-1 * _Variables.MOVE_DISTANCE);
             Point check = centerLine_offset.End;
 
-            if (!Region_Static.isPointinRegion(check, contours))
+            if (!Region_Static.isPointinRegion(check, centerLine.getOffsetVector(), contours))
             {
                 A = 2 * Math.PI - A;
             }
@@ -116,5 +116,11 @@ namespace Geometry
             return !object.Equals(a, b);
         }
 
+        public override string ToString()
+        {
+            //string str = "(Start) " + Start.ToString() + " \n(End) " + End.ToString() + " \n(Length) " + Length().ToString();
+            string str = StartEdge.Line.ToString() + " " + EndEdge.Line.ToString();
+            return str;
+        }
     }
 }

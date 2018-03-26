@@ -53,11 +53,15 @@ namespace Logic_Reinf
         public static int Y_ELEMENT_WIDTH_COVER = X_ELEMENT_WIDTH - X_CONCRETE_COVER_1 * 2;
 
         public static int Y_CONCRETE_COVER_DELTA = (int)(Math.Ceiling(X_REINFORCEMENT_MAIN_DIAMETER / 5.0 + 0.01) * 5) + 5;
-        public static int Y_CONCRETE_COVER_2 = X_CONCRETE_COVER_1 + Y_CONCRETE_COVER_DELTA;
-        public static int Y_CONCRETE_COVER_3 = Y_CONCRETE_COVER_2 + Y_CONCRETE_COVER_DELTA;
+        public static int X_CONCRETE_COVER_2 = X_CONCRETE_COVER_1 + Y_CONCRETE_COVER_DELTA;
+        public static int Y_CONCRETE_COVER_3 = X_CONCRETE_COVER_2 + Y_CONCRETE_COVER_DELTA;
 
         public static double M_TRIM_TOLERANCE = 0.95;
         public static double M_B_BAR_TOLERANCE = 0.02; // B vs C (1 deg == 0.0017)
         public static double M_LINE_SEGMENTATOR_STEP = 50.0;
+
+        public static double X_DENIER_MINIMUM_DELTA = 5.49;
+        public static double X_TRIM_MINIMUM_DELTA = 0.1;
+        public static double X_TRIM_SIDE_MINIMUM_DELTA = 5.49;
     }
 }

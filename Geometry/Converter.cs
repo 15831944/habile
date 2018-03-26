@@ -46,33 +46,77 @@ namespace Geometry
             return value;
         }
 
+        public static double wrapper(double value, double max = 2 * Math.PI, double min = 0)
+        {
+            //TODO
+            //hetkel ei s6ltu max-ist mitte kuidagi
+            value -= min;
+            value %= (2 * Math.PI);
+            while (value < min) value += (2 * Math.PI);
+            value += min;
+
+            return value;
+        }
+
+
         public static double AngleDelta(double a1, double a2)
         {
-            double d1 = Math.Abs(a2 - a1);
-            double d2 = Math.Abs(a2 - a1 + 2 * Math.PI);
-            double d3 = Math.Abs(a2 - a1 - 2 * Math.PI);
+            double ccw = AngleDeltaCCW(a1, a2);
+            double cw = AngleDeltaCW(a1, a2);
 
-            double delta = Math.Min(d1, d2);
-            delta = Math.Min(delta, d3);
+            double deltaMin = Math.Min(ccw, cw);
+            return deltaMin;
+        }
+
+
+        public static double AngleDeltaCW(double a1, double a2)
+        {
+            double ang1 = wrapper(a1, 2 * Math.PI, 0);
+            double ang2 = wrapper(a2, 2 * Math.PI, 0);
+
+            double delta = ang1 - ang2;
+            if (delta < 0) delta += (2 * Math.PI);
 
             return delta;
         }
 
-        public static double AngleDeltaClockwise(Vector v1, Vector v2)
+
+        public static double AngleDeltaCCW(double a1, double a2)
         {
-            Polar a1 = Converter.xy_to_la(v1);
-            Polar a2 = Converter.xy_to_la(v2);
-
-            double ang1 = Converter.Wrap(a1.angle, Math.PI * 2, 0);
-            double ang2 = Converter.Wrap(a2.angle, Math.PI * 2, 0);
-
-            if (ang2 < ang1)
-            {
-                ang2 += Math.PI * 2;
-            }
+            double ang1 = wrapper(a1, 2 * Math.PI, 0);
+            double ang2 = wrapper(a2, 2 * Math.PI, 0);
 
             double delta = ang2 - ang1;
+            if (delta < 0) delta += (2 * Math.PI);
+
             return delta;
+        }
+
+
+        public static double AngleDelta(Vector v1, Vector v2)
+        {
+            Polar _this = Converter.xy_to_la(v1);
+            Polar _other = Converter.xy_to_la(v2);
+
+            return AngleDelta(_this.angle, _other.angle);
+        }
+
+
+        public static double AngleDeltaCW(Vector v1, Vector v2)
+        {
+            Polar _this = Converter.xy_to_la(v1);
+            Polar _other = Converter.xy_to_la(v2);
+            
+            return AngleDeltaCW(_this.angle, _other.angle);
+        }
+
+
+        public static double AngleDeltaCCW(Vector v1, Vector v2)
+        {
+            Polar _this = Converter.xy_to_la(v1);
+            Polar _other = Converter.xy_to_la(v2);
+
+            return AngleDeltaCCW(_this.angle, _other.angle);
         }
 
         public static double ToDeg(double rad)

@@ -29,7 +29,7 @@ namespace Geometry
             }
 
             edges = new List<Edge>();
-
+            
             setBoundies(contours);
             setEdges(contours);
 
@@ -39,8 +39,10 @@ namespace Geometry
                 setCorners(contours);
                 bool stop = insanityCheck();
                 if (stop) break;
-            }            
+            }
+            
         }
+        
 
         private void setBoundies(List<Line> contours)
         {
@@ -65,7 +67,7 @@ namespace Geometry
                 Point center = line.getCenterPoint();
                 Vector offset = line.getOffsetVector();
                 Point p = center.move(_Variables.MOVE_DISTANCE, offset);
-                bool inSide = Region_Static.isPointinRegion(p, contours);
+                bool inSide = Region_Static.isPointinRegion(p, offset, contours);
 
                 if (inSide)
                 {
@@ -78,7 +80,7 @@ namespace Geometry
                     center = new_line.getCenterPoint();
                     offset = new_line.getOffsetVector();
                     p = center.move(_Variables.MOVE_DISTANCE, offset);
-                    inSide = Region_Static.isPointinRegion(p, contours);
+                    inSide = Region_Static.isPointinRegion(p, offset, contours);
 
                     if (inSide)
                     {

@@ -14,8 +14,8 @@ namespace Logic_Reinf
     {
         public bool define_simple_B(G.Edge startEdge, G.Edge endEdge)
         {
-            double cover1 = _V_.Y_CONCRETE_COVER_2;
-            double cover2 = _V_.Y_CONCRETE_COVER_2;
+            double cover1 = _V_.X_CONCRETE_COVER_2;
+            double cover2 = _V_.X_CONCRETE_COVER_2;
 
             double mainDist = _V_.X_REINFORCEMENT_MAIN_ANCHOR_LENGTH;
             double sideDist = _V_.X_REINFORCEMENT_MAIN_ANCHOR_LENGTH;

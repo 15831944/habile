@@ -18,6 +18,7 @@ namespace Logic_Reinf
             bool side1Set = setEdges.Keys.Contains(side1Edge);
             bool side2Set = setEdges.Keys.Contains(side2Edge);
 
+
             double cover1 = _V_.X_CONCRETE_COVER_1;
             double coverMain = _V_.X_CONCRETE_COVER_1;
             double cover2 = _V_.X_CONCRETE_COVER_1;
@@ -26,6 +27,16 @@ namespace Logic_Reinf
             double side1Dist = _V_.X_REINFORCEMENT_MAIN_ANCHOR_LENGTH;
             double mainDist = mainEdge.Line.Length();
             double side2Dist = _V_.X_REINFORCEMENT_MAIN_ANCHOR_LENGTH;
+
+
+            G.Corner startCorner = null;
+            G.Point IP1 = getCornerPoint(side1Edge, mainEdge, cover1, coverMain, ref startCorner);
+            if (startCorner == null) return false;
+
+            G.Corner endCorner = null;
+            G.Point IP2 = getCornerPoint(mainEdge, side2Edge, coverMain, cover2, ref endCorner);
+            if (endCorner == null) return false;
+
 
             if (mainSet == true)
             {
@@ -38,7 +49,14 @@ namespace Logic_Reinf
             }
             else
             {
-                side1Dist = side1Dist + side1Edge.Line.Length();
+                if (side1Edge.getOtherCorner(startCorner).Angle > Math.PI)
+                {
+                    side1Dist = side1Dist + side1Edge.Line.Length();
+                }
+                else
+                {
+                    side1Dist = side1Edge.edgeOffset(_V_.X_CONCRETE_COVER_1, _V_.X_CONCRETE_COVER_1, _V_.X_CONCRETE_COVER_1).Length();
+                }                
             }
 
             if (side2Set == true)
@@ -47,7 +65,14 @@ namespace Logic_Reinf
             }
             else
             {
-                side2Dist = side2Dist + side2Edge.Line.Length();
+                if (side2Edge.getOtherCorner(endCorner).Angle > Math.PI)
+                {
+                    side2Dist = side2Dist + side2Edge.Line.Length();
+                }
+                else
+                {
+                    side2Dist = side2Edge.edgeOffset(_V_.X_CONCRETE_COVER_1, _V_.X_CONCRETE_COVER_1, _V_.X_CONCRETE_COVER_1).Length();
+                }
             }
 
             if (side1Dist != side2Dist)
@@ -56,14 +81,9 @@ namespace Logic_Reinf
                 side1Dist = max;
                 side2Dist = max;
             }
-
-            G.Corner startCorner = null;
-            G.Point IP1 = getCornerPoint(side1Edge, mainEdge, cover1, coverMain, ref startCorner);
-            if (startCorner == null) return false;
-
-            G.Corner endCorner = null;
-            G.Point IP2 = getCornerPoint(mainEdge, side2Edge, coverMain, cover2, ref endCorner);
-            if (endCorner == null) return false;
+            
+            IP1 = getCornerPoint(side1Edge, mainEdge, cover1, coverMain, ref startCorner);
+            IP2 = getCornerPoint(mainEdge, side2Edge, coverMain, cover2, ref endCorner);
 
             G.Vector v1 = mainEdge.Line.getOffsetVector();
             G.Vector v2 = side1Edge.Line.getCoolVector(v1);
@@ -78,7 +98,11 @@ namespace Logic_Reinf
 
             bool success = false;
 
-            if (side1Set == false)
+            if(side1Set == false && side2Set == false)
+            {
+                success = D_vs_E_handler(IP1, IP2, side1Start, side2End, mainEdge, startCorner, endCorner, parand, side1Edge, side2Edge); // parand magic
+            }
+            else if (side1Set == false)
             {
                 success = D_vs_E_handler(IP1, IP2, side1Start, side2End, mainEdge, startCorner, endCorner, parand, side1Edge); // parand magic
             }
@@ -101,9 +125,9 @@ namespace Logic_Reinf
             bool side1Set = setEdges.Keys.Contains(side1Edge);
             bool side2Set = setEdges.Keys.Contains(side2Edge);
 
-            double cover1 = _V_.Y_CONCRETE_COVER_2;
-            double coverMain = _V_.Y_CONCRETE_COVER_2;
-            double cover2 = _V_.Y_CONCRETE_COVER_2;
+            double cover1 = _V_.X_CONCRETE_COVER_2;
+            double coverMain = _V_.X_CONCRETE_COVER_2;
+            double cover2 = _V_.X_CONCRETE_COVER_2;
             int parand = 2 * _V_.Y_CONCRETE_COVER_DELTA - 10; // parand magic
 
             double side1Dist = _V_.X_REINFORCEMENT_MAIN_ANCHOR_LENGTH;

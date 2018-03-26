@@ -77,7 +77,7 @@ namespace Logic_Reinf
             G.Vector v1 = main.getDirectionVector();
             G.Vector v2 = side.getDirectionVector();
 
-            double ang = G.Converter.AngleDeltaClockwise(v1, v2);
+            double ang = G.Converter.AngleDeltaCW(v1, v2);
 
             if (Math.Abs(ang - 3 * Math.PI / 2) < _V_.M_B_BAR_TOLERANCE)
             {
@@ -131,7 +131,7 @@ namespace Logic_Reinf
 
 
         //D HANDLE
-        private bool D_vs_E_handler(G.Point mainPoint, G.Point mainEnd, G.Point side1Start, G.Point side2End, G.Edge e, G.Corner c1, G.Corner c2, int parand, G.Edge other = null)
+        private bool D_vs_E_handler(G.Point mainPoint, G.Point mainEnd, G.Point side1Start, G.Point side2End, G.Edge e, G.Corner c1, G.Corner c2, int parand, G.Edge other = null, G.Edge other2 = null)
         {
             G.Line main = new G.Line(mainPoint, mainEnd);
             G.Line side1 = new G.Line(side1Start, mainPoint);
@@ -147,8 +147,8 @@ namespace Logic_Reinf
             G.Vector v2 = side1.getDirectionVector();
             G.Vector v3 = side2.getDirectionVector();
 
-            double ang1 = G.Converter.AngleDeltaClockwise(v1, v2);
-            double ang2 = G.Converter.AngleDeltaClockwise(v1, v3);
+            double ang1 = G.Converter.AngleDeltaCW(v1, v2);
+            double ang2 = G.Converter.AngleDeltaCW(v1, v3);
 
             bool d1 = Math.Abs(ang1 - 3 * Math.PI / 2) < _V_.M_B_BAR_TOLERANCE;
             bool d2 = Math.Abs(ang2 - Math.PI / 2) < _V_.M_B_BAR_TOLERANCE;
@@ -162,6 +162,7 @@ namespace Logic_Reinf
 
                 keep(reinf, e, c1, c2);
                 keep_double(reinf, other);
+                keep_double(reinf, other2);
             }
             else
             {
@@ -173,6 +174,7 @@ namespace Logic_Reinf
 
                 keep(reinf, e, c1, c2);
                 keep_double(reinf, other);
+                keep_double(reinf, other2);
             }
 
             return true;

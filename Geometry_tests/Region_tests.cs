@@ -160,12 +160,9 @@ namespace Geometry_tests
             Line s = new Line(sa, sb);
             contours.Add(s);
 
-
-
-            contours.Add(k);
-
             Region reg = new Region(contours);
-            
+
+            Assert.AreEqual(reg.edges.Count, 16);
         }
 
 

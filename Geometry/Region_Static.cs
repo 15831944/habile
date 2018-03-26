@@ -8,7 +8,7 @@ namespace Geometry
 {
     static class Region_Static
     {
-        public static bool isPointinRegion(Point pa, List<Line> contours)
+        public static bool isPointinRegion(Point pa, Vector v, List<Line> contours)
         {
             double min_X = double.MaxValue;
             double max_X = double.MinValue;
@@ -24,11 +24,13 @@ namespace Geometry
 
             double dX = Math.Abs(max_X - min_X);
             double dY = Math.Abs(max_Y - min_Y);
+            double dL = (dX + dY)*2;
 
-            double new_X = (pa.X + dX) * 1.9;
-            double new_Y = (pa.Y + dY) * 2.1;
+            double new_X = (pa.X + dX) * 5;
+            double new_Y = pa.Y;
 
-            Point pe = new Point(new_X, new_Y);
+            //Point pe = new Point(new_X, new_Y);
+            Point pe = pa.move(dL, v);
             Line testLine = new Line(pa, pe);
 
             int i = 0;

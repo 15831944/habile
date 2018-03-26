@@ -86,6 +86,7 @@ namespace Geometry
         {
             //string str = "X: " + X.ToString("f2") + "  Y: " + Y.ToString("f2");
             string str = X.ToString("F5") + "<" + Y.ToString("F5");
+            //string str = X.ToString("F5") + "," + Y.ToString("F5");
 
             return str;
         }

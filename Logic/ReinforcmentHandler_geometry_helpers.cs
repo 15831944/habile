@@ -17,7 +17,7 @@ namespace Logic_Reinf
         {
             foreach (G.Edge eg in allEdges)
             {
-                double o = _V_.X_CONCRETE_COVER_1 - 5.49;
+                double o = _V_.X_CONCRETE_COVER_1 - _V_.X_DENIER_MINIMUM_DELTA;
                 G.Line offsetLine = eg.edgeOffset(o, o, o);
                 if (G.Line.hasIntersection(final, offsetLine))
                 {
@@ -29,13 +29,14 @@ namespace Logic_Reinf
 
 
         private bool denier(G.Line final, G.Edge e)
-        {
+        {            
             foreach (G.Edge eg in allEdges)
             {
                 if (eg == e) continue;
-
-                double o = _V_.X_CONCRETE_COVER_1 - 5.49;
+                
+                double o = _V_.X_CONCRETE_COVER_1 - _V_.X_DENIER_MINIMUM_DELTA;
                 G.Line offsetLine = eg.edgeOffset(o, o, o);
+                
                 if (G.Line.hasIntersection(final, offsetLine))
                 {
                     return true;
@@ -57,7 +58,7 @@ namespace Logic_Reinf
             G.Line testLine1 = new G.Line(main.Start, ep1);
             G.Line testLine2 = new G.Line(cp, ep2);
             G.Line testLine3 = new G.Line(main.End, ep3);
-
+            
             if (denier(testLine1, e) && denier(testLine2, e) && denier(testLine3, e)) return true;
 
             return false;
@@ -154,7 +155,7 @@ namespace Logic_Reinf
 
             foreach (G.Edge eg in allEdges)
             {
-                double o = _V_.X_CONCRETE_COVER_1 - 0.49;
+                double o = _V_.X_CONCRETE_COVER_1 - _V_.X_TRIM_MINIMUM_DELTA;
                 G.Line offsetLine = eg.edgeOffset(o, o, o);
 
                 if (G.Line.hasIntersection(trimmedLine, offsetLine))
@@ -179,14 +180,22 @@ namespace Logic_Reinf
         private G.Line trimLine_baseline(G.Line extendedLine, G.Line startLine, double offset, G.Edge e, ref G.Edge trimmer)
         {
             G.Line trimmedLine = extendedLine.Copy();
-            Debuger.Print(trimmedLine.ToString());
 
             foreach (G.Edge eg in allEdges)
             {
-                if (eg == e) continue;
+                if (eg.Line.getOffsetVector() == e.Line.getOffsetVector()) continue;
+                if (e.StartCorner.getOtherEdge(e) == eg && e.StartCorner.Angle > Math.PI) continue;
+                if (e.EndCorner.getOtherEdge(e) == eg && e.EndCorner.Angle > Math.PI) continue;
+                if (trimmedLine.getDirectionVector() == eg.Line.getDirectionVector()) continue;
+                if (trimmedLine.getDirectionVector() == (-1) * eg.Line.getDirectionVector()) continue;
 
-                double o = offset - 5.49;
-                G.Line offsetLine = eg.edgeTrimmer(o, o, o);
+                double o = offset - _V_.X_TRIM_MINIMUM_DELTA;
+                double so = _V_.X_CONCRETE_COVER_1 - _V_.X_TRIM_SIDE_MINIMUM_DELTA;
+
+                if (e.StartCorner.getOtherEdge(e) == eg) o = _V_.X_CONCRETE_COVER_1 - _V_.X_TRIM_MINIMUM_DELTA; ;
+                if (e.EndCorner.getOtherEdge(e) == eg) o = _V_.X_CONCRETE_COVER_1 - _V_.X_TRIM_MINIMUM_DELTA; ;
+
+                G.Line offsetLine = eg.edgeTrimmer(o, so, so);
 
                 if (G.Line.hasIntersection(trimmedLine, offsetLine))
                 {
@@ -207,22 +216,27 @@ namespace Logic_Reinf
             
             return trimmedLine;
         }
-
+        
 
         private G.Line trimLine_basepoint(G.Line extendedLine, G.Point fixedPoint, double offset, G.Edge e, ref G.Edge trimmer)
         {
             G.Line trimmedLine = extendedLine.Copy();
 
-            Debuger.Print(trimmedLine.ToString());
-
             foreach (G.Edge eg in allEdges)
             {
-                if (eg == e) continue;
+                if (eg.Line.getOffsetVector() == e.Line.getOffsetVector()) continue;
+                if (e.StartCorner.getOtherEdge(e) == eg && e.StartCorner.Angle > Math.PI) continue;
+                if (e.EndCorner.getOtherEdge(e) == eg && e.EndCorner.Angle > Math.PI) continue;
+                if (trimmedLine.getDirectionVector() == eg.Line.getDirectionVector()) continue;
+                if (trimmedLine.getDirectionVector() == (-1) * eg.Line.getDirectionVector()) continue;
 
-                double o = offset - 5.49;
-                G.Line offsetLine = eg.edgeTrimmer(o, o, o);
+                double o = offset - _V_.X_TRIM_MINIMUM_DELTA;
+                double so = _V_.X_CONCRETE_COVER_1 - _V_.X_TRIM_SIDE_MINIMUM_DELTA;
 
-                Debuger.Print(offsetLine.ToString());
+                if (e.StartCorner.getOtherEdge(e) == eg) o = so;
+                if (e.EndCorner.getOtherEdge(e) == eg) o = so;
+
+                G.Line offsetLine = eg.edgeTrimmer(o, so, so);
 
                 if (G.Line.hasIntersection(trimmedLine, offsetLine))
                 {
