@@ -1,5 +1,5 @@
-﻿//#define BRX_APP
-#define ARX_APP
+﻿#define BRX_APP
+//#define ARX_APP
 
 using System;
 using System.Text;
@@ -52,13 +52,13 @@ namespace DMTCommands
     public class CadCommands
     {
         //TODO
-        [_Trx.CommandMethod("qqq1")]
-        public void qqq()
-        {
-            _CONNECTION c = new _CONNECTION();
-            Reinforcer program = new Reinforcer(ref c);
-            program.run();
-        }
+        //[_Trx.CommandMethod("debug1")]
+        //public void debug1()
+        //{
+        //    _CONNECTION c = new _CONNECTION();
+        //    Reinforcer program = new Reinforcer(ref c);
+        //    program.run();
+        //}
         
 
         [_Trx.CommandMethod("AEINFO")]
@@ -233,79 +233,47 @@ namespace DMTCommands
         }
 
 
-        //TODO
-        [_Trx.CommandMethod("qq")]
-        public void test()
+        [_Trx.CommandMethod("FindReplaceAE")]
+        public void dummy()
         {
-            _CONNECTION c = new _CONNECTION();
-
-            try
-            {
-                _Db.Database sourceDb = new _Db.Database(false, true);
-                string sourceFileName = @"C:\Brics_pealeehitus\master.dwg";
-
-                sourceDb.ReadDwgFile(sourceFileName, System.IO.FileShare.Read, true, "");
-                _Db.ObjectIdCollection blockIds = new _Db.ObjectIdCollection();
-
-                c.ed.WriteMessage("\n");
-
-                using (_Db.Transaction sourceTrans = sourceDb.TransactionManager.StartTransaction())
-                {
-                    _Db.BlockTable sourceBlockTable = sourceTrans.GetObject(sourceDb.BlockTableId, _Db.OpenMode.ForWrite, false) as _Db.BlockTable;
-
-                    foreach (_Db.ObjectId sourceObject in sourceBlockTable)
-                    {
-                        _Db.BlockTableRecord btr = sourceTrans.GetObject(sourceObject, _Db.OpenMode.ForWrite, false) as _Db.BlockTableRecord;
-
-                        if (btr.IsLayout) continue;
-                        if (btr.IsDynamicBlock) c.ed.WriteMessage("\n[dyn] " + btr.Name);
-
-                        btr.Dispose();
-                    }
-                }
-
-                _Db.IdMapping mapping = new _Db.IdMapping();
-                sourceDb.WblockCloneObjects(blockIds, c.blockTable.Id, mapping, _Db.DuplicateRecordCloning.Replace, false);
-                sourceDb.Dispose();
-            }
-            catch
-            {
-
-            }
-            finally
-            {
-                c.close();
-            }
-
+            findReplacer();
         }
 
 
-        //TODO
-        [_Trx.CommandMethod("ww")]
-        public void test2()
+        [_Trx.CommandMethod("AEFR")]
+        public void findReplacer()
         {
-            _CONNECTION c = new _CONNECTION();
-
             try
             {
-                foreach (_Db.ObjectId sourceObject in c.blockTable)
+                _CONNECTION c = new _CONNECTION();
+
+                try
                 {
-                    _Db.BlockTableRecord btr = c.trans.GetObject(sourceObject, _Db.OpenMode.ForWrite, false) as _Db.BlockTableRecord;
+                    FindReplacer program = new FindReplacer(ref c);
+                    program.run();
+                    c.ed.WriteMessage("\n[DONE]");
 
-                    if (btr.IsLayout) continue;
-                    if (btr.IsDynamicBlock) c.ed.WriteMessage("\n[dyn] " + btr.Name);
-
-                    btr.Dispose();
+                }
+                catch (DMTException de)
+                {
+                    c.ed.WriteMessage("\n" + de.Message);
+                }
+                catch (Exception ex)
+                {
+                    c.ed.WriteMessage("\n[ERROR] Unknown Exception");
+                    c.ed.WriteMessage("\n[ERROR] " + ex.Message);
+                    c.ed.WriteMessage("\n[ERROR] " + ex.TargetSite);
+                }
+                finally
+                {
+                    c.close();
                 }
             }
             catch
             {
-
-            }
-            finally
-            {
-                c.close();
+                _SWF.MessageBox.Show("\n[ERROR] Connection to BricsCad/AutoCad failed.");
             }
         }
+
     }
 }

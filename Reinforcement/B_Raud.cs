@@ -34,8 +34,16 @@ namespace Reinforcement
             _IP = main.Start;
             _Length = _A + _B;
 
+            //OVERRIDE
+            G.Vector dir = main.getDirectionVector();
+            double shorterLength = shorter(main.Length());
+            _StartPoint = main.Start;
+            _EndPoint = _StartPoint.move(shorterLength, dir);
+            //OVERRIDE
+
             G.Vector v1 = -1 * side.getDirectionVector();
             _SidePoint = _StartPoint.move(_A, v1);
+
         }
 
         public G.Line makeMainLine()
@@ -54,6 +62,7 @@ namespace Reinforcement
             return rebarLine;
         }
 
+
         public static D_Raud mergeTwoRebar(B_Raud one, B_Raud two)
         {
             G.Point a = one._SidePoint;
@@ -68,6 +77,36 @@ namespace Reinforcement
             D_Raud raud = new D_Raud(main, side1, side2, one.Number, one.Diameter, one.Materjal);
             return raud;
         }
+
+
+        public static D_Raud mergeTwoRebar_long(B_Raud one, B_Raud two)
+        {
+            G.Point a = one._SidePoint;
+            G.Point b = one.StartPoint;
+            G.Point c = two.StartPoint;
+            G.Point d = two._EndPoint;
+
+            G.Line temp1 = new G.Line(a, b);
+            G.Line main = new G.Line(b, c);
+            G.Line temp2 = new G.Line(c, d);
+
+            double s1 = temp1.Length();
+            double s2 = temp2.Length();
+            double max = Math.Max(s1, s2);
+
+            G.Vector v1 = (-1) * temp1.getDirectionVector();
+            G.Vector v2 = temp2.getDirectionVector();
+
+            G.Point new_a = b.move(max, v1);
+            G.Point new_d = c.move(max, v2);
+
+            G.Line side1 = new G.Line(new_a, b);
+            G.Line side2 = new G.Line(c, new_d);
+
+            D_Raud raud = new D_Raud(main, side1, side2, one.Number, one.Diameter, one.Materjal);
+            return raud;
+        }
+
 
         public override string ToString()
         {

@@ -59,6 +59,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FindReplacer.cs" />
     <Compile Include="_COMMANDS.cs" />
     <Compile Include="Tabler_Checker_Outputs.cs" />
     <Compile Include="_CONNECTION.cs" />
@@ -78,7 +79,7 @@
       <Project>{eb7afcc4-42af-429d-ac54-72f488c0164c}</Project>
       <Name>Geometry</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Logic\Logic_Reinf.csproj">
+    <ProjectReference Include="..\Logic_Reinf\Logic_Reinf.csproj">
       <Project>{0c575e87-472b-4ff8-8b8f-d5554a35d556}</Project>
       <Name>Logic_Reinf</Name>
     </ProjectReference>

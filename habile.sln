@@ -13,7 +13,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Geometry_tests", "Geometry_
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Geometry_visual", "Geometry_visual\Geometry_visual.csproj", "{1D554DAE-0B57-4CEE-B8C5-E37984F6DFBC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logic_Reinf", "Logic\Logic_Reinf.csproj", "{0C575E87-472B-4FF8-8B8F-D5554A35D556}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logic_Reinf", "Logic_Reinf\Logic_Reinf.csproj", "{0C575E87-472B-4FF8-8B8F-D5554A35D556}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reinforcement", "Reinforcement\Reinforcement.csproj", "{1199B856-127E-4F0E-9407-CE40646DC8F4}"
 EndProject
