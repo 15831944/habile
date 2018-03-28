@@ -123,6 +123,7 @@ namespace Logic_Reinf
             if (new_reinf_normal.A < _V_.Y_REINFORCEMENT_MAIN_RADIUS) return false;
             if (new_reinf_normal.B2 < _V_.Y_REINFORCEMENT_MAIN_RADIUS * 1.99) return false;
             if (new_reinf_normal.C < _V_.Y_REINFORCEMENT_MAIN_RADIUS) return false;
+            if (new_reinf_long.Length > _V_.X_REINFORCEMENT_MAIN_MAX_D_LENGTH) return false;
 
             keep_replace(new_reinf_normal, a, b);
 
@@ -159,6 +160,7 @@ namespace Logic_Reinf
             if (new_reinf.A < _V_.Y_REINFORCEMENT_MAIN_RADIUS) return false;
             if (new_reinf.B2 < _V_.Y_REINFORCEMENT_MAIN_RADIUS * 1.99) return false;
             if (new_reinf.C < _V_.Y_REINFORCEMENT_MAIN_RADIUS) return false;
+            if (new_reinf_long.Length > _V_.X_REINFORCEMENT_MAIN_MAX_D_LENGTH) return false;
 
             keep_replace(new_reinf, a, b);
 
