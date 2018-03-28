@@ -40,6 +40,21 @@ namespace Geometry
             return len;
         }
 
+
+        public bool isInBounds(Line target)
+        {
+            Vector v = target.getDirectionVector();
+            Polar p = Converter.xy_to_la(v);
+
+            Line projected_line = target.rotation(this, p.angle);
+
+            if (this.X < projected_line.Start.X) return false;
+            if (this.X > projected_line.End.X) return false;
+
+            return true;
+        }
+        
+
         public Point getClosePoint(Point one, Point two)
         {
             double d1 = distanceTo(one);

@@ -51,6 +51,64 @@ namespace Logic_Reinf
         }
 
 
+        private bool AB_handler_replace_side(R.A_Raud a, R.B_Raud b)
+        {
+            G.Line t1 = a.makeLine();
+            G.Line t2 = b.makeMainLine();
+            G.Line t3 = b.makeSideLine();
+
+            G.Line new_a_line = new G.Line(a.StartPoint, b.IP);
+
+            G.Point new_b_start = t2.Start.move(_V_.Y_CONCRETE_COVER_DELTA, t2.getDirectionVector());
+            G.Point new_b_end = t2.End.move(_V_.Y_CONCRETE_COVER_DELTA, t2.getDirectionVector());
+
+            G.Point new_b_side_point = new_b_start.move(_V_.X_REINFORCEMENT_MAIN_ANCHOR_LENGTH, (-1) * t3.getDirectionVector());
+
+            G.Line new_b_side_line = new G.Line(new_b_side_point, new_b_start);
+            G.Line new_b_main_line = new G.Line(new_b_start, new_b_end);
+
+            R.A_Raud new_A = new R.A_Raud(new_a_line, a.Number, a.Diameter, a.Materjal);
+            R.B_Raud new_B = new R.B_Raud(new_b_main_line, new_b_side_line, b.Number, b.Diameter, b.Materjal);
+
+            if (denier(new_A.makeLine())) return false;
+            if (denier(new_B.makeSideLine())) return false;
+            if (denier(new_B.makeMainLine())) return false;
+
+            keep_replace(new_A, new_B, a, b);
+
+            return true;
+        }
+
+
+        private bool AB_handler_replace_main(R.A_Raud a, R.B_Raud b)
+        {
+            G.Line t1 = a.makeLine();
+            G.Line t2 = b.makeMainLine();
+            G.Line t3 = b.makeSideLine();
+
+            G.Line new_a_line = new G.Line(b.IP, a.EndPoint);
+
+            G.Point new_b_side_point = t3.Start.move(_V_.Y_CONCRETE_COVER_DELTA, (-1) * t3.getDirectionVector());
+            G.Point new_b_start = t3.End.move(_V_.Y_CONCRETE_COVER_DELTA, (-1) * t3.getDirectionVector());
+
+            G.Point new_b_end = new_b_start.move(_V_.X_REINFORCEMENT_MAIN_ANCHOR_LENGTH, t2.getDirectionVector());
+
+            G.Line new_b_side_line = new G.Line(new_b_side_point, new_b_start);
+            G.Line new_b_main_line = new G.Line(new_b_start, new_b_end);
+
+            R.A_Raud new_A = new R.A_Raud(new_a_line, a.Number, a.Diameter, a.Materjal);
+            R.B_Raud new_B = new R.B_Raud(new_b_main_line, new_b_side_line, b.Number, b.Diameter, b.Materjal);
+
+            if (denier(new_A.makeLine())) return false;
+            if (denier(new_B.makeSideLine())) return false;
+            if (denier(new_B.makeMainLine())) return false;
+
+            keep_replace(new_A, new_B, a, b);
+
+            return true;
+        }
+
+
         private void A_remover(R.A_Raud a)
         {
             keep_remove(a);

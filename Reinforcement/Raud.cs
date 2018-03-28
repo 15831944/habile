@@ -21,6 +21,7 @@ namespace Reinforcement
         string _Materjal;
 
         public G.Point StartPoint { get { return _StartPoint; } }
+        public G.Point EndPoint { get { return _EndPoint; } }
         public G.Point IP { get { return _IP; } }
         public double Rotation { get { return _Rotation; } }
         public int Number { get { return _Number; } }

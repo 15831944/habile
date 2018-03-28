@@ -1,5 +1,5 @@
-﻿#define BRX_APP
-//#define ARX_APP
+﻿//#define BRX_APP
+#define ARX_APP
 
 using System;
 using System.Text;
@@ -61,7 +61,7 @@ namespace DMTCommands
 
         public void run()
         {
-            List<string> blockNames = new List<string>() { "Raud_A", "Raud_B", "Raud_C", "Raud_D", "Raud_E", "Raud_U", "Reinf_A_Raud", "Reinf_B_Raud", "Reinf_C_Raud", "Reinf_D_Raud", "Reinf_D_Raud_side", "Reinf_E_Raud", "Reinf_U_Raud_side" };
+            List<string> blockNames = new List<string>() { "Raud_A", "Raud_B", "Raud_C", "Raud_D", "Raud_E", "Raud_U", "Reinf_A_Raud", "Reinf_B_Raud", "Reinf_C_Raud", "Reinf_D_Raud", "Reinf_D_Raud_side", "Reinf_E_Raud2", "Reinf_U_Raud_side" };
             List<string> layerNames = new List<string>() { "K023TL", "Armatuur" };
             _SETUP init = new _SETUP(ref _c);
             init.start(blockNames, layerNames);

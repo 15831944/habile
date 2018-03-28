@@ -30,7 +30,7 @@ namespace Logic_Reinf
         public ReinforcmentHandler(List<G.Line> polys)
         {
             DebugerWindow _debuger = new DebugerWindow();
-            //_debuger.Show();
+            _debuger.Show();
             
             r = new G.Region(polys);
             
@@ -101,30 +101,32 @@ namespace Logic_Reinf
             create_valid_D();
             create_oversized_D();
 
-            //create_valid_D();
-            //create_oversized_D();
+            create_valid_D();
+            create_oversized_D();
 
-            //executor(create_extended_B);
-            //executor(create_long_B);
+            executor(create_extended_B);
+            executor(create_long_B);
 
-            //executor(create_trimmed_short_A);
+            executor(create_trimmed_short_A);
 
-            //create_valid_D();
-            //create_oversized_D();
-            //executor(create_extended_B);
-            //executor(create_long_B);
+            create_valid_D();
+            create_oversized_D();
+            executor(create_extended_B);
+            executor(create_long_B);
 
-            //executor(create_valid_B);
-            //executor(create_diagonal_A);
+            executor(create_valid_B);
+            executor(create_diagonal_A);
         }
 
 
         private void executor(Action fn)
         {
             fn();
-            //merge_A();
-            //merge_B();
-            //merge_C();
+            merge_A();
+            merge_B();
+            merge_C();
+
+            merge_AB();
         }
 
 
@@ -863,35 +865,92 @@ namespace Logic_Reinf
                 }
             }
 
-            //DOES NOT WORK BECASUE E REBAR IS BROCKEN IN BRICSCAD
+            restartLoop = true;
+            while (restartLoop)
+            {
+                restartLoop = false;
 
-            //restartLoop = true;
-            //while (restartLoop)
-            //{
-            //    restartLoop = false;
+                List<R.Raud> onlyB = knownReinforcement.Where(x => x is R.C_Raud).ToList();
 
-            //    List<R.Raud> onlyB = knownReinforcement.Where(x => x is R.C_Raud).ToList();
+                foreach (R.C_Raud a in onlyB)
+                {
+                    List<R.Raud> not = onlyB.Where(x => !ReferenceEquals(a, x)).ToList();
+                    List<R.Raud> same = not.Where(x => a.Diameter == x.Diameter).ToList();
+                    List<R.Raud> colinear = same.Where(x => G.Line.areLinesCoLinear(a.makeMainLine().extendEnd(_V_.X_MERGE_EXTEND_SINGLE_DIST),
+                                                                                    (x as R.C_Raud).makeSideLine().extendStart(_V_.X_MERGE_EXTEND_SINGLE_DIST), 3))
+                                                                                    .ToList();
 
-            //    foreach (R.C_Raud a in onlyB)
-            //    {
-            //        List<R.Raud> not = onlyB.Where(x => !ReferenceEquals(a, x)).ToList();
-            //        List<R.Raud> same = not.Where(x => a.Diameter == x.Diameter).ToList();
-            //        List<R.Raud> colinear = same.Where(x => G.Line.areLinesCoLinear(a.makeMainLine().extendEnd(_V_.X_MERGE_EXTEND_SINGLE_DIST), 
-            //                                                                        (x as R.C_Raud).makeSideLine().extendStart(_V_.X_MERGE_EXTEND_SINGLE_DIST), 3))
-            //                                                                        .ToList();
-
-            //        if (colinear.Count > 0)
-            //        {
-            //            bool success = C_handler_replace(a, colinear[0] as R.C_Raud);
-            //            if (success)
-            //            {
-            //                restartLoop = true;
-            //                break;
-            //            }
-            //        }
-            //    }
-            //}
+                    if (colinear.Count > 0)
+                    {
+                        bool success = C_handler_replace(a, colinear[0] as R.C_Raud);
+                        if (success)
+                        {
+                            restartLoop = true;
+                            break;
+                        }
+                    }
+                }
+            }
         }
 
+
+        private void merge_AB()
+        {
+            bool restartLoop = true;
+
+            while (restartLoop)
+            {
+                restartLoop = false;
+
+                List<R.Raud> onlyA = knownReinforcement.Where(x => x is R.A_Raud).ToList();
+                List<R.Raud> onlyB = knownReinforcement.Where(x => x is R.B_Raud).ToList();
+
+                foreach (R.A_Raud a in onlyA)
+                {
+                    List<R.Raud> same = onlyB.Where(x => a.Diameter == x.Diameter).ToList();
+                    List<R.Raud> colinear = same.Where(x => G.Line.areLinesCoLinear(a.makeLine(), (x as R.B_Raud).makeSideLine(), 3)).ToList();
+
+                    if (colinear.Count > 0)
+                    {
+                        foreach (R.B_Raud b in colinear)
+                        {
+                            if (b.IP.isInBounds(a.makeLine())) continue;
+                            if (b.makeMainLine().Length() > _V_.X_REINFORCEMENT_MAIN_ANCHOR_LENGTH * 1.1) continue;
+
+                            bool success = AB_handler_replace_side(a, b);
+                            if (success)
+                            {
+                                restartLoop = true;
+                                break;
+                            }
+                        }
+
+                        if (restartLoop == true) break;
+
+                    }
+
+                    colinear = same.Where(x => G.Line.areLinesCoLinear(a.makeLine(), (x as R.B_Raud).makeMainLine(), 3)).ToList();
+
+                    if (colinear.Count > 0)
+                    {
+                        foreach (R.B_Raud b in colinear)
+                        {
+                            if (b.IP.isInBounds(a.makeLine())) continue;
+                            if (b.makeSideLine().Length() > _V_.X_REINFORCEMENT_MAIN_ANCHOR_LENGTH * 1.1) continue;
+
+                            bool success = AB_handler_replace_main(a, b);
+                            if (success)
+                            {
+                                restartLoop = true;
+                                break;
+                            }
+
+                            if (restartLoop == true) break;
+                        }
+                    }
+                }
+            }
+
+        }
     }
 }

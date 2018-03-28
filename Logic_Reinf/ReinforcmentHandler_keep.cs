@@ -89,6 +89,34 @@ namespace Logic_Reinf
             knownReinforcement.Add(nw);
         }
 
+        private void keep_replace(R.Raud n1, R.Raud n2, R.Raud old1, R.Raud old2)
+        {
+            ReplaceByValue(setEdges, old1, n1);
+            ReplaceByValue(setEdges, old2, n1);
+            ReplaceByValue(setCorners, old1, n2);
+            ReplaceByValue(setCorners, old2, n2);
+
+
+            for (int i = knownReinforcement.Count - 1; i >= 0; i--)
+            {
+                if (ReferenceEquals(knownReinforcement[i], old1))
+                {
+                    knownReinforcement.RemoveAt(i);
+                }
+            }
+
+            for (int i = knownReinforcement.Count - 1; i >= 0; i--)
+            {
+                if (ReferenceEquals(knownReinforcement[i], old2))
+                {
+                    knownReinforcement.RemoveAt(i);
+                }
+            }
+
+            knownReinforcement.Add(n1);
+            knownReinforcement.Add(n2);
+        }
+
         private void keep_remove(R.Raud a)
         {
             RemoveByValue(setEdges, a);

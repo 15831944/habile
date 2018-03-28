@@ -77,7 +77,7 @@ namespace Geometry
                 }
                 else
                 {
-                    Line new_line = new Line(line.End, line.Start);
+                    Line new_line = line.swapHandles();
                     center = new_line.getCenterPoint();
                     offset = new_line.getOffsetVector();
                     p = center.move(_Variables.MOVE_DISTANCE, offset);

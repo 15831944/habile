@@ -59,6 +59,13 @@ namespace Reinforcement
             return raud;
         }
 
+
+        public static void mergeTwoRebarAB(A_Raud one, B_Raud two, ref A_Raud out1, ref B_Raud out2)
+        {
+            
+        }
+
+
         public bool Equals(A_Raud other)
         {
             if (other == null) return false;

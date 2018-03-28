@@ -1,5 +1,5 @@
-﻿#define BRX_APP
-//#define ARX_APP
+﻿//#define BRX_APP
+#define ARX_APP
 
 using System;
 using System.Text;
@@ -316,14 +316,14 @@ namespace DMTCommands
                         else if (a.PropertyName == "U") a.Value = Math.PI - _BETA_.U; // HERE
                         else if (a.PropertyName == "V")
                         {
-                            if (_BETA_.B > 1000)
-                            {
-                                a.Value = _BETA_.V + Math.PI; //DOES NOT WORK???????????????????
-                            }
-                            else
-                            {
+                            //if (_BETA_.B > 6000)
+                            //{
+                            //    a.Value = _BETA_.V + Math.PI; //DOES NOT WORK???????????????????
+                            //}
+                            //else
+                            //{
                                 a.Value = _BETA_.V;
-                            }
+                            //}
                         }
                         else if (a.PropertyName == "X") a.Value = _BETA_.X;
                         else if (a.PropertyName == "Y") a.Value = _BETA_.Y;
@@ -331,7 +331,7 @@ namespace DMTCommands
                     else if (_ALFA_ is R.U_Raud)
                     {
                         R.U_Raud _BETA_ = _ALFA_ as R.U_Raud;
-                        if (a.PropertyName == "A") a.Value = _BETA_.A;
+                        if (a.PropertyName == "A") a.Value = _BETA_.A; 
                         else if (a.PropertyName == "B") a.Value = _BETA_.B;
                         else if (a.PropertyName == "C") a.Value = _BETA_.C;
                     }
@@ -470,7 +470,7 @@ namespace DMTCommands
                 else if (_ALFA_ is R.B_Raud) return "Reinf_B_Raud";
                 else if (_ALFA_ is R.C_Raud) return "Reinf_C_Raud";
                 else if (_ALFA_ is R.D_Raud) return "Reinf_D_Raud";
-                else if (_ALFA_ is R.E_Raud) return "Reinf_E_Raud";
+                else if (_ALFA_ is R.E_Raud) return "Reinf_E_Raud2";
             }
             else
             {

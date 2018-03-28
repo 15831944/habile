@@ -34,6 +34,13 @@ namespace Geometry
             }
         }
 
+
+        public Line swapHandles()
+        {
+            return new Line(End, Start);
+        }
+
+
         public Line Copy()
         {
             Point new_start = new Point(Start.X, Start.Y);
