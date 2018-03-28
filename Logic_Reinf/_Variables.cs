@@ -49,6 +49,8 @@ namespace Logic_Reinf
         public static double Y_REINFORCEMENT_MAIN_MIN_LENGTH = X_REINFORCEMENT_MAIN_ANCHOR_LENGTH * 2 * X_FIRST_PASS_CONSTRAINT; // A + 2B vs D
         public static int Y_REINFORCEMENT_MAIN_RADIUS = 1000;
         public static double X_REINFORCEMENT_MAIN_MAX_D_LENGTH = 5.5 * X_REINFORCEMENT_MAIN_ANCHOR_LENGTH; // NOT ASKED
+        public static double X_MERGE_EXTEND_SINGLE_DIST = 25; // NOT ASKED
+        public static double X_MERGE_EXTEND_DOUBLE_DIST = 50; // NOT ASKED
 
         public static int Y_STIRRUP_MAX_LENGTH = X_REINFORCEMENT_STIRRUP_CONSTRAINT * X_ELEMENT_WIDTH;
         public static int Y_REINFORCEMENT_STIRRUP_RADIUS = 1000;
@@ -63,7 +65,7 @@ namespace Logic_Reinf
         public static double M_LINE_SEGMENTATOR_STEP = 50.0;
 
         public static double X_DENIER_MINIMUM_DELTA = 5.49;
-        public static double X_TRIM_MINIMUM_DELTA = 0.01;
+        public static double X_TRIM_MINIMUM_DELTA = 0.05;
         public static double X_TRIM_SIDE_MINIMUM_DELTA = 5.01;
     }
 }

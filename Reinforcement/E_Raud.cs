@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 using G = Geometry;
 
@@ -43,6 +44,7 @@ namespace Reinforcement
         public double X { get { return _X; } }
         public double Y { get { return _Y; } }
         public double Length { get { return _Length; } }
+
 
         public E_Raud(G.Line main, G.Line side1, G.Line side2, int nr, int d, string teras, int parand = 0) : base(main, nr, d, teras)
         {
@@ -89,6 +91,7 @@ namespace Reinforcement
             _Side2Point = _EndPoint.move(_C, v2);
         }
 
+
         public G.Line makeMainLine()
         {
             G.Point a = new G.Point(_StartPoint.X, _StartPoint.Y);
@@ -96,6 +99,7 @@ namespace Reinforcement
             G.Line rebarLine = new G.Line(a, b);
             return rebarLine;
         }
+
 
         public G.Line makeSide1Line()
         {
@@ -105,6 +109,7 @@ namespace Reinforcement
             return rebarLine;
         }
 
+
         public G.Line makeSide2Line()
         {
             G.Point a = new G.Point(_EndPoint.X, _EndPoint.Y);
@@ -112,6 +117,7 @@ namespace Reinforcement
             G.Line rebarLine = new G.Line(a, b);
             return rebarLine;
         }
+
 
         public override string ToString()
         {
@@ -127,6 +133,7 @@ namespace Reinforcement
             return str;
         }
 
+
         public override string ToStringNoCount()
         {
             string str = "";
@@ -140,6 +147,16 @@ namespace Reinforcement
             }
             return str;
         }
+
+
+        public string ToStringDebug()
+        {
+            string str = "";
+            str = "A: " + _A.ToString() + ", B:" + _B.ToString() + ", B2: " + _B2.ToString() + ", C: " + _C.ToString() + ", U: " + _U.ToString() + ", V: " + _V.ToString() + ", X: " + _X.ToString() + ", Y: " + _Y.ToString();
+
+            return str;
+        }
+
 
         public bool Equals(E_Raud other)
         {
@@ -159,6 +176,7 @@ namespace Reinforcement
             return tot;
         }
 
+
         public override bool Equals(Raud obj)
         {
             if (ReferenceEquals(null, obj)) return false;
@@ -166,6 +184,7 @@ namespace Reinforcement
             if (obj.GetType() != GetType()) return false;
             return Equals(obj as E_Raud);
         }
+
 
         public override bool Equals(object obj)
         {
@@ -175,14 +194,17 @@ namespace Reinforcement
             return Equals(obj as E_Raud);
         }
 
+
         public static bool operator ==(E_Raud a, E_Raud b)
         {
             return object.Equals(a, b);
         }
 
+
         public static bool operator !=(E_Raud a, E_Raud b)
         {
             return !object.Equals(a, b);
         }
+
     }
 }

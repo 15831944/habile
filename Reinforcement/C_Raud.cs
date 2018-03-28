@@ -91,7 +91,7 @@ namespace Reinforcement
         }
 
 
-        public static D_Raud mergeTwoRebar_long(C_Raud one, C_Raud two)
+        public static E_Raud mergeTwoRebar_long(C_Raud one, C_Raud two)
         {
             G.Point a = one._SidePoint;
             G.Point b = one.StartPoint;
@@ -115,7 +115,7 @@ namespace Reinforcement
             G.Line side1 = new G.Line(new_a, b);
             G.Line side2 = new G.Line(c, new_d);
 
-            D_Raud raud = new D_Raud(main, side1, side2, one.Number, one.Diameter, one.Materjal);
+            E_Raud raud = new E_Raud(main, side1, side2, one.Number, one.Diameter, one.Materjal);
             return raud;
         }
 

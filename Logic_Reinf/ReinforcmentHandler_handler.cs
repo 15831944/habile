@@ -78,8 +78,8 @@ namespace Logic_Reinf
             G.Vector v2 = side.getDirectionVector();
 
             double ang = G.Converter.AngleDeltaCW(v1, v2);
-            
-            if (Math.Abs(ang - 3 * Math.PI / 2) < _V_.M_B_BAR_TOLERANCE)
+
+            if (Math.Abs(ang - Math.PI / 2) < _V_.M_B_BAR_TOLERANCE)
             {
                 R.B_Raud reinf = new R.B_Raud(main, side, _V_.X_REINFORCEMENT_NUMBER, _V_.X_REINFORCEMENT_MAIN_DIAMETER, _V_.X_REINFORCEMENT_MARK);
                 keep(reinf, e, oc, null);
@@ -133,7 +133,7 @@ namespace Logic_Reinf
 
         private bool C_handler_replace(R.C_Raud a, R.C_Raud b)
         {
-            R.D_Raud new_reinf_long = R.C_Raud.mergeTwoRebar_long(a, b);
+            R.E_Raud new_reinf_long = R.C_Raud.mergeTwoRebar_long(a, b);
 
             bool longD = true;
             if (denier(new_reinf_long.makeMainLine())) longD = false;
@@ -180,7 +180,7 @@ namespace Logic_Reinf
             //reinf_geometry_debug.Add(main);
             //reinf_geometry_debug.Add(side1);
             //reinf_geometry_debug.Add(side2);
-
+            
             G.Vector v1 = main.getDirectionVector();
             G.Vector v2 = side1.getDirectionVector();
             G.Vector v3 = side2.getDirectionVector();
@@ -188,8 +188,8 @@ namespace Logic_Reinf
             double ang1 = G.Converter.AngleDeltaCW(v1, v2);
             double ang2 = G.Converter.AngleDeltaCW(v1, v3);
 
-            bool d1 = Math.Abs(ang1 - 3 * Math.PI / 2) < _V_.M_B_BAR_TOLERANCE;
-            bool d2 = Math.Abs(ang2 - Math.PI / 2) < _V_.M_B_BAR_TOLERANCE;
+            bool d1 = Math.Abs(ang1 - Math.PI / 2) < _V_.M_B_BAR_TOLERANCE;
+            bool d2 = Math.Abs(ang2 - 3 * Math.PI / 2) < _V_.M_B_BAR_TOLERANCE;
             if (d1 && d2)
             {
                 R.D_Raud reinf = new R.D_Raud(main, side1, side2, _V_.X_REINFORCEMENT_NUMBER, _V_.X_REINFORCEMENT_MAIN_DIAMETER, _V_.X_REINFORCEMENT_MARK, parand);

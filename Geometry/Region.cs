@@ -27,7 +27,7 @@ namespace Geometry
             {
                 throw new RegionNotValidException();
             }
-
+            
             edges = new List<Edge>();
             
             setBoundies(contours);
@@ -39,8 +39,7 @@ namespace Geometry
                 setCorners(contours);
                 bool stop = insanityCheck();
                 if (stop) break;
-            }
-            
+            }            
         }
         
 
@@ -72,7 +71,9 @@ namespace Geometry
                 if (inSide)
                 {
                     Edge e = new Edge(line);
-                    edges.Add(e);
+                    if (edges.Contains(e)) continue;
+
+                    edges.Add(e); 
                 }
                 else
                 {
@@ -85,6 +86,8 @@ namespace Geometry
                     if (inSide)
                     {
                         Edge e = new Edge(new_line);
+                        if (edges.Contains(e)) continue;
+
                         edges.Add(e);
                     }
                     else

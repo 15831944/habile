@@ -18,6 +18,7 @@ namespace Geometry
             return d;
         }
 
+
         public static Vector la_to_xy(Polar d)
         {
             double X = d.L * Math.Cos(d.angle);
@@ -27,6 +28,7 @@ namespace Geometry
 
             return v;
         }
+
 
         public static double Wrap(double value, double max = Math.PI, double min = -Math.PI)
         {
@@ -46,9 +48,9 @@ namespace Geometry
             return value;
         }
 
+
         public static double wrapper(double value, double max = 2 * Math.PI, double min = 0)
         {
-            //TODO
             //hetkel ei s6ltu max-ist mitte kuidagi
             value -= min;
             value %= (2 * Math.PI);
@@ -125,6 +127,7 @@ namespace Geometry
 
             return deg;
         }
+
     }
 }
 

@@ -9,6 +9,7 @@ namespace Geometry_tests
     [TestClass]
     public class Region_tests
     {
+
         [TestMethod]
         public void Region_init_test_1()
         {
@@ -36,6 +37,7 @@ namespace Geometry_tests
             Assert.AreEqual(r.edges.Count, 3);
             Assert.AreEqual(r.corners.Count, 3);
         }
+
 
         [TestMethod]
         public void Region_init_test_2()
@@ -185,6 +187,7 @@ namespace Geometry_tests
             Region r = new Region(contours);
         }
 
+
         [TestMethod]
         public void Region_isPointinRegion_test_simple()
         {
@@ -242,6 +245,7 @@ namespace Geometry_tests
             t = new Point(4, 4);
             Assert.IsTrue(r.isPointinRegion(t));
         }
+
 
         [TestMethod]
         public void Region_isPointinRegion_test_twoRecs()
@@ -302,6 +306,7 @@ namespace Geometry_tests
             Assert.IsFalse(r.isPointinRegion(t));
         }
 
+
         [TestMethod]
         public void Region_isPointinRegion_test_bugz()
         {
@@ -342,6 +347,7 @@ namespace Geometry_tests
             Assert.AreEqual(r.edges.Count, 4);
             Assert.AreEqual(r.corners.Count, 4);
         }
+
     }
 }
 

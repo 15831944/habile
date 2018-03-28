@@ -309,14 +309,21 @@ namespace DMTCommands
                     else if (_ALFA_ is R.E_Raud)
                     {
                         R.E_Raud _BETA_ = _ALFA_ as R.E_Raud;
+
                         if (a.PropertyName == "A") a.Value = _BETA_.A;
                         else if (a.PropertyName == "B") a.Value = _BETA_.B;
                         else if (a.PropertyName == "C") a.Value = _BETA_.C;
                         else if (a.PropertyName == "U") a.Value = Math.PI - _BETA_.U; // HERE
                         else if (a.PropertyName == "V")
                         {
-                            if (_BETA_.B > 1000) a.Value = _BETA_.V + Math.PI;
-                            else a.Value = _BETA_.V;
+                            if (_BETA_.B > 1000)
+                            {
+                                a.Value = _BETA_.V + Math.PI; //DOES NOT WORK???????????????????
+                            }
+                            else
+                            {
+                                a.Value = _BETA_.V;
+                            }
                         }
                         else if (a.PropertyName == "X") a.Value = _BETA_.X;
                         else if (a.PropertyName == "Y") a.Value = _BETA_.Y;
@@ -381,7 +388,7 @@ namespace DMTCommands
                     }
                     else if (ar.Tag == "U")
                     {
-                        ar.TextString = ((int)G.Converter.ToDeg(_BETA_.U)).ToString();
+                        ar.TextString = ((int)Math.Round(G.Converter.ToDeg(_BETA_.U), 0)).ToString();
                     }
                 }
 
@@ -419,11 +426,11 @@ namespace DMTCommands
                     }
                     else if (ar.Tag == "U")
                     {
-                        ar.TextString = ((int)G.Converter.ToDeg(_BETA_.U)).ToString();
+                        ar.TextString = ((int)Math.Round(G.Converter.ToDeg(_BETA_.U), 0)).ToString();
                     }
                     else if (ar.Tag == "V")
                     {
-                        ar.TextString = ((int)G.Converter.ToDeg(_BETA_.V)).ToString();
+                        ar.TextString = ((int)Math.Round(G.Converter.ToDeg(_BETA_.V), 0)).ToString();
                     }
                     else if (ar.Tag == "X")
                     {
