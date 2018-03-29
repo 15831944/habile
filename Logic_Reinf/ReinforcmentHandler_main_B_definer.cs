@@ -176,6 +176,9 @@ namespace Logic_Reinf
             G.Point sidePoint = IP.move(sideDist, v4);
 
 
+            //A_handler_debug(IP, mainEndPoint);
+            //A_handler_debug(sidePoint, IP);
+
             bool success = false;
 
             if (startSet == false)

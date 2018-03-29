@@ -1,5 +1,5 @@
-﻿//#define BRX_APP
-#define ARX_APP
+﻿#define BRX_APP
+//#define ARX_APP
 
 using System;
 using System.Text;
@@ -54,7 +54,7 @@ namespace DMTCommands
         {
             reinfSingleHandler(reinf);
             reinfArrayHandler(reinf_array);
-            //bendingHandler(unique_reinf, insertPoint);
+            bendingHandler(unique_reinf, insertPoint);
         }
 
 
@@ -63,7 +63,7 @@ namespace DMTCommands
             foreach (R.Raud re in reinf)
             {
                 insertReinforcementSingle(re, false);
-                //insertReinforcmentMark(re.ToString(), re.IP);
+                insertReinforcmentMark(re.ToString(), re.IP);
             }
         }
 
@@ -79,7 +79,7 @@ namespace DMTCommands
                         insertReinforcementSingle(re, true);
                     }
 
-                    //insertReinforcmentMark(rea.ToString(), rea.IP);
+                    insertReinforcmentMark(rea.ToString(), rea.IP);
                 }
             }
         }
@@ -120,7 +120,7 @@ namespace DMTCommands
             leader.SetTextAttachmentType(_Db.TextAttachmentType.AttachmentBottomOfTopLine, _Db.LeaderDirectionType.LeftLeader); // Left attachment
             leader.SetTextAttachmentType(_Db.TextAttachmentType.AttachmentBottomOfTopLine, _Db.LeaderDirectionType.RightLeader); // Right attachment
             leader.EnableLanding = false;
-            leader.LeaderLineColor = _Cm.Color.FromColorIndex(_Cm.ColorMethod.None, 155);
+            leader.LeaderLineColor = _Cm.Color.FromColorIndex(_Cm.ColorMethod.None, 255);
             leader.LandingGap = 0;
             leader.ContentType = _Db.ContentType.MTextContent;
 
@@ -187,12 +187,12 @@ namespace DMTCommands
         {
             G.Point currentPoint = new G.Point(insertPoint.X, insertPoint.Y);
 
-            List<R.Raud> onlyA = unique_reinf.Where(x => x is R.A_Raud).ToList();
-            List<R.Raud> onlyB = unique_reinf.Where(x => x is R.B_Raud).ToList();
-            List<R.Raud> onlyC = unique_reinf.Where(x => x is R.C_Raud).ToList();
-            List<R.Raud> onlyD = unique_reinf.Where(x => x is R.D_Raud).ToList();
-            List<R.Raud> onlyE = unique_reinf.Where(x => x is R.E_Raud).ToList();
-            List<R.Raud> onlyU = unique_reinf.Where(x => x is R.U_Raud).ToList();
+            List<R.Raud> onlyA = unique_reinf.Where(x => x is R.A_Raud).OrderBy(b => b.Length).Reverse().ToList();
+            List<R.Raud> onlyB = unique_reinf.Where(x => x is R.B_Raud).OrderBy(b => b.Length).Reverse().ToList();
+            List<R.Raud> onlyC = unique_reinf.Where(x => x is R.C_Raud).OrderBy(b => b.Length).Reverse().ToList();
+            List<R.Raud> onlyD = unique_reinf.Where(x => x is R.D_Raud).OrderBy(b => b.Length).Reverse().ToList();
+            List<R.Raud> onlyE = unique_reinf.Where(x => x is R.E_Raud).OrderBy(b => b.Length).Reverse().ToList();
+            List<R.Raud> onlyU = unique_reinf.Where(x => x is R.U_Raud).OrderBy(b => b.Length).Reverse().ToList();
 
             if (onlyA.Count > 0)
             {
@@ -316,14 +316,8 @@ namespace DMTCommands
                         else if (a.PropertyName == "U") a.Value = Math.PI - _BETA_.U; // HERE
                         else if (a.PropertyName == "V")
                         {
-                            //if (_BETA_.B > 6000)
-                            //{
-                            //    a.Value = _BETA_.V + Math.PI; //DOES NOT WORK???????????????????
-                            //}
-                            //else
-                            //{
-                                a.Value = _BETA_.V;
-                            //}
+                            if (_BETA_.B > 6000) a.Value = _BETA_.V + Math.PI;
+                            else a.Value = _BETA_.V;
                         }
                         else if (a.PropertyName == "X") a.Value = _BETA_.X;
                         else if (a.PropertyName == "Y") a.Value = _BETA_.Y;

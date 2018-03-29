@@ -15,8 +15,7 @@ namespace Logic_Reinf
         public static int X_ELEMENT_WIDTH = 200;
 
         public static int X_REINFORCEMENT_MAIN_DIAMETER = 12;
-        public static int X_REINFORCEMENT_MAIN_ANCHOR_LENGTH = 500;
-        
+        public static int X_REINFORCEMENT_MAIN_ANCHOR_LENGTH = 500;        
 
         public static double X_FIRST_PASS_CONSTRAINT = 1.2; // A + 2B vs D
 
@@ -48,7 +47,8 @@ namespace Logic_Reinf
         // calculated constants
         public static double Y_REINFORCEMENT_MAIN_MIN_LENGTH = X_REINFORCEMENT_MAIN_ANCHOR_LENGTH * 2 * X_FIRST_PASS_CONSTRAINT; // A + 2B vs D
         public static int Y_REINFORCEMENT_MAIN_RADIUS = 1000;
-        public static double X_REINFORCEMENT_MAIN_MAX_D_LENGTH = 5.5 * X_REINFORCEMENT_MAIN_ANCHOR_LENGTH; // NOT ASKED
+        public static double X_REINFORCEMENT_MAX_D_LENGTH = 5.5 * X_REINFORCEMENT_MAIN_ANCHOR_LENGTH; // NOT ASKED
+        public static double X_REINFORCEMENT_REMOVE_A_LENGTH = 0.9 * Y_REINFORCEMENT_MAIN_MIN_LENGTH; // NOT ASKED
         public static double X_MERGE_EXTEND_SINGLE_DIST = 25; // NOT ASKED
         public static double X_MERGE_EXTEND_DOUBLE_DIST = 50; // NOT ASKED
 

@@ -24,13 +24,11 @@ namespace Reinforcement
         double _B2; // magic
         double _C;
         
-        double _Length;
 
         public double A { get { return _A; } }
         public double B { get { return _B; } }
         public double B2 { get { return _B2; } } // parand magic
         public double C { get { return _C; } }
-        public double Length { get { return _Length; } }
 
         public D_Raud(G.Line side1, int z_dist, int nr, int d, string teras) : base(side1, nr, d, teras)
         {

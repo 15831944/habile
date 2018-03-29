@@ -149,5 +149,12 @@ namespace Geometry
         {
             return !object.Equals(a, b);
         }
+
+
+        public override string ToString()
+        {
+            return line.ToString();
+        }
+
     }
 }

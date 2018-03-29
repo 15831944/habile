@@ -13,12 +13,14 @@ namespace Geometry
         public LineSamePointException(string message, Exception inner) : base(message, inner) { }
     }
 
+
     public class LineSameLineException : Exception
     {
         public LineSameLineException() { }
         public LineSameLineException(string message) : base(message) { }
         public LineSameLineException(string message, Exception inner) : base(message, inner) { }
     }
+
 
     public class LineNoIntersectionException : Exception
     {
@@ -27,12 +29,14 @@ namespace Geometry
         public LineNoIntersectionException(string message, Exception inner) : base(message, inner) { }
     }
 
+
     public class RegionNotValidException : Exception
     {
         public RegionNotValidException() { }
         public RegionNotValidException(string message) : base(message) { }
         public RegionNotValidException(string message, Exception inner) : base(message, inner) { }
     }
+
 
     public class RegionLineNotInRegionException : Exception
     {
@@ -41,12 +45,14 @@ namespace Geometry
         public RegionLineNotInRegionException(string message, Exception inner) : base(message, inner) { }
     }
 
+
     public class VectorZeroException : Exception
     {
         public VectorZeroException() { }
         public VectorZeroException(string message) : base(message) { }
         public VectorZeroException(string message, Exception inner) : base(message, inner) { }
     }
+
 
     public class EdgeNotInDefinedCornerException : Exception
     {
@@ -55,10 +61,12 @@ namespace Geometry
         public EdgeNotInDefinedCornerException(string message, Exception inner) : base(message, inner) { }
     }
 
+
     public class CornerNotInDefinedEdgeException : Exception
     {
         public CornerNotInDefinedEdgeException() { }
         public CornerNotInDefinedEdgeException(string message) : base(message) { }
         public CornerNotInDefinedEdgeException(string message, Exception inner) : base(message, inner) { }
     }
+
 }

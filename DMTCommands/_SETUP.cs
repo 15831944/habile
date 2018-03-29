@@ -1,5 +1,5 @@
-﻿//#define BRX_APP
-#define ARX_APP
+﻿#define BRX_APP
+//#define ARX_APP
 
 using System;
 using System.Text;
@@ -165,5 +165,6 @@ namespace DMTCommands
         {
             _c.ed.WriteMessage("\n" + message);
         }
+
     }
 }

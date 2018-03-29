@@ -21,6 +21,7 @@ namespace Geometry
         public double Min_Y { get { return min_Y; } }
         public double Max_Y { get { return max_Y; } }
 
+
         public Region(List<Line> contours)
         {
             if (contours.Count < 3)
@@ -59,13 +60,16 @@ namespace Geometry
             }
         }
 
+
         private void setEdges(List<Line> contours)
         {
             foreach (Line line in contours)
             {
                 Point center = line.getCenterPoint();
                 Vector offset = line.getOffsetVector();
+                Vector dir = line.getDirectionVector();
                 Point p = center.move(_Variables.MOVE_DISTANCE, offset);
+                p = p.move(_Variables.MOVE_DISTANCE, dir);
                 bool inSide = Region_Static.isPointinRegion(p, offset, contours);
 
                 if (inSide)
@@ -80,7 +84,9 @@ namespace Geometry
                     Line new_line = line.swapHandles();
                     center = new_line.getCenterPoint();
                     offset = new_line.getOffsetVector();
+                    dir = line.getDirectionVector();
                     p = center.move(_Variables.MOVE_DISTANCE, offset);
+                    p = p.move(_Variables.MOVE_DISTANCE, dir);
                     inSide = Region_Static.isPointinRegion(p, offset, contours);
 
                     if (inSide)
@@ -97,6 +103,7 @@ namespace Geometry
                 }
             }
         }
+
 
         private void setCorners(List<Line> contours)
         {
@@ -116,6 +123,7 @@ namespace Geometry
             }
         }
 
+
         private bool setCorner(Point point, Edge e1, Edge e2, List<Line> contours)
         {
             foreach (Corner oc in corners)
@@ -132,6 +140,7 @@ namespace Geometry
             corners.Add(c);
             return true;
         }
+
 
         public bool isPointinRegion(Point pa)
         {
@@ -162,6 +171,7 @@ namespace Geometry
 
             return answer;
         }
+
 
         private bool insanityCheck()
         {
@@ -198,5 +208,6 @@ namespace Geometry
 
             return true;
         }
+
     }
 }

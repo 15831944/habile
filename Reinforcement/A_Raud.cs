@@ -15,11 +15,8 @@ namespace Reinforcement
     public class A_Raud : Raud
     {
         double _A;
-
-        double _Length;
-
+        
         public double A { get { return _A; } }
-        public double Length { get { return _Length; } }
 
         public A_Raud(G.Line main, int nr, int d, string teras) : base (main, nr, d, teras)
         {

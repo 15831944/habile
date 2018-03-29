@@ -17,13 +17,12 @@ namespace Reinforcement
         double _A;
         double _B;
         double _C;
-
-        double _Length;
+        
 
         public double A { get { return _A; } }
         public double B { get { return _B; } }
         public double C { get { return _C; } }
-        public double Length { get { return _Length; } }
+
 
         public U_Raud(G.Line side1, int z_dist, int nr, int d, string teras) : base(side1, nr, d, teras)
         {

@@ -21,13 +21,11 @@ namespace Reinforcement
         double _A;
         double _B;
         double _U;
-
-        double _Length;
+        
 
         public double A { get { return _A; } }
         public double B { get { return _B; } }
         public double U { get { return _U; } }
-        public double Length { get { return _Length; } }
 
 
         public C_Raud(G.Line main, G.Line side, int nr, int d, string teras) : base(main, nr, d, teras)

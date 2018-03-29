@@ -1,5 +1,5 @@
-﻿//#define BRX_APP
-#define ARX_APP
+﻿#define BRX_APP
+//#define ARX_APP
 
 using System;
 using System.Text;
@@ -50,7 +50,6 @@ namespace DMTCommands
 {
     partial class Tabler
     {
-
         public void bending_output(List<T.DrawingArea> fields)
         {
             foreach (T.DrawingArea f in fields)

@@ -107,9 +107,73 @@ namespace Logic_Reinf
 
             return true;
         }
+        
+
+        private bool AC_handler_replace_side(R.A_Raud a, R.C_Raud b)
+        {
+            G.Line t1 = a.makeLine();
+            G.Line t2 = b.makeMainLine();
+            G.Line t3 = b.makeSideLine();
+
+            G.Line new_a_line = new G.Line(a.StartPoint, b.IP);
+
+            G.Point new_c_start = t2.Start.move(_V_.Y_CONCRETE_COVER_DELTA, t2.getDirectionVector());
+            G.Point new_c_end = t2.End.move(_V_.Y_CONCRETE_COVER_DELTA, t2.getDirectionVector());
+
+            G.Point new_c_side_point = new_c_start.move(_V_.X_REINFORCEMENT_MAIN_ANCHOR_LENGTH, (-1) * t3.getDirectionVector());
+
+            G.Line new_c_side_line = new G.Line(new_c_side_point, new_c_start);
+            G.Line new_c_main_line = new G.Line(new_c_start, new_c_end);
+
+            R.A_Raud new_A = new R.A_Raud(new_a_line, a.Number, a.Diameter, a.Materjal);
+            R.C_Raud new_B = new R.C_Raud(new_c_main_line, new_c_side_line, b.Number, b.Diameter, b.Materjal);
+
+            if (denier(new_A.makeLine())) return false;
+            if (denier(new_B.makeSideLine())) return false;
+            if (denier(new_B.makeMainLine())) return false;
+
+            keep_replace(new_A, new_B, a, b);
+
+            return true;
+        }
+
+
+        private bool AC_handler_replace_main(R.A_Raud a, R.C_Raud b)
+        {
+            G.Line t1 = a.makeLine();
+            G.Line t2 = b.makeMainLine();
+            G.Line t3 = b.makeSideLine();
+
+            G.Line new_a_line = new G.Line(b.IP, a.EndPoint);
+
+            G.Point new_c_side_point = t3.Start.move(_V_.Y_CONCRETE_COVER_DELTA, (-1) * t3.getDirectionVector());
+            G.Point new_c_start = t3.End.move(_V_.Y_CONCRETE_COVER_DELTA, (-1) * t3.getDirectionVector());
+
+            G.Point new_c_end = new_c_start.move(_V_.X_REINFORCEMENT_MAIN_ANCHOR_LENGTH, t2.getDirectionVector());
+
+            G.Line new_c_side_line = new G.Line(new_c_side_point, new_c_start);
+            G.Line new_c_main_line = new G.Line(new_c_start, new_c_end);
+
+            R.A_Raud new_A = new R.A_Raud(new_a_line, a.Number, a.Diameter, a.Materjal);
+            R.C_Raud new_B = new R.C_Raud(new_c_main_line, new_c_side_line, b.Number, b.Diameter, b.Materjal);
+
+            if (denier(new_A.makeLine())) return false;
+            if (denier(new_B.makeSideLine())) return false;
+            if (denier(new_B.makeMainLine())) return false;
+
+            keep_replace(new_A, new_B, a, b);
+
+            return true;
+        }
 
 
         private void A_remover(R.A_Raud a)
+        {
+            keep_remove(a);
+        }
+
+
+        private void B_remover(R.B_Raud a)
         {
             keep_remove(a);
         }
@@ -164,7 +228,7 @@ namespace Logic_Reinf
             if (new_reinf_long.A < _V_.Y_REINFORCEMENT_MAIN_RADIUS) longD = false;
             if (new_reinf_long.B2 < _V_.Y_REINFORCEMENT_MAIN_RADIUS * 1.99) longD = false;
             if (new_reinf_long.C < _V_.Y_REINFORCEMENT_MAIN_RADIUS) longD = false;
-            if (new_reinf_long.Length > _V_.X_REINFORCEMENT_MAIN_MAX_D_LENGTH) longD = false;
+            if (new_reinf_long.Length > _V_.X_REINFORCEMENT_MAX_D_LENGTH) longD = false;
 
             if (longD == true)
             {
@@ -181,7 +245,7 @@ namespace Logic_Reinf
             if (new_reinf_normal.A < _V_.Y_REINFORCEMENT_MAIN_RADIUS) return false;
             if (new_reinf_normal.B2 < _V_.Y_REINFORCEMENT_MAIN_RADIUS * 1.99) return false;
             if (new_reinf_normal.C < _V_.Y_REINFORCEMENT_MAIN_RADIUS) return false;
-            if (new_reinf_long.Length > _V_.X_REINFORCEMENT_MAIN_MAX_D_LENGTH) return false;
+            if (new_reinf_long.Length > _V_.X_REINFORCEMENT_MAX_D_LENGTH) return false;
 
             keep_replace(new_reinf_normal, a, b);
 
@@ -201,7 +265,7 @@ namespace Logic_Reinf
             if (new_reinf_long.A < _V_.Y_REINFORCEMENT_MAIN_RADIUS) longD = false;
             if (new_reinf_long.B2 < _V_.Y_REINFORCEMENT_MAIN_RADIUS * 1.99) longD = false;
             if (new_reinf_long.C < _V_.Y_REINFORCEMENT_MAIN_RADIUS) longD = false;
-            if (new_reinf_long.Length > _V_.X_REINFORCEMENT_MAIN_MAX_D_LENGTH) longD = false;
+            if (new_reinf_long.Length > _V_.X_REINFORCEMENT_MAX_D_LENGTH) longD = false;
 
             if (longD == true)
             {
@@ -218,7 +282,7 @@ namespace Logic_Reinf
             if (new_reinf.A < _V_.Y_REINFORCEMENT_MAIN_RADIUS) return false;
             if (new_reinf.B2 < _V_.Y_REINFORCEMENT_MAIN_RADIUS * 1.99) return false;
             if (new_reinf.C < _V_.Y_REINFORCEMENT_MAIN_RADIUS) return false;
-            if (new_reinf_long.Length > _V_.X_REINFORCEMENT_MAIN_MAX_D_LENGTH) return false;
+            if (new_reinf_long.Length > _V_.X_REINFORCEMENT_MAX_D_LENGTH) return false;
 
             keep_replace(new_reinf, a, b);
 

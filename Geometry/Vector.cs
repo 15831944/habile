@@ -11,17 +11,20 @@ namespace Geometry
         public double X;
         public double Y;
 
+
         public Vector(double X, double Y)
         {
             this.X = X;
             this.Y = Y;
         }
 
+
         public double Length()
         {
             double len = Math.Sqrt(X * X + Y * Y);
             return len;
         }
+
 
         public Vector rotate(double rad)
         {
@@ -31,6 +34,7 @@ namespace Geometry
 
             return new_v;
         }
+
 
         public bool Equals(Vector other)
         {
@@ -46,6 +50,7 @@ namespace Geometry
             return false;
         }
 
+
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(null, obj)) return false;
@@ -54,35 +59,42 @@ namespace Geometry
             return Equals(obj as Vector);
         }
 
+
         public static bool operator ==(Vector a, Vector b)
         {
             return object.Equals(a, b);
         }
+
 
         public static bool operator !=(Vector a, Vector b)
         {
             return !object.Equals(a, b);
         }
 
+
         public static Vector operator *(double a, Vector b)
         {
             return new Vector(a * b.X, a * b.Y);
         }
+
 
         public static Vector operator /(Vector b, double a)
         {
             return new Vector(b.X / a, b.Y / a);
         }
 
+
         public static Vector operator +(Vector a, Vector b)
         {
             return new Vector(a.X + b.X, a.Y + b.Y);
         }
 
+
         public static Vector operator -(Vector a, Vector b)
         {
             return new Vector(a.X - b.X, a.Y - b.Y);
         }
+
 
         public override string ToString()
         {
@@ -90,6 +102,6 @@ namespace Geometry
 
             return str;
         }
+
     }
 }
-

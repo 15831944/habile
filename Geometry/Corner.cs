@@ -89,6 +89,14 @@ namespace Geometry
         }
 
 
+        public bool isReverseCorner()
+        {
+            if (Angle > Math.PI) return true;
+
+            return false;
+        }
+
+
         public bool Equals(Corner other)
         {
             if (other == null) return false;
@@ -116,11 +124,13 @@ namespace Geometry
             return !object.Equals(a, b);
         }
 
+
         public override string ToString()
         {
             //string str = "(Start) " + Start.ToString() + " \n(End) " + End.ToString() + " \n(Length) " + Length().ToString();
             string str = StartEdge.Line.ToString() + " " + EndEdge.Line.ToString();
             return str;
         }
+
     }
 }

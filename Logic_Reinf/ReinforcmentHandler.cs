@@ -30,17 +30,17 @@ namespace Logic_Reinf
         public ReinforcmentHandler(List<G.Line> polys)
         {
             DebugerWindow _debuger = new DebugerWindow();
-            _debuger.Show();
-            
+            //_debuger.Show();
+
             r = new G.Region(polys);
-            
+
             allEdges = new List<G.Edge>(r.edges);
             allCorners = new List<G.Corner>(r.corners);
 
             setEdges = new Dictionary<G.Edge, R.Raud>();
             setCorners = new Dictionary<G.Corner, R.Raud>();
             setLineSegment = new List<LineSegment>();
-            
+
             knownReinforcement = new List<R.Raud>();
             knownArrayReinforcement = new List<R.Raud_Array>();
             knownUniqueReinforcement = new List<R.Raud>();
@@ -72,7 +72,7 @@ namespace Logic_Reinf
         public void main(ref List<R.Raud> reinf, ref List<R.Raud_Array> reinf_array, ref List<R.Raud> unique_reinf)
         {
             create_all_main_reinforcement();
-            //create_all_side_reinforcement();
+            create_all_side_reinforcement();
 
             //Drawing_Box visu2 = new Drawing_Box(r, reinf_geometry_debug);
             //visu2.Show();
@@ -97,6 +97,7 @@ namespace Logic_Reinf
             executor(create_valid_A);
 
             executor(create_trimmed_long_A);
+            executor(create_trimmed_short_A);
 
             create_valid_D();
             create_oversized_D();
@@ -111,11 +112,14 @@ namespace Logic_Reinf
 
             create_valid_D();
             create_oversized_D();
+
             executor(create_extended_B);
             executor(create_long_B);
 
             executor(create_valid_B);
             executor(create_diagonal_A);
+
+            remove_double_B();
         }
 
 
@@ -127,6 +131,7 @@ namespace Logic_Reinf
             merge_C();
 
             merge_AB();
+            merge_AC();
         }
 
 
@@ -162,22 +167,23 @@ namespace Logic_Reinf
         private void create_all_A()
         {
             List<G.Edge> emptyEdges = allEdges.Where(x => !setEdges.Keys.Contains(x)).ToList();
-            emptyEdges = emptyEdges.OrderBy(b => b.Line.Length()).ToList();
+            emptyEdges = emptyEdges.OrderBy(b => b.Line.Length()).Reverse().ToList();
 
-            for (int i = emptyEdges.Count - 1; i >= 0; i--)
+            foreach (G.Edge e in emptyEdges)
             {
-                G.Edge e = emptyEdges[i];
-
                 if (narrow_denier(e)) continue;
-                
+
                 G.Line main = e.edgeOffset(_V_.X_CONCRETE_COVER_1, _V_.X_CONCRETE_COVER_1, _V_.X_CONCRETE_COVER_1);
 
-                double c1 = _V_.Y_REINFORCEMENT_MAIN_MIN_LENGTH;
-                bool c2 = e.StartCorner.Angle > Math.PI;
-                bool c3 = e.EndCorner.Angle > Math.PI;
+                if (e.StartCorner.Angle > Math.PI)
+                {
+                    main = main.extendStart(_V_.X_REINFORCEMENT_MAIN_ANCHOR_LENGTH);
+                }
 
-                if (c2) main = main.extendStart(_V_.X_REINFORCEMENT_MAIN_ANCHOR_LENGTH);
-                if (c3) main = main.extendEnd(_V_.X_REINFORCEMENT_MAIN_ANCHOR_LENGTH);
+                if (e.EndCorner.Angle > Math.PI)
+                {
+                    main = main.extendEnd(_V_.X_REINFORCEMENT_MAIN_ANCHOR_LENGTH);
+                }
 
                 A_handler(main.Start, main.End, e, null, _V_.X_REINFORCEMENT_MAIN_DIAMETER);
             }
@@ -187,17 +193,13 @@ namespace Logic_Reinf
         private void create_valid_A()
         {
             List<G.Edge> emptyEdges = allEdges.Where(x => !setEdges.Keys.Contains(x)).ToList();
-            emptyEdges = emptyEdges.OrderBy(b => b.Line.Length()).ToList();
+            emptyEdges = emptyEdges.OrderBy(b => b.Line.Length()).Reverse().ToList();
 
-            for (int i = emptyEdges.Count - 1; i >= 0; i--)
-            {
-                G.Edge e = emptyEdges[i];
+            foreach (G.Edge e in emptyEdges)
+            { 
                 if (narrow_denier(e)) continue;
                 
-                bool c1 = e.StartCorner.Angle > Math.PI;
-                bool c2 = e.EndCorner.Angle > Math.PI;
-
-                if (c1 && c2)
+                if (e.StartCorner.Angle > Math.PI && e.EndCorner.Angle > Math.PI)
                 {
                     G.Line main = e.edgeOffset(_V_.X_CONCRETE_COVER_1, _V_.X_CONCRETE_COVER_1, _V_.X_CONCRETE_COVER_1);
                     main = main.extendDouble(_V_.X_REINFORCEMENT_MAIN_ANCHOR_LENGTH);
@@ -210,45 +212,41 @@ namespace Logic_Reinf
         private void create_trimmed_long_A()
         {
             List<G.Edge> emptyEdges = allEdges.Where(x => !setEdges.Keys.Contains(x)).ToList();
-            emptyEdges = emptyEdges.OrderBy(b => b.Line.Length()).ToList();
+            emptyEdges = emptyEdges.OrderBy(b => b.Line.Length()).Reverse().ToList();
 
-            for (int i = emptyEdges.Count - 1; i >= 0; i--)
+            foreach (G.Edge e in emptyEdges)
             {
-                G.Edge e = emptyEdges[i];
-                
                 if (setEdges.Keys.Contains(e)) continue;
                 if (narrow_denier(e)) continue;
 
-                double c1 = _V_.Y_REINFORCEMENT_MAIN_MIN_LENGTH;
-                bool c2 = e.StartCorner.Angle > Math.PI;
-                bool c3 = e.EndCorner.Angle > Math.PI;
-
-                bool startTrimmed = false;
-                bool endTrimmed = false;
-                G.Edge startTrimmerEdge = null;
-                G.Edge endTrimmerEdge = null;
-                
                 G.Edge temp = null;
                 G.Line main = e.edgeOffset(_V_.X_CONCRETE_COVER_1, _V_.X_CONCRETE_COVER_1, _V_.X_CONCRETE_COVER_1);
                 main = trimLine_baseline(main, main.Copy(), _V_.X_CONCRETE_COVER_1, e, ref temp);
 
-                if (c2)
+
+                bool startTrimmed = false;
+                G.Edge startTrimmerEdge = null;
+                if (e.StartCorner.Angle > Math.PI)
                 {
                     G.Line extended = main.extendStart(_V_.X_REINFORCEMENT_MAIN_ANCHOR_LENGTH);
-                    G.Line trimmed = trimLine_basepoint(extended, main.End, _V_.X_CONCRETE_COVER_2, e, ref startTrimmerEdge); ///////GGGG
+                    G.Line trimmed = trimLine_basepoint(extended, main.End, _V_.X_CONCRETE_COVER_2, e, ref startTrimmerEdge);
                     if (trimmed.Length() < main.Length() + _V_.X_REINFORCEMENT_MAIN_ANCHOR_LENGTH * _V_.M_TRIM_TOLERANCE) startTrimmed = true;
                     main = trimmed;
                 }
 
-                if (c3)
+
+                bool endTrimmed = false;
+                G.Edge endTrimmerEdge = null;
+                if (e.EndCorner.Angle > Math.PI)
                 {
                     G.Line extended = main.extendEnd(_V_.X_REINFORCEMENT_MAIN_ANCHOR_LENGTH);
-                    G.Line trimmed = trimLine_basepoint(extended, main.Start, _V_.X_CONCRETE_COVER_2, e, ref endTrimmerEdge); ///////GGGG
+                    G.Line trimmed = trimLine_basepoint(extended, main.Start, _V_.X_CONCRETE_COVER_2, e, ref endTrimmerEdge);
                     if (trimmed.Length() < main.Length() + _V_.X_REINFORCEMENT_MAIN_ANCHOR_LENGTH * _V_.M_TRIM_TOLERANCE) endTrimmed = true;
                     main = trimmed;
                 }
-                
-                if (main.Length() > c1)
+
+
+                if (main.Length() > _V_.Y_REINFORCEMENT_MAIN_MIN_LENGTH)
                 {
                     A_handler(main.Start, main.End, e, null, _V_.X_REINFORCEMENT_MAIN_DIAMETER);
 
@@ -303,29 +301,22 @@ namespace Logic_Reinf
         private void create_trimmed_short_A()
         {
             List<G.Edge> emptyEdges = allEdges.Where(x => !setEdges.Keys.Contains(x)).ToList();
-            emptyEdges = emptyEdges.OrderBy(b => b.Line.Length()).Reverse().ToList();
+            emptyEdges = emptyEdges.OrderBy(b => b.Line.Length()).ToList();
             
-            for (int i = emptyEdges.Count - 1; i >= 0; i--)
+            foreach (G.Edge e in emptyEdges)
             {
-                G.Edge e = emptyEdges[i];
-
                 if (setEdges.Keys.Contains(e)) continue;
                 if (narrow_denier(e)) continue;
-                
-                double c1 = _V_.Y_REINFORCEMENT_MAIN_MIN_LENGTH;
-                bool c2 = e.StartCorner.Angle > Math.PI;
-                bool c3 = e.EndCorner.Angle > Math.PI;
 
-                bool startTrimmed = false;
-                bool endTrimmed = false;
-                G.Edge startTrimmerEdge = null;
-                G.Edge endTrimmerEdge = null;
 
                 G.Edge temp = null;
                 G.Line main = e.edgeOffset(_V_.X_CONCRETE_COVER_1, _V_.X_CONCRETE_COVER_1, _V_.X_CONCRETE_COVER_1);
                 main = trimLine_baseline(main, main.Copy(), _V_.X_CONCRETE_COVER_2, e, ref temp);
 
-                if (c2)
+
+                bool startTrimmed = false;
+                G.Edge startTrimmerEdge = null;
+                if (e.StartCorner.Angle > Math.PI)
                 {
                     G.Line extended = main.extendStart(_V_.X_REINFORCEMENT_MAIN_ANCHOR_LENGTH);
                     G.Line trimmed = trimLine_basepoint(extended, main.End, _V_.X_CONCRETE_COVER_2, e, ref startTrimmerEdge);
@@ -333,15 +324,19 @@ namespace Logic_Reinf
                     main = trimmed;
                 }
 
-                if (c3)
+
+                bool endTrimmed = false;
+                G.Edge endTrimmerEdge = null;
+                if (e.EndCorner.Angle > Math.PI)
                 {
                     G.Line extended = main.extendEnd(_V_.X_REINFORCEMENT_MAIN_ANCHOR_LENGTH);
                     G.Line trimmed = trimLine_basepoint(extended, main.Start, _V_.X_CONCRETE_COVER_2, e, ref endTrimmerEdge);
                     if (trimmed.Length() < main.Length() + _V_.X_REINFORCEMENT_MAIN_ANCHOR_LENGTH * _V_.M_TRIM_TOLERANCE) endTrimmed = true;
                     main = trimmed;
                 }
-                
-                if (main.Length() <= c1)
+
+
+                if (main.Length() <= _V_.Y_REINFORCEMENT_MAIN_MIN_LENGTH)
                 {
                     if (startTrimmed && endTrimmed)
                     {
@@ -456,7 +451,7 @@ namespace Logic_Reinf
                                 if (got_D)
                                 {
                                     A_handler(main.Start, main.End, e, null, _V_.X_REINFORCEMENT_MAIN_DIAMETER);
-                                }                                
+                                }
                             }
                             else
                             {
@@ -478,9 +473,8 @@ namespace Logic_Reinf
         {
             List<G.Corner> emptyCorners = allCorners.Where(x => !setCorners.Keys.Contains(x)).ToList();
 
-            for (int i = emptyCorners.Count - 1; i >= 0; i--)
+            foreach (G.Corner ec in emptyCorners)
             {
-                G.Corner ec = emptyCorners[i];
                 G.Edge se = ec.StartEdge;
                 G.Edge ee = ec.EndEdge;
 
@@ -501,7 +495,6 @@ namespace Logic_Reinf
                     }
 
                     A_handler(tester.Start, tester.End, null, ec, _V_.X_REINFORCEMENT_DIAGONAL_DIAMETER);
-
                 }
             }
         }
@@ -511,9 +504,8 @@ namespace Logic_Reinf
         {
             List<G.Corner> emptyCorners = allCorners.Where(x => !setCorners.Keys.Contains(x)).ToList();
 
-            for (int i = emptyCorners.Count - 1; i >= 0; i--)
+            foreach (G.Corner ec in emptyCorners)
             {
-                G.Corner ec = emptyCorners[i];
                 G.Edge se = ec.StartEdge;
                 G.Edge ee = ec.EndEdge;
 
@@ -531,42 +523,10 @@ namespace Logic_Reinf
         private void create_extended_B()
         {
             List<G.Edge> emptyEdges = allEdges.Where(x => !setEdges.Keys.Contains(x)).ToList();
-            emptyEdges = emptyEdges.OrderBy(b => b.Line.Length()).ToList();
+            emptyEdges = emptyEdges.OrderBy(b => b.Line.Length()).Reverse().ToList();
 
-            for (int i = emptyEdges.Count - 1; i >= 0; i--)
+            foreach (G.Edge e in emptyEdges)
             {
-                G.Edge e = emptyEdges[i];
-                G.Corner sc = e.StartCorner;
-                G.Corner ec = e.EndCorner;
-
-                bool c1 = sc.Angle > Math.PI;
-                bool c2 = ec.Angle > Math.PI;
-
-                if (c1 && c2) continue;
-                if (!c1 && !c2) continue;
-                
-                if (c1) //startCorner >> math.pi
-                {
-                    G.Edge otherEdge = ec.getOtherEdge(e);
-                    define_B(otherEdge, e);
-                }
-                else if (c2)//endCorner >> math.pi
-                {
-                    G.Edge otherEdge = sc.getOtherEdge(e);
-                    define_B(e, otherEdge);
-                }
-            }
-        }
-
-
-        private void create_oversized_B()
-        {
-            List<G.Edge> emptyEdges = allEdges.Where(x => !setEdges.Keys.Contains(x)).ToList();
-            emptyEdges = emptyEdges.OrderBy(b => b.Line.Length()).ToList();
-
-            for (int i = emptyEdges.Count - 1; i >= 0; i--)
-            {
-                G.Edge e = emptyEdges[i];
                 G.Corner sc = e.StartCorner;
                 G.Corner ec = e.EndCorner;
 
@@ -581,23 +541,22 @@ namespace Logic_Reinf
                     G.Edge otherEdge = ec.getOtherEdge(e);
                     define_B(otherEdge, e);
                 }
-                else if (c2)//endCorner >> math.pi
+                else if (c2) //endCorner >> math.pi
                 {
                     G.Edge otherEdge = sc.getOtherEdge(e);
                     define_B(e, otherEdge);
                 }
             }
         }
-
+        
 
         private void create_long_B()
         {
             List<G.Edge> emptyEdges = allEdges.Where(x => !setEdges.Keys.Contains(x)).ToList();
-            emptyEdges = emptyEdges.OrderBy(b => b.Line.Length()).ToList();
+            emptyEdges = emptyEdges.OrderBy(b => b.Line.Length()).Reverse().ToList();
 
-            for (int i = emptyEdges.Count - 1; i >= 0; i--)
+            foreach (G.Edge e in emptyEdges)
             {
-                G.Edge e = emptyEdges[i];
                 G.Corner sc = e.StartCorner;
                 G.Corner ec = e.EndCorner;
 
@@ -626,11 +585,10 @@ namespace Logic_Reinf
         private void create_valid_D()
         {
             List<G.Edge> emptyEdges = allEdges.Where(x => !setEdges.Keys.Contains(x)).ToList();
-            emptyEdges = emptyEdges.OrderBy(b => b.Line.Length()).ToList();
+            emptyEdges = emptyEdges.OrderBy(b => b.Line.Length()).Reverse().ToList();
 
-            for (int i = emptyEdges.Count - 1; i >= 0; i--)
+            foreach (G.Edge e in emptyEdges)
             {
-                G.Edge e = emptyEdges[i];
                 G.Corner sc = e.StartCorner;
                 G.Corner ec = e.EndCorner;
 
@@ -655,14 +613,13 @@ namespace Logic_Reinf
         private void create_oversized_D()
         {
             List<G.Edge> emptyEdges = allEdges.Where(x => !setEdges.Keys.Contains(x)).ToList();
-            emptyEdges = emptyEdges.OrderBy(b => b.Line.Length()).ToList();
+            emptyEdges = emptyEdges.OrderBy(b => b.Line.Length()).Reverse().ToList();
 
-            for (int i = emptyEdges.Count - 1; i >= 0; i--)
+            foreach (G.Edge e in emptyEdges)
             {
-                G.Edge e = emptyEdges[i];
                 G.Corner sc = e.StartCorner;
                 G.Corner ec = e.EndCorner;
-                
+
                 G.Edge side1Edge = sc.getOtherEdge(e);
                 G.Edge side2Edge = ec.getOtherEdge(e);
 
@@ -682,7 +639,7 @@ namespace Logic_Reinf
                             if (side2Edge.Line.Length() < _V_.Y_REINFORCEMENT_MAIN_MIN_LENGTH)
                             {
                                 define_simple_D(e, side1Edge, side2Edge);
-                            }                                
+                            }
                         }
                     }
                     else if (!c5)
@@ -700,7 +657,7 @@ namespace Logic_Reinf
                         }
                     }
                 }
-                
+
             }
 
         }
@@ -708,14 +665,12 @@ namespace Logic_Reinf
 
         private void remove_short_A()
         {
-            double c1 = _V_.Y_REINFORCEMENT_MAIN_MIN_LENGTH * 0.9;
-
             List<R.Raud> onlyA = knownReinforcement.Where(x => x is R.A_Raud).ToList();
             for (int i = onlyA.Count - 1; i >= 0; i--)
             {
                 R.A_Raud a = knownReinforcement[i] as R.A_Raud;
 
-                if (a.Length < c1)
+                if (a.Length < _V_.X_REINFORCEMENT_REMOVE_A_LENGTH)
                 {
                     A_remover(a);
                 }
@@ -739,15 +694,17 @@ namespace Logic_Reinf
                     List<R.Raud> same = not.Where(x => a.Diameter == x.Diameter).ToList();
                     List<R.Raud> colinear = same.Where(x => G.Line.areLinesCoLinear(a.makeLine(), (x as R.A_Raud).makeLine(), 3)).ToList();
 
-                    if (colinear.Count > 0)
+                    foreach (R.A_Raud b in colinear)
                     {
-                        bool success = A_handler_replace(a, colinear[0] as R.A_Raud);
+                        bool success = A_handler_replace(a, b);
                         if (success)
                         {
                             restartLoop = true;
                             break;
                         }
                     }
+
+                    if (restartLoop) break;
                 }
             }
 
@@ -762,19 +719,21 @@ namespace Logic_Reinf
                 {
                     List<R.Raud> not = onlyA.Where(x => !ReferenceEquals(a, x)).ToList();
                     List<R.Raud> same = not.Where(x => a.Diameter == x.Diameter).ToList();
-                    List<R.Raud> colinear = same.Where(x => G.Line.areLinesCoLinear(a.makeLine().extendDouble(_V_.X_MERGE_EXTEND_DOUBLE_DIST), 
+                    List<R.Raud> colinear = same.Where(x => G.Line.areLinesCoLinear(a.makeLine().extendDouble(_V_.X_MERGE_EXTEND_DOUBLE_DIST),
                                                                                     (x as R.A_Raud).makeLine().extendDouble(_V_.X_MERGE_EXTEND_DOUBLE_DIST), 3))
                                                                                     .ToList();
 
-                    if (colinear.Count > 0)
+                    foreach (R.A_Raud b in colinear)
                     {
-                        bool success = A_handler_replace(a, colinear[0] as R.A_Raud);
+                        bool success = A_handler_replace(a, b);
                         if (success)
                         {
                             restartLoop = true;
                             break;
                         }
                     }
+
+                    if (restartLoop) break;
                 }
             }
         }
@@ -819,7 +778,7 @@ namespace Logic_Reinf
                 {
                     List<R.Raud> not = onlyB.Where(x => !ReferenceEquals(a, x)).ToList();
                     List<R.Raud> same = not.Where(x => a.Diameter == x.Diameter).ToList();
-                    List<R.Raud> colinear = same.Where(x => G.Line.areLinesCoLinear(a.makeMainLine().extendEnd(_V_.X_MERGE_EXTEND_SINGLE_DIST), 
+                    List<R.Raud> colinear = same.Where(x => G.Line.areLinesCoLinear(a.makeMainLine().extendEnd(_V_.X_MERGE_EXTEND_SINGLE_DIST),
                                                                                     (x as R.B_Raud).makeSideLine().extendStart(_V_.X_MERGE_EXTEND_SINGLE_DIST), 3))
                                                                                     .ToList();
 
@@ -908,7 +867,7 @@ namespace Logic_Reinf
                 foreach (R.A_Raud a in onlyA)
                 {
                     List<R.Raud> same = onlyB.Where(x => a.Diameter == x.Diameter).ToList();
-                    List<R.Raud> colinear = same.Where(x => G.Line.areLinesCoLinear(a.makeLine(), (x as R.B_Raud).makeSideLine(), 3)).ToList();
+                    List<R.Raud> colinear = same.Where(x => G.Line.areLinesCoLinear(a.makeLine().extendDouble(_V_.X_MERGE_EXTEND_DOUBLE_DIST), (x as R.B_Raud).makeSideLine(), 3)).ToList();
 
                     if (colinear.Count > 0)
                     {
@@ -929,7 +888,7 @@ namespace Logic_Reinf
 
                     }
 
-                    colinear = same.Where(x => G.Line.areLinesCoLinear(a.makeLine(), (x as R.B_Raud).makeMainLine(), 3)).ToList();
+                    colinear = same.Where(x => G.Line.areLinesCoLinear(a.makeLine(), (x as R.B_Raud).makeMainLine().extendDouble(_V_.X_MERGE_EXTEND_DOUBLE_DIST), 3)).ToList();
 
                     if (colinear.Count > 0)
                     {
@@ -950,7 +909,99 @@ namespace Logic_Reinf
                     }
                 }
             }
-
         }
+
+        private void merge_AC()
+        {
+            bool restartLoop = true;
+
+            while (restartLoop)
+            {
+                restartLoop = false;
+
+                List<R.Raud> onlyA = knownReinforcement.Where(x => x is R.A_Raud).ToList();
+                List<R.Raud> onlyC = knownReinforcement.Where(x => x is R.C_Raud).ToList();
+
+                foreach (R.A_Raud a in onlyA)
+                {
+                    List<R.Raud> same = onlyC.Where(x => a.Diameter == x.Diameter).ToList();
+                    List<R.Raud> colinear = same.Where(x => G.Line.areLinesCoLinear(a.makeLine().extendDouble(_V_.X_MERGE_EXTEND_DOUBLE_DIST), (x as R.C_Raud).makeSideLine(), 3)).ToList();
+
+                    if (colinear.Count > 0)
+                    {
+                        foreach (R.C_Raud b in colinear)
+                        {
+                            if (b.IP.isInBounds(a.makeLine())) continue;
+                            if (b.makeMainLine().Length() > _V_.X_REINFORCEMENT_MAIN_ANCHOR_LENGTH * 1.1) continue;
+
+                            bool success = AC_handler_replace_side(a, b);
+                            if (success)
+                            {
+                                restartLoop = true;
+                                break;
+                            }
+                        }
+
+                        if (restartLoop == true) break;
+
+                    }
+
+                    colinear = same.Where(x => G.Line.areLinesCoLinear(a.makeLine(), (x as R.C_Raud).makeMainLine().extendDouble(_V_.X_MERGE_EXTEND_DOUBLE_DIST), 3)).ToList();
+
+                    if (colinear.Count > 0)
+                    {
+                        foreach (R.C_Raud b in colinear)
+                        {
+                            if (b.IP.isInBounds(a.makeLine())) continue;
+                            if (b.makeSideLine().Length() > _V_.X_REINFORCEMENT_MAIN_ANCHOR_LENGTH * 1.1) continue;
+
+                            bool success = AC_handler_replace_main(a, b);
+                            if (success)
+                            {
+                                restartLoop = true;
+                                break;
+                            }
+
+                            if (restartLoop == true) break;
+                        }
+                    }
+                }
+            }
+        }
+
+
+        private void remove_double_B()
+        {
+            bool restartLoop = true;
+            while (restartLoop)
+            {
+                restartLoop = false;
+
+                List<R.Raud> onlyB = knownReinforcement.Where(x => x is R.B_Raud).ToList();
+
+                foreach (R.B_Raud a in onlyB)
+                {
+                    List<R.Raud> not = onlyB.Where(x => !ReferenceEquals(a, x)).ToList();
+                    List<R.Raud> same = not.Where(x => a.IP == x.IP).ToList();
+
+                    foreach (R.B_Raud b in same)
+                    {
+                        if (a.Diameter != b.Diameter) continue;
+                        if (Math.Round(Math.Abs((a.Rotation - b.Rotation)), 2) > 0.01) continue;
+                        
+                        if (a.A < b.A) continue;
+                        if (a.B < b.B) continue;
+                        
+                        B_remover(b);
+
+                        restartLoop = true;
+                        break;
+                    }
+
+                    if (restartLoop == true) break;
+                }
+            }
+        }        
+
     }
 }

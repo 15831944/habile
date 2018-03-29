@@ -32,8 +32,7 @@ namespace Reinforcement
         double _V;
         double _X;
         double _Y;
-
-        double _Length;
+        
 
         public double A { get { return _A; } }
         public double B { get { return _B; } }
@@ -43,7 +42,6 @@ namespace Reinforcement
         public double V { get { return _V; } }
         public double X { get { return _X; } }
         public double Y { get { return _Y; } }
-        public double Length { get { return _Length; } }
 
 
         public E_Raud(G.Line main, G.Line side1, G.Line side2, int nr, int d, string teras, int parand = 0) : base(main, nr, d, teras)

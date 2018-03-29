@@ -11,11 +11,13 @@ namespace Geometry
         public double L;
         public double angle;
 
+
         public Polar(double L, double ang)
         {
             this.L = L;
             this.angle = Converter.Wrap(ang);
         }
+
 
         public Polar rotate(double ang)
         {
@@ -25,11 +27,13 @@ namespace Geometry
             return new_d;
         }
 
+
         public bool Equals(Polar other)
         {
             if (other == null) return false;
             return (this.L == other.L) && (this.angle == other.angle);
         }
+
 
         public override bool Equals(object obj)
         {
@@ -39,15 +43,18 @@ namespace Geometry
             return Equals(obj as Polar);
         }
 
+
         public static bool operator ==(Polar a, Polar b)
         {
             return object.Equals(a, b);
         }
 
+
         public static bool operator !=(Polar a, Polar b)
         {
             return !object.Equals(a, b);
         }
+
 
         public override string ToString()
         {

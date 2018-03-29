@@ -11,11 +11,13 @@ namespace Geometry
         Point _min;
         Point _max;
 
+
         public Area(Point min, Point max)
         {
             _min = min;
             _max = max;
         }
+
 
         public bool isPointInArea(Point p)
         {
@@ -26,5 +28,6 @@ namespace Geometry
 
             return true;
         }
+
     }
 }

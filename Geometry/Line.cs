@@ -12,6 +12,7 @@ namespace Geometry
         public Point Start;
         public Point End;
 
+
         public Line(Point Start, Point End)
         {
             if (Start == End)
@@ -22,6 +23,7 @@ namespace Geometry
             this.Start = Start;
             this.End = End;
         }
+
 
         public Line(Point Center, double distance, Vector v1)
         {
@@ -40,7 +42,7 @@ namespace Geometry
             return new Line(End, Start);
         }
 
-
+            
         public Line Copy()
         {
             Point new_start = new Point(Start.X, Start.Y);
@@ -49,6 +51,7 @@ namespace Geometry
 
             return new_line;
         }
+
 
         public double Length()
         {
@@ -60,6 +63,7 @@ namespace Geometry
             return len;
         }
 
+
         public Point getCenterPoint()
         {
             double cX = Start.X + ((End.X - Start.X) / 2);
@@ -69,6 +73,7 @@ namespace Geometry
 
             return center;
         }
+
 
         public Line extendStart(double dist)
         {
@@ -80,6 +85,7 @@ namespace Geometry
             return new_line;
         }
 
+
         public Line extendEnd(double dist)
         {
             Vector dir = getDirectionVector();
@@ -90,6 +96,7 @@ namespace Geometry
             return new_line;
         }
         
+
         public Line extendDouble(double dist)
         {
             Vector dir = getDirectionVector();
@@ -99,6 +106,7 @@ namespace Geometry
 
             return new_line;
         }
+
 
         public Vector getDirectionVector()
         {
@@ -115,6 +123,7 @@ namespace Geometry
             return unit;
         }
 
+
         public Vector getTopVector(Vector one)
         {
             Vector other = getDirectionVector();
@@ -127,6 +136,7 @@ namespace Geometry
             return other;
         }
 
+
         public Vector getBottomVector(Vector one)
         {
             Vector other = getDirectionVector();
@@ -138,6 +148,7 @@ namespace Geometry
 
             return other;
         }
+
 
         public Vector getCoolVector(Vector one)
         {
@@ -157,6 +168,7 @@ namespace Geometry
             }
         }
 
+
         public Vector getOffsetVector()
         {
             Vector unit = getDirectionVector();
@@ -165,11 +177,13 @@ namespace Geometry
             return u90;
         }
 
+
         public Point getOtherPoint(Point one)
         {
             if (one == Start) return End;
             else return Start;
         }
+
 
         public Line Offset(double offset)
         {
@@ -184,6 +198,7 @@ namespace Geometry
             return new_line;
         }
 
+
         public Line rotation(Point startPoint, double angle)
         {
             Vector a_s = new Vector(Start.X - startPoint.X, Start.Y - startPoint.Y);
@@ -197,6 +212,7 @@ namespace Geometry
 
             return projection;
         }
+
 
         public static Line merge(Line line_a, Line line_b)
         {
@@ -234,6 +250,7 @@ namespace Geometry
             return merged_line;
         }
 
+
         public static bool areLinesOnSameLine(Line line_a, Line line_b, double X_TOLERANCE = 1)
         {
             Vector v1 = line_a.getDirectionVector();
@@ -253,6 +270,7 @@ namespace Geometry
 
             return true;
         }
+
 
         public static bool areLinesCoLinear(Line line_a, Line line_b, double X_TOLERANCE = 1)
         {
@@ -274,6 +292,7 @@ namespace Geometry
 
             return false;
         }
+
 
         public static bool hasIntersection(Line line_a, Line line_b)
         {
@@ -321,6 +340,7 @@ namespace Geometry
             return true;
         }
 
+
         private static int side(Point a, Point b, Point c)
         {
             double dd = (c.Y - a.Y) * (b.X - a.X) - (b.Y - a.Y) * (c.X - a.X);
@@ -333,6 +353,7 @@ namespace Geometry
 
             return r;
         }
+
 
         public static Point getIntersectionPoint(Line line_a, Line line_b)
         {
@@ -379,14 +400,15 @@ namespace Geometry
             {
                 throw new LineNoIntersectionException();
             }
-
         }
+
 
         public bool Equals(Line other)
         {
             if (other == null) return false;
             return (this.Start == other.Start && this.End == other.End);
         }
+
 
         public override bool Equals(object obj)
         {
@@ -396,15 +418,18 @@ namespace Geometry
             return Equals(obj as Line);
         }
 
+
         public static bool operator ==(Line a, Line b)
         {
             return object.Equals(a, b);
         }
 
+
         public static bool operator !=(Line a, Line b)
         {
             return !object.Equals(a, b);
         }
+
 
         public override string ToString()
         {

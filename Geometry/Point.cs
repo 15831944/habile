@@ -11,11 +11,13 @@ namespace Geometry
         public double X;
         public double Y;
 
+
         public Point(double X, double Y)
         {
             this.X = X;
             this.Y = Y;
         }
+
 
         public Point move(double distance, Vector direction)
         {
@@ -29,6 +31,7 @@ namespace Geometry
 
             return new_point;
         }
+
 
         public double distanceTo(Point target)
         {
@@ -63,8 +66,7 @@ namespace Geometry
             if (d1 < d2) return one;
             else return two;
         }
-
-        //TODO distanceTo (Line)
+        
 
         public bool Equals(Point other)
         {
@@ -74,6 +76,7 @@ namespace Geometry
             return (dL < _Variables.EQUALS_TOLERANCE);
         }
 
+
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(null, obj)) return false;
@@ -82,20 +85,24 @@ namespace Geometry
             return Equals(obj as Point);
         }
 
+
         public static Point operator +(Point a, Vector b)
         {
             return new Point(a.X + b.X, a.Y + b.Y);
         }
+
 
         public static bool operator ==(Point a, Point b)
         {
             return object.Equals(a, b);
         }
 
+
         public static bool operator !=(Point a, Point b)
         {
             return !object.Equals(a, b);
         }
+
 
         public override string ToString()
         {
@@ -105,5 +112,6 @@ namespace Geometry
 
             return str;
         }
+
     }
 }

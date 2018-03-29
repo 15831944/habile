@@ -126,7 +126,7 @@ namespace Logic_Reinf
             bool side2Set = setEdges.Keys.Contains(side2Edge);
 
             double cover1 = _V_.X_CONCRETE_COVER_2;
-            double coverMain = _V_.X_CONCRETE_COVER_2;
+            double coverMain = _V_.X_CONCRETE_COVER_1;
             double cover2 = _V_.X_CONCRETE_COVER_2;
             int parand = 2 * _V_.Y_CONCRETE_COVER_DELTA - 10; // parand magic
 
@@ -134,10 +134,10 @@ namespace Logic_Reinf
             double mainDist = mainEdge.Line.Length();
             double side2Dist = _V_.X_REINFORCEMENT_MAIN_ANCHOR_LENGTH;
 
-            //if (mainSet == true)
-            //{
-            //    coverMain = coverMain + _V_.Y_CONCRETE_COVER_DELTA;
-            //}
+            if (mainSet == true)
+            {
+                coverMain = coverMain + _V_.Y_CONCRETE_COVER_DELTA;
+            }
 
             G.Corner startCorner = null;
             G.Point IP1 = getCornerPoint(side1Edge, mainEdge, cover1, coverMain, ref startCorner);
@@ -216,14 +216,14 @@ namespace Logic_Reinf
 
             bool success = false;
 
-            //if (mainSet == true)
-            //{
-                 success = D_vs_E_handler(IP1, IP2, side1Start, side2End, null, startCorner, endCorner, parand); // parand magic
-            //}
-            //else
-            //{
-            //    success = D_vs_E_handler(IP1, IP2, side1Start, side2End, mainEdge, startCorner, endCorner, parand); // parand magic
-            //}
+            if (mainSet == true)
+            {
+                success = D_vs_E_handler(IP1, IP2, side1Start, side2End, null, startCorner, endCorner, parand); // parand magic
+            }
+            else
+            {
+                success = D_vs_E_handler(IP1, IP2, side1Start, side2End, mainEdge, startCorner, endCorner, parand); // parand magic
+            }
 
 
             return success;

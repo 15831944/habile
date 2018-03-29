@@ -28,8 +28,7 @@ namespace Geometry
 
             double new_X = (pa.X + dX) * 5;
             double new_Y = pa.Y;
-
-            //Point pe = new Point(new_X, new_Y);
+            
             Point pe = pa.move(dL, v);
             Line testLine = new Line(pa, pe);
 
@@ -46,6 +45,7 @@ namespace Geometry
             return answer;
         }
 
+
         private static void find_boundries(List<Line> contours, ref double min_X, ref double max_X, ref double min_Y, ref double max_Y)
         {
             foreach (Line ln in contours)
@@ -61,5 +61,6 @@ namespace Geometry
                 if (ln.End.Y > max_Y) max_Y = ln.End.Y;
             }
         }
+
     }
 }

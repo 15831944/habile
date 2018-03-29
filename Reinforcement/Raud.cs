@@ -13,12 +13,13 @@ namespace Reinforcement
         internal G.Point _StartPoint;
         internal G.Point _EndPoint;
         internal G.Point _IP;
+        internal double _Length;
 
         double _Rotation;
 
         int _Number;
         int _Diameter;
-        string _Materjal;
+        string _Materjal;        
 
         public G.Point StartPoint { get { return _StartPoint; } }
         public G.Point EndPoint { get { return _EndPoint; } }
@@ -27,6 +28,7 @@ namespace Reinforcement
         public int Number { get { return _Number; } }
         public int Diameter { get { return _Diameter; } }
         public string Materjal { get { return _Materjal; } }
+        public double Length { get { return _Length; } }
 
         public Raud(G.Line main, int nr, int d, string teras)
         {
