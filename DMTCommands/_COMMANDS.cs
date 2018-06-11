@@ -275,5 +275,41 @@ namespace DMTCommands
             }
         }
 
+
+        [_Trx.CommandMethod("A123")]
+        public void A123()
+        {
+            try
+            {
+                _CONNECTION c = new _CONNECTION();
+
+                try
+                {
+                    //FindReplacer program = new FindReplacer(ref c);
+                    //program.run();
+                    c.ed.WriteMessage("\n[DONE]");
+
+                }
+                catch (DMTException de)
+                {
+                    c.ed.WriteMessage("\n" + de.Message);
+                }
+                catch (Exception ex)
+                {
+                    c.ed.WriteMessage("\n[ERROR] Unknown Exception");
+                    c.ed.WriteMessage("\n[ERROR] " + ex.Message);
+                    c.ed.WriteMessage("\n[ERROR] " + ex.TargetSite);
+                }
+                finally
+                {
+                    c.close();
+                }
+            }
+            catch
+            {
+                _SWF.MessageBox.Show("\n[ERROR] Connection to BricsCad/AutoCad failed.");
+            }
+        }
+
     }
 }
