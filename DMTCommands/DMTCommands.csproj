@@ -59,7 +59,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
+    <Compile Include="CsvWriter.cs" />
     <Compile Include="FindReplacer.cs" />
     <Compile Include="_COMMANDS.cs" />
     <Compile Include="Tabler_Checker_Outputs.cs" />

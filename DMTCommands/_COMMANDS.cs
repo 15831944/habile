@@ -1,5 +1,5 @@
-﻿#define BRX_APP
-//#define ARX_APP
+﻿//#define BRX_APP
+#define ARX_APP
 
 using System;
 using System.Text;
@@ -285,8 +285,8 @@ namespace DMTCommands
 
                 try
                 {
-                    //FindReplacer program = new FindReplacer(ref c);
-                    //program.run();
+                    CsvWriter program = new CsvWriter(ref c);
+                    program.run();
                     c.ed.WriteMessage("\n[DONE]");
 
                 }
