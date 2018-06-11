@@ -52,6 +52,8 @@ namespace DMTCommands
     {
         _CONNECTION _c;
 
+        static string[] newBoxNames = { "KN-C", "KN-V27" };
+        Dictionary<_Area_v2, List<_Mark>> local_stats;
 
         public Class1(ref _CONNECTION c)
         {
@@ -61,7 +63,15 @@ namespace DMTCommands
 
         public void run()
         {
+            List<_Area_v2> areas = getAllAreas(newBoxNames);
 
+            if (areas.Count < 1)
+            {
+                string names = string.Join(", ", newBoxNames.ToArray());
+                writeCadMessage("[ERROR] - (" + names + ") not found");
+            }
+
+            local_stats = new Dictionary<_Area_v2, List<_Mark>>();
         }
         
 
