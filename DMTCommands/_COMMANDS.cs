@@ -1,5 +1,5 @@
-﻿//#define BRX_APP
-#define ARX_APP
+﻿#define BRX_APP
+//#define ARX_APP
 
 using System;
 using System.Text;
@@ -99,10 +99,12 @@ namespace DMTCommands
             {
                 _CONNECTION c = new _CONNECTION();
 
+                Reinforcer program = new Reinforcer(ref c);
+
                 try
                 {
-                    Reinforcer program = new Reinforcer(ref c);
                     program.run();
+
                     c.ed.WriteMessage("\n[DONE]");
                 }
                 catch (DMTException de)
@@ -134,10 +136,12 @@ namespace DMTCommands
             {
                 _CONNECTION c = new _CONNECTION();
 
+                Tabler program = new Tabler(ref c);
+
                 try
                 {
-                    Tabler program = new Tabler(ref c);
                     program.bending();
+
                     c.ed.WriteMessage("\n[DONE]");
                 }
                 catch (DMTException de)
@@ -169,10 +173,12 @@ namespace DMTCommands
             {
                 _CONNECTION c = new _CONNECTION();
 
+                Tabler program = new Tabler(ref c);
+
                 try
                 {
-                    Tabler program = new Tabler(ref c);
                     program.material();
+
                     c.ed.WriteMessage("\n[DONE]");
                 }
                 catch (DMTException de)
@@ -204,12 +210,13 @@ namespace DMTCommands
             {
                 _CONNECTION c = new _CONNECTION();
 
+                Tabler program = new Tabler(ref c);
+
                 try
                 {
-                    Tabler program = new Tabler(ref c);
                     program.check();
-                    c.ed.WriteMessage("\n[DONE]");
 
+                    c.ed.WriteMessage("\n[DONE]");
                 }
                 catch (DMTException de)
                 {
@@ -247,12 +254,13 @@ namespace DMTCommands
             {
                 _CONNECTION c = new _CONNECTION();
 
+                FindReplacer program = new FindReplacer(ref c);
+
                 try
                 {
-                    FindReplacer program = new FindReplacer(ref c);
                     program.run();
-                    c.ed.WriteMessage("\n[DONE]");
 
+                    c.ed.WriteMessage("\n[DONE]");
                 }
                 catch (DMTException de)
                 {
@@ -276,19 +284,20 @@ namespace DMTCommands
         }
 
 
-        [_Trx.CommandMethod("A123")]
-        public void A123()
+        [_Trx.CommandMethod("CSV_REINF_SINGLE")]
+        public void csv_reinf_single()
         {
             try
             {
                 _CONNECTION c = new _CONNECTION();
 
+                CSV_Writer program = new CSV_Writer(ref c);
+
                 try
                 {
-                    CsvWriter program = new CsvWriter(ref c);
                     program.run();
-                    c.ed.WriteMessage("\n[DONE]");
 
+                    c.ed.WriteMessage("\n[DONE]");
                 }
                 catch (DMTException de)
                 {

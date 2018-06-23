@@ -1,5 +1,5 @@
-﻿//#define BRX_APP
-#define ARX_APP
+﻿#define BRX_APP
+//#define ARX_APP
 
 using System;
 using System.Text;
@@ -369,7 +369,10 @@ namespace DMTCommands
         {
             List<G.Line> polys = new List<G.Line>();
 
-            _Ed.PromptSelectionResult userSelection = _c.doc.Editor.GetSelection();
+            _Ed.PromptSelectionOptions opts = new _Ed.PromptSelectionOptions();
+            opts.MessageForAdding = "\nSelect Geometry: ";
+            
+            _Ed.PromptSelectionResult userSelection = _c.doc.Editor.GetSelection(opts);
 
             if (userSelection.Status != _Ed.PromptStatus.OK) throw new DMTException("[ERROR] Geometry - cancelled");
 

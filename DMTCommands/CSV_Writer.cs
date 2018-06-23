@@ -1,5 +1,5 @@
-﻿//#define BRX_APP
-#define ARX_APP
+﻿#define BRX_APP
+//#define ARX_APP
 
 using System;
 using System.Text;
@@ -49,7 +49,7 @@ using T = Logic_Tabler;
 
 namespace DMTCommands
 {
-    class CsvWriter
+    class CSV_Writer
     {
         struct Rebar
         {
@@ -64,7 +64,7 @@ namespace DMTCommands
         {
             public string size;
             public string mat;
-            public double area;
+            public string area;
             public string unit;
         };
 
@@ -73,6 +73,7 @@ namespace DMTCommands
 
         static string[] titleBlockName = { "kirjanurk_h_EN" };
         static string[] titleNameAttribute = { "DRAWING_NR" };
+        static string[] titleProjectAttribute = { "WORK_NR" };
 
         static string[] rebarMaterialBlockName = { "PainutusKokkuvõte" };
         static string[] rebarFilterOutWords = { "KOKKU" };
@@ -89,32 +90,32 @@ namespace DMTCommands
         static string[] meshAreaAttribute = { "HULK" };
         static string[] meshUnitAttribute = { "ÜHIK" };
 
-        string output_dir = @"temp_csv\";
+        static string output_dir = @"temp_csv\";
 
 
-        public CsvWriter(ref _CONNECTION c)
+        public CSV_Writer(ref _CONNECTION c)
         {
-            _c = c;            
+            _c = c;
         }
         
 
         public void run()
         {
             string panelName = getPanelName();
+            string projectNumber = getProjectNumber();
             List<Rebar> rebar = getReinforcementData();
             List<Mesh> mesh = getMeshData();
 
-            output(panelName, rebar, mesh);
-
+            output(panelName, projectNumber, rebar, mesh);
         }
 
 
-        private void output(string panelName, List<Rebar> rebar, List<Mesh> mesh)
+        private void output(string panelName, string projectNumber, List<Rebar> rebar, List<Mesh> mesh)
         {
             string fileName = createFileName();
             createFolder(fileName);
             
-            writeToCSV(fileName , panelName, rebar, mesh);
+            writeToCSV(fileName , panelName, projectNumber, rebar, mesh);
         }
 
 
@@ -124,9 +125,21 @@ namespace DMTCommands
             if (titleblocks.Count < 1) throw new DMTException("[ERROR] Titleblock - NOT FOUND");
 
             List<string> names = getAllAttributeValues(titleblocks, titleNameAttribute);
-            if (names.Count < 1) throw new DMTException("[ERROR] Titleblock - Name attribute not found");
+            if (names.Count < 1) throw new DMTException("[ERROR] Titleblock - Name - attribute error");
 
             names = names.OrderBy(x => x.Length).ToList();
+
+            return names.First();
+        }
+
+
+        private string getProjectNumber()
+        {
+            List<_Db.BlockReference> titleblocks = getallBlocks(titleBlockName);
+            if (titleblocks.Count < 1) throw new DMTException("[ERROR] Titleblock - NOT FOUND");
+
+            List<string> names = getAllAttributeValues(titleblocks, titleProjectAttribute);
+            if (names.Count < 1) throw new DMTException("[ERROR] Titleblock - Project number - attribute error");
 
             return names.First();
         }
@@ -159,7 +172,7 @@ namespace DMTCommands
                     Rebar r;
                     r.diam = diams[i].ToUpper().Replace("%%C", "D");
                     r.mat = mats[i];
-                    r.mass = masses[i];
+                    r.mass = masses[i].Replace(".", ",");
                     r.unit = units[i];
                     reb.Add(r);
                 }
@@ -201,12 +214,65 @@ namespace DMTCommands
 
                 for (int i = 0; i < meshMaterialBlocks.Count; i++)
                 {
-                    Mesh m;
-                    m.size = sizes[i].ToUpper().Replace("#", "").Replace("%%C", "").Replace(" CC=", "-");
-                    m.mat = mats[i];
-                    m.area = parseArea(areas[i]);
-                    m.unit = units[i];
-                    mesh.Add(m);
+                    string[] ars = areas[i].Split(';');
+                    foreach (string ar in ars)
+                    {
+                        string aar = ar.Replace(" ", "").ToUpper();
+                        if (aar.StartsWith("1X"))
+                        {
+                            Mesh m;
+                            m.size = sizes[i].ToUpper().Replace("#", "").Replace("%%C", "").Replace(" CC=", "-");
+                            m.mat = mats[i];
+                            m.area = aar.Replace(".", ",").Replace("1X", "");
+                            m.unit = units[i];
+                            mesh.Add(m);
+                        }
+                        else if (aar.StartsWith("2X"))
+                        {
+                            for (int j = 0; j < 2; j++)
+                            {
+                                Mesh m;
+                                m.size = sizes[i].ToUpper().Replace("#", "").Replace("%%C", "").Replace(" CC=", "-");
+                                m.mat = mats[i];
+                                m.area = aar.Replace(".", ",").Replace("2X", "");
+                                m.unit = units[i];
+                                mesh.Add(m);
+                            }
+                        }
+                        else if (aar.StartsWith("3X"))
+                        {
+                            for (int j = 0; j < 2; j++)
+                            {
+                                Mesh m;
+                                m.size = sizes[i].ToUpper().Replace("#", "").Replace("%%C", "").Replace(" CC=", "-");
+                                m.mat = mats[i];
+                                m.area = aar.Replace(".", ",").Replace("3X", "");
+                                m.unit = units[i];
+                                mesh.Add(m);
+                            }
+                        }
+                        else if (aar.StartsWith("4X"))
+                        {
+                            for (int j = 0; j < 2; j++)
+                            {
+                                Mesh m;
+                                m.size = sizes[i].ToUpper().Replace("#", "").Replace("%%C", "").Replace(" CC=", "-");
+                                m.mat = mats[i];
+                                m.area = aar.Replace(".", ",").Replace("3X", "");
+                                m.unit = units[i];
+                                mesh.Add(m);
+                            }
+                        }
+                        else
+                        {
+                            Mesh m;
+                            m.size = sizes[i].ToUpper().Replace("#", "").Replace("%%C", "").Replace(" CC=", "-");
+                            m.mat = mats[i];
+                            m.area = aar.Replace(".", ",");
+                            m.unit = units[i];
+                            mesh.Add(m);
+                        }
+                    }
                 }
 
                 mesh = mesh.OrderBy(x => x.area).ToList();
@@ -217,29 +283,6 @@ namespace DMTCommands
             }
 
             return mesh;
-        }
-
-
-        private double parseArea(string area)
-        {
-            string[] areas = area.Split(';');
-
-            double value = 0;
-
-            foreach (string a in areas)
-            {
-                try
-                {
-                    double temp = Double.Parse(a.Replace(',', '.'));
-                    value = value + temp;
-                }
-                catch
-                {
-                    throw new DMTException("[ERROR] Mesh Material Block - Area - value error");
-                }                
-            }
-
-            return value;
         }
 
 
@@ -294,14 +337,14 @@ namespace DMTCommands
         }
 
 
-        private void writeToCSV(string fullPath, string panelName, List<Rebar> rebar, List<Mesh> mesh)
+        private void writeToCSV(string fullPath, string panelName, string projectNumber, List<Rebar> rebar, List<Mesh> mesh)
         {
             StringBuilder txt = new StringBuilder();
 
             write(fullPath);
-            txt.AppendLine("alexi programmi ajutine file");
-            txt.AppendLine(";");
-            txt.AppendLine(";" + panelName + ";");
+            txt.AppendLine("Project number;Element pos. number;Part name;material;exposure class;Profile;Quantity;units;Height H, mm;Length L, mm;Width B, mm;c.nom;REI ;mu0;empty;Length/pcs, m;Lentgh/total, m;Area netto, m2;Area brutto, m2;Weight;Weight/total;Comment;Dr.number;Dr.date;REV; Rev.date;Rev.comment;ORDER;Erection start;Actual er. start;Fabrication start;Actual fab. start;empty;empty ;GUID:");
+            txt.AppendLine("");
+            txt.AppendLine(projectNumber + ";" + panelName + ";");
 
             foreach (Rebar r in rebar)
             {
@@ -316,7 +359,6 @@ namespace DMTCommands
             string csvText = txt.ToString();
 
             File.AppendAllText(fullPath, csvText);
-
         }
 
 
@@ -373,7 +415,7 @@ namespace DMTCommands
                 if (value != null)
                 {
                     values.Add(value);
-                }                
+                }
             }
 
             return values;
