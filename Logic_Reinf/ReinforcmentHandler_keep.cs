@@ -41,6 +41,7 @@ namespace Logic_Reinf
             knownReinforcement.Add(reinf);
         }
 
+
         private void keep_double(R.Raud reinf, G.Edge edge)
         {
             if (edge != null)
@@ -52,6 +53,7 @@ namespace Logic_Reinf
             }
         }
 
+
         private void keep_array(R.Raud reinf, LineSegment ls)
         {
             if (ls != null)
@@ -62,6 +64,7 @@ namespace Logic_Reinf
                 }
             }
         }
+
 
         private void keep_replace(R.Raud nw, R.Raud old1, R.Raud old2)
         {
@@ -88,6 +91,7 @@ namespace Logic_Reinf
 
             knownReinforcement.Add(nw);
         }
+
 
         private void keep_replace(R.Raud n1, R.Raud n2, R.Raud old1, R.Raud old2)
         {
@@ -117,6 +121,7 @@ namespace Logic_Reinf
             knownReinforcement.Add(n2);
         }
 
+
         private void keep_remove(R.Raud a)
         {
             RemoveByValue(setEdges, a);
@@ -130,6 +135,7 @@ namespace Logic_Reinf
                 }
             }
         }
+
 
         private List<R.Raud> get_unique()
         {
@@ -157,6 +163,7 @@ namespace Logic_Reinf
             return unique;
         }
 
+
         private static void ReplaceByValue<TKey, TValue>(Dictionary<TKey, TValue> dictionary, TValue someValue, TValue someNewValue)
         {
             List<TKey> itemsToReplace = new List<TKey>();
@@ -172,6 +179,7 @@ namespace Logic_Reinf
             }
         }
 
+
         private static void RemoveByValue<TKey, TValue>(Dictionary<TKey, TValue> dictionary, TValue someValue)
         {
             List<TKey> itemsToRemove = new List<TKey>();
@@ -186,5 +194,6 @@ namespace Logic_Reinf
                 dictionary.Remove(item);
             }
         }
+
     }
 }

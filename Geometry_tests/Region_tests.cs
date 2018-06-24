@@ -44,6 +44,35 @@ namespace Geometry_tests
         {
             List<Line> contours = new List<Line>();
 
+            Point a = new Point(-1, -2);
+            Point b = new Point(10, 0);
+            Point c = new Point(10, 11);
+
+            Line k = new Line(a, b);
+            Line l = new Line(b, c);
+            Line m = new Line(a, c);
+
+            contours.Add(k);
+            contours.Add(l);
+            contours.Add(m);
+
+            Region r = new Region(contours);
+
+            Assert.AreEqual(r.Min_X, -1, _Variables.EQUALS_TOLERANCE);
+            Assert.AreEqual(r.Max_X, 10, _Variables.EQUALS_TOLERANCE);
+            Assert.AreEqual(r.Min_Y, -2, _Variables.EQUALS_TOLERANCE);
+            Assert.AreEqual(r.Max_Y, 11, _Variables.EQUALS_TOLERANCE);
+
+            Assert.AreEqual(r.edges.Count, 3);
+            Assert.AreEqual(r.corners.Count, 3);
+        }
+
+
+        [TestMethod]
+        public void Region_init_test_3()
+        {
+            List<Line> contours = new List<Line>();
+
             Point a = new Point(0, 0);
             Point b = new Point(5, 0);
             Point c = new Point(10, 0);
@@ -73,7 +102,7 @@ namespace Geometry_tests
 
 
         [TestMethod]
-        public void Region_init_test_3()
+        public void Region_init_test_4()
         {
             List<Line> contours = new List<Line>();
 
@@ -169,7 +198,7 @@ namespace Geometry_tests
 
 
         [TestMethod]
-        public void Region_init_test_4()
+        public void Region_init_test_5()
         {
             List<Line> contours = new List<Line>();
 
@@ -241,6 +270,43 @@ namespace Geometry_tests
             Region reg = new Region(contours);
 
             Assert.AreEqual(reg.edges.Count, 13);
+        }
+
+
+        [TestMethod]
+        public void Region_init_test_6()
+        {
+            List<Line> contours = new List<Line>();      
+
+            Point aa = new Point(0.00000, 0.00000);
+            Point ab = new Point(0.00000, 4145.33380);
+            Line a = new Line(aa, ab);
+            contours.Add(a);
+
+            Point ba = new Point(0.00000, 4145.33380);
+            Point bb = new Point(3681.32683, 4145.33380);
+            Line b = new Line(ba, bb);
+            contours.Add(b);
+
+            Point ca = new Point(3681.42683, 0.00000);
+            Point cb = new Point(3681.42683, 4145.33380);
+            Line c = new Line(ca, cb);
+            contours.Add(c);
+
+            Point da = new Point(0.00000, 0.00000);
+            Point db = new Point(3681.32683, 0.00000);
+            Line d = new Line(da, db);
+            contours.Add(d);
+
+            Region reg = new Region(contours);
+
+            Assert.AreEqual(reg.edges.Count, 4);
+            Assert.AreEqual(reg.corners.Count, 4);
+
+            foreach (Corner cc in reg.corners)
+            {
+                Assert.AreEqual(cc.Angle, Math.PI/2, _Variables.EQUALS_TOLERANCE);
+            }
         }
 
 

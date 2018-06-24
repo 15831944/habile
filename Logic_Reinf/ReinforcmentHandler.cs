@@ -72,7 +72,7 @@ namespace Logic_Reinf
         public void main(ref List<R.Raud> reinf, ref List<R.Raud_Array> reinf_array, ref List<R.Raud> unique_reinf)
         {
             create_all_main_reinforcement();
-            create_all_side_reinforcement();
+            //create_all_side_reinforcement();
 
             //Drawing_Box visu2 = new Drawing_Box(r, reinf_geometry_debug);
             //visu2.Show();
@@ -174,7 +174,7 @@ namespace Logic_Reinf
                 if (narrow_denier(e)) continue;
 
                 G.Line main = e.edgeOffset(_V_.X_CONCRETE_COVER_1, _V_.X_CONCRETE_COVER_1, _V_.X_CONCRETE_COVER_1);
-
+                
                 if (e.StartCorner.Angle > Math.PI)
                 {
                     main = main.extendStart(_V_.X_REINFORCEMENT_MAIN_ANCHOR_LENGTH);
@@ -184,7 +184,7 @@ namespace Logic_Reinf
                 {
                     main = main.extendEnd(_V_.X_REINFORCEMENT_MAIN_ANCHOR_LENGTH);
                 }
-
+                
                 A_handler(main.Start, main.End, e, null, _V_.X_REINFORCEMENT_MAIN_DIAMETER);
             }
         }

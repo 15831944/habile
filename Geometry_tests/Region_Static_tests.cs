@@ -59,6 +59,7 @@ namespace Geometry_tests
             Assert.IsTrue(Region_Static.isPointinRegion(t, v, contours));
         }
 
+
         [TestMethod]
         public void Region_Static_isPointinRegion_test_twoRecs()
         {
@@ -114,5 +115,6 @@ namespace Geometry_tests
             t = new Point(0, -9);
             Assert.IsFalse(Region_Static.isPointinRegion(t, v, contours));
         }
+
     }
 }

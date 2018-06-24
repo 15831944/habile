@@ -1,5 +1,5 @@
-﻿#define BRX_APP
-//#define ARX_APP
+﻿//#define BRX_APP
+#define ARX_APP
 
 using System;
 using System.Text;
@@ -68,6 +68,7 @@ namespace DMTCommands
 
             getSettings();
             List<G.Line> polys = getGeometry();
+
             G.Point insertPoint = getBendingInsertionPoint();
 
             List<R.Raud> reinf = new List<R.Raud>();

@@ -7,7 +7,6 @@ namespace Geometry_tests
     [TestClass]
     public class Converter_tests
     {
-
         [TestMethod]
         public void Converter_xy_to_la_test1()
         {
@@ -17,6 +16,7 @@ namespace Geometry_tests
             Assert.AreEqual(pol.L, 11.1803, _Variables.EQUALS_TOLERANCE);
             Assert.AreEqual(pol.angle, 1.1071, _Variables.EQUALS_TOLERANCE);
         }
+
 
         [TestMethod]
         public void Converter_xy_to_la_test2()
@@ -28,6 +28,7 @@ namespace Geometry_tests
             Assert.AreEqual(pol.angle, Math.PI - 1.1071, _Variables.EQUALS_TOLERANCE);
         }
 
+
         [TestMethod]
         public void Converter_xy_to_la_test3()
         {
@@ -37,6 +38,7 @@ namespace Geometry_tests
             Assert.AreEqual(pol.L, 11.1803, _Variables.EQUALS_TOLERANCE);
             Assert.AreEqual(pol.angle, -Math.PI + 1.1071, _Variables.EQUALS_TOLERANCE);
         }
+
 
         [TestMethod]
         public void Converter_xy_to_la_test4()
@@ -48,6 +50,7 @@ namespace Geometry_tests
             Assert.AreEqual(pol.angle, -1.1071, _Variables.EQUALS_TOLERANCE);
         }
 
+
         [TestMethod]
         public void Converter_la_to_xy_test1()
         {
@@ -57,6 +60,7 @@ namespace Geometry_tests
             Assert.AreEqual(v.X, 5, _Variables.EQUALS_TOLERANCE);
             Assert.AreEqual(v.Y, 10, _Variables.EQUALS_TOLERANCE);
         }
+
 
         [TestMethod]
         public void Converter_la_to_xy_test2()
@@ -68,6 +72,7 @@ namespace Geometry_tests
             Assert.AreEqual(v.Y, 10, _Variables.EQUALS_TOLERANCE);
         }
 
+
         [TestMethod]
         public void Converter_la_to_xy_test3()
         {
@@ -77,6 +82,7 @@ namespace Geometry_tests
             Assert.AreEqual(v.X, -5, _Variables.EQUALS_TOLERANCE);
             Assert.AreEqual(v.Y, -10, _Variables.EQUALS_TOLERANCE);
         }
+
 
         [TestMethod]
         public void Converter_la_to_xy_test4()
@@ -88,6 +94,7 @@ namespace Geometry_tests
             Assert.AreEqual(v.Y, -10, _Variables.EQUALS_TOLERANCE);
         }
 
+
         [TestMethod]
         public void Converter_Wrap_test1()
         {
@@ -95,6 +102,7 @@ namespace Geometry_tests
             double pii2 = Converter.Wrap(pii);
             Assert.AreEqual(pii2, Math.PI/2, _Variables.EQUALS_TOLERANCE);
         }
+
 
         [TestMethod]
         public void Converter_Wrap_test2()
@@ -104,6 +112,7 @@ namespace Geometry_tests
             Assert.AreEqual(pii2, Math.PI / 2, _Variables.EQUALS_TOLERANCE);
         }
 
+
         [TestMethod]
         public void Converter_Wrap_test3()
         {
@@ -112,6 +121,7 @@ namespace Geometry_tests
             Assert.AreEqual(pii2, -Math.PI / 2, _Variables.EQUALS_TOLERANCE);
         }
 
+
         [TestMethod]
         public void Converter_Wrap_test4()
         {
@@ -119,6 +129,7 @@ namespace Geometry_tests
             double pii2 = Converter.Wrap(pii);
             Assert.AreEqual(pii2, -Math.PI / 2, _Variables.EQUALS_TOLERANCE);
         }
+
 
         [TestMethod]
         public void Converter_Wrap_test5()
@@ -131,6 +142,7 @@ namespace Geometry_tests
             Assert.AreEqual(pii3, Math.PI / 2 + Math.PI, _Variables.EQUALS_TOLERANCE);
         }
 
+
         [TestMethod]
         public void Converter_DeltaAngle_test1()
         {
@@ -141,6 +153,7 @@ namespace Geometry_tests
 
             Assert.AreEqual(delta, 3.0, _Variables.EQUALS_TOLERANCE);
         }
+
 
         [TestMethod]
         public void Converter_DeltaAngle_test2()
@@ -153,6 +166,7 @@ namespace Geometry_tests
             Assert.AreEqual(delta, 3.0, _Variables.EQUALS_TOLERANCE);
         }
 
+
         [TestMethod]
         public void Converter_DeltaAngle_test3()
         {
@@ -163,6 +177,7 @@ namespace Geometry_tests
 
             Assert.AreEqual(delta, 0.284, _Variables.EQUALS_TOLERANCE);
         }
+
 
         [TestMethod]
         public void Converter_DeltaAngle_test4()
@@ -175,6 +190,7 @@ namespace Geometry_tests
             Assert.AreEqual(delta, 0.5, _Variables.EQUALS_TOLERANCE);
         }
 
+
         [TestMethod]
         public void Converter_AngleDeltaClockwise_test1()
         {
@@ -185,6 +201,7 @@ namespace Geometry_tests
 
             Assert.AreEqual(delta, 3 * Math.PI / 4, _Variables.EQUALS_TOLERANCE);
         }
+
 
         [TestMethod]
         public void Converter_AngleDeltaClockwise_test2()
@@ -284,5 +301,6 @@ namespace Geometry_tests
             Assert.AreEqual(deltaCCW, 2 * Math.PI - Math.PI / 2, _Variables.EQUALS_TOLERANCE);
             Assert.AreEqual(deltaMin, Math.PI / 2, _Variables.EQUALS_TOLERANCE);
         }
+
     }
 }

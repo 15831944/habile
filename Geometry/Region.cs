@@ -37,12 +37,12 @@ namespace Geometry
             while (true)
             {
                 corners = new List<Corner>();
-                setCorners(contours);
+                setCorners();
                 bool stop = insanityCheck();
                 if (stop) break;
             }            
         }
-        
+                
 
         private void setBoundies(List<Line> contours)
         {
@@ -105,7 +105,7 @@ namespace Geometry
         }
 
 
-        private void setCorners(List<Line> contours)
+        private void setCorners()
         {
             foreach (Edge e1 in edges)
             {
@@ -117,14 +117,14 @@ namespace Geometry
                     }
                     else if (e1.Line.End == e2.Line.Start)
                     {
-                        if (setCorner(e1.Line.End, e1, e2, contours)) break;
+                        if (setCorner(e1.Line.End, e1, e2)) break;
                     }
                 }
             }
         }
 
 
-        private bool setCorner(Point point, Edge e1, Edge e2, List<Line> contours)
+        private bool setCorner(Point point, Edge e1, Edge e2)
         {
             foreach (Corner oc in corners)
             {
@@ -134,7 +134,7 @@ namespace Geometry
                 }
             }
 
-            Corner c = new Corner(point, e1, e2, contours);
+            Corner c = new Corner(point, e1, e2);
             e1.setCorner(c);
             e2.setCorner(c);
             corners.Add(c);

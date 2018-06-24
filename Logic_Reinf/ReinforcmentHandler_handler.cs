@@ -30,7 +30,7 @@ namespace Logic_Reinf
         public bool A_handler(G.Point mainPoint, G.Point mainEnd, G.Edge e, G.Corner c, int d)
         {
             G.Line main = new G.Line(mainPoint, mainEnd);
-
+            //Debugerrint(main.ToString());
             //reinf_geometry_debug.Add(main);
 
             R.A_Raud reinf = new R.A_Raud(main, _V_.X_REINFORCEMENT_NUMBER, d, _V_.X_REINFORCEMENT_MARK);

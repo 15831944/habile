@@ -137,7 +137,7 @@ namespace Reinforcement
             if (other == null) return false;
             return (this.A == other.A &&
                     this.B == other.B &&
-                    (int)G.Converter.ToDeg(this.U) == (int)G.Converter.ToDeg(other.U) &&
+                    ((int)Math.Round(G.Converter.ToDeg(this.U), 0) == (int)Math.Round(G.Converter.ToDeg(other.U), 0)) &&
                     this.Diameter == other.Diameter &&
                     this.Materjal == other.Materjal);
         }

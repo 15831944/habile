@@ -19,7 +19,7 @@ namespace Geometry
         public double Angle { get { return angle; } }
 
 
-        public Corner(Point p, Edge ln1, Edge ln2, List<Line> contours)
+        public Corner(Point p, Edge ln1, Edge ln2)
         {
             corner = p;
 
@@ -34,16 +34,19 @@ namespace Geometry
                 endEdge = ln1;
             }
 
-            angle = calcAngle(ln1, ln2, contours);
+            angle = calcAngle(endEdge, startEdge);
         }
 
 
-        private double calcAngle(Edge eb, Edge ec, List<Line> contours)
+        private double calcAngle(Edge end, Edge start)
         {
-            double b = eb.Line.Length();
-            double c = ec.Line.Length();
+            Vector p1 = end.Line.getDirectionVector();
+            Vector p2 = start.Line.getDirectionVector();
+            if (p1 == p2) return Math.PI;
 
-            Line la = new Line(eb.Line.Start, ec.Line.End);
+            Line la = new Line(end.Line.Start, start.Line.End);
+            double b = end.Line.Length();
+            double c = start.Line.Length();
             double a = la.Length();
 
             double cosA = (Math.Pow(b, 2) + Math.Pow(c, 2) - Math.Pow(a, 2)) / (2 * b * c);
@@ -51,14 +54,13 @@ namespace Geometry
 
             double A = Math.Acos(cosAmod);
 
-            Point one = la.getCenterPoint();
-            Point two = eb.Line.getCenterPoint();
+            Point ccp = la.getCenterPoint();
+            Point ecp = end.Line.Offset(10).getCenterPoint();
 
-            Line centerLine = new Line(one, two);
-            Line centerLine_offset = centerLine.extendEnd(-1 * _Variables.MOVE_DISTANCE);
-            Point check = centerLine_offset.End;
+            Line aa = new Line(ccp, ecp);
+            Line bb = end.Line.extendDouble(10 * start.Line.Length());
 
-            if (!Region_Static.isPointinRegion(check, centerLine.getOffsetVector(), contours))
+            if (Line.hasIntersection(aa, bb))
             {
                 A = 2 * Math.PI - A;
             }

@@ -23,6 +23,7 @@ namespace Geometry_tests
             Assert.AreEqual(k.End.Y, 0, _Variables.EQUALS_TOLERANCE);
         }
 
+
         [TestMethod]
         [ExpectedException(typeof(LineSamePointException))]
         public void Line_init_fail_test()
@@ -32,6 +33,7 @@ namespace Geometry_tests
 
             Line k = new Line(a, b);
         }
+
 
         [TestMethod]
         public void Line_getCenterPoint_test1()
@@ -46,6 +48,7 @@ namespace Geometry_tests
             Assert.AreEqual(c.Y, 5, _Variables.EQUALS_TOLERANCE);
         }
 
+
         [TestMethod]
         public void Line_getCenterPoint_test2()
         {
@@ -58,6 +61,7 @@ namespace Geometry_tests
             Assert.AreEqual(c.X, 5, _Variables.EQUALS_TOLERANCE);
             Assert.AreEqual(c.Y, 5, _Variables.EQUALS_TOLERANCE);
         }
+
 
         [TestMethod]
         public void Line_getCenterPoint_test3()
@@ -72,6 +76,7 @@ namespace Geometry_tests
             Assert.AreEqual(c.Y, -5, _Variables.EQUALS_TOLERANCE);
         }
 
+
         [TestMethod]
         public void Line_getDirectionVector_test1()
         {
@@ -84,6 +89,7 @@ namespace Geometry_tests
             Assert.AreEqual(v.X, 0.9839, _Variables.EQUALS_TOLERANCE);
             Assert.AreEqual(v.Y, 0.1789, _Variables.EQUALS_TOLERANCE);
         }
+
 
         [TestMethod]
         public void Line_getDirectionVector_test2()
@@ -98,6 +104,7 @@ namespace Geometry_tests
             Assert.AreEqual(v.Y, -0.1789, _Variables.EQUALS_TOLERANCE);
         }
 
+
         [TestMethod]
         public void Line_getOffsetVector_test1()
         {
@@ -111,6 +118,7 @@ namespace Geometry_tests
             Assert.AreEqual(o.Y, 0.9839, _Variables.EQUALS_TOLERANCE);
         }
 
+
         [TestMethod]
         public void Line_getOffsetVector_test2()
         {
@@ -123,6 +131,7 @@ namespace Geometry_tests
             Assert.AreEqual(o.X, 0.1789, _Variables.EQUALS_TOLERANCE);
             Assert.AreEqual(o.Y, -0.9839, _Variables.EQUALS_TOLERANCE);
         }
+
 
         [TestMethod]
         public void Line_offset_test1()
@@ -140,6 +149,7 @@ namespace Geometry_tests
             Assert.AreEqual(new_k.End.Y, 1.5, _Variables.EQUALS_TOLERANCE);
         }
 
+
         [TestMethod]
         public void Line_offset_test2()
         {
@@ -156,6 +166,7 @@ namespace Geometry_tests
             Assert.AreEqual(new_k.End.Y, -1.5, _Variables.EQUALS_TOLERANCE);
         }
 
+
         [TestMethod]
         public void Line_Extend_Start_test1()
         {
@@ -170,6 +181,7 @@ namespace Geometry_tests
             Assert.AreEqual(new_a.X, -1, _Variables.EQUALS_TOLERANCE);
             Assert.AreEqual(new_a.Y, 0, _Variables.EQUALS_TOLERANCE);
         }
+
 
         [TestMethod]
         public void Line_Extend_Start_test2()
@@ -186,6 +198,7 @@ namespace Geometry_tests
             Assert.AreEqual(new_a.Y, 0, _Variables.EQUALS_TOLERANCE);
         }
 
+
         [TestMethod]
         public void Line_Extend_End_test1()
         {
@@ -200,6 +213,7 @@ namespace Geometry_tests
             Assert.AreEqual(new_b.X, 11, _Variables.EQUALS_TOLERANCE);
             Assert.AreEqual(new_b.Y, 0, _Variables.EQUALS_TOLERANCE);
         }
+
 
         [TestMethod]
         public void Line_Extend_End_test2()
@@ -216,6 +230,7 @@ namespace Geometry_tests
             Assert.AreEqual(new_b.Y, 0, _Variables.EQUALS_TOLERANCE);
         }
 
+
         [TestMethod]
         public void Line_Extend_Double_test1()
         {
@@ -231,6 +246,7 @@ namespace Geometry_tests
             Assert.AreEqual(new_k.End.X, 11, _Variables.EQUALS_TOLERANCE);
             Assert.AreEqual(new_k.End.Y, 0, _Variables.EQUALS_TOLERANCE);
         }
+
 
         [TestMethod]
         public void Line_getIntersectionPoint_test1()
@@ -249,6 +265,7 @@ namespace Geometry_tests
             Assert.AreEqual(x.Y, 0, _Variables.EQUALS_TOLERANCE);
         }
 
+
         [TestMethod]
         public void Line_getIntersectionPoint_test2()
         {
@@ -265,6 +282,7 @@ namespace Geometry_tests
             Assert.AreEqual(x.X, 5, _Variables.EQUALS_TOLERANCE);
             Assert.AreEqual(x.Y, 0, _Variables.EQUALS_TOLERANCE);
         }
+
 
         [TestMethod]
         public void Line_getIntersectionPoint_test3()
@@ -283,6 +301,7 @@ namespace Geometry_tests
             Assert.AreEqual(x.Y, 5, _Variables.EQUALS_TOLERANCE);
         }
 
+
         [TestMethod]
         [ExpectedException(typeof(LineNoIntersectionException))]
         public void Line_getIntersectionPoint_test4()
@@ -298,6 +317,7 @@ namespace Geometry_tests
 
             Point x = Line.getIntersectionPoint(k, m);
         }
+
 
         [TestMethod]
         public void Line_getIntersectionPoint_test5()
@@ -316,6 +336,7 @@ namespace Geometry_tests
             Assert.AreEqual(x.Y, -5, _Variables.EQUALS_TOLERANCE);
         }
 
+
         [TestMethod]
         public void Line_getIntersectionPoint_test6()
         {
@@ -333,6 +354,7 @@ namespace Geometry_tests
             Assert.AreEqual(x.Y, 0, _Variables.EQUALS_TOLERANCE);
         }
 
+
         [TestMethod]
         public void Line_rotation_test1()
         {
@@ -346,6 +368,7 @@ namespace Geometry_tests
 
             Assert.AreEqual(z.Length(), 1414.2135, _Variables.EQUALS_TOLERANCE);
         }
+
 
         [TestMethod]
         public void Line_rotation_test2()
@@ -372,6 +395,7 @@ namespace Geometry_tests
             Assert.AreEqual(z_dY, 0, _Variables.EQUALS_TOLERANCE);
             Assert.AreEqual(x_dY, 0, _Variables.EQUALS_TOLERANCE);
         }
+
 
         [TestMethod]
         public void Line_rotation_test3()
@@ -403,6 +427,7 @@ namespace Geometry_tests
             Assert.AreEqual(zex_dY, 50, _Variables.EQUALS_TOLERANCE);
         }
 
+
         [TestMethod]
         public void Line_areLinesColinear_test1()
         {
@@ -420,6 +445,7 @@ namespace Geometry_tests
             Assert.AreEqual(y, true);
             Assert.AreEqual(z, true);
         }
+
 
         [TestMethod]
         public void Line_areLinesColinear_test2()
@@ -439,6 +465,7 @@ namespace Geometry_tests
             Assert.AreEqual(z, true);
         }
 
+
         [TestMethod]
         public void Line_areLinesColinear_test3()
         {
@@ -456,6 +483,7 @@ namespace Geometry_tests
             Assert.AreEqual(y, true);
             Assert.AreEqual(z, false);
         }
+
     }
 }
 

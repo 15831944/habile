@@ -166,8 +166,8 @@ namespace Reinforcement
                         this.Diameter == other.Diameter &&
                         this.Materjal == other.Materjal);
 
-            bool a1 = (int)G.Converter.ToDeg(this.U) == (int)G.Converter.ToDeg(other.U) && (int)G.Converter.ToDeg(this.V) == (int)G.Converter.ToDeg(other.V);
-            bool a2 = (int)G.Converter.ToDeg(this.U) == (int)G.Converter.ToDeg(other.V) && (int)G.Converter.ToDeg(this.V) == (int)G.Converter.ToDeg(other.U);
+            bool a1 = (int)Math.Round(G.Converter.ToDeg(this.U), 0) == (int)Math.Round(G.Converter.ToDeg(this.U), 0) && (int)Math.Round(G.Converter.ToDeg(this.V), 0) == (int)Math.Round(G.Converter.ToDeg(this.V), 0);
+            bool a2 = (int)Math.Round(G.Converter.ToDeg(this.U), 0) == (int)Math.Round(G.Converter.ToDeg(this.V), 0) && (int)Math.Round(G.Converter.ToDeg(this.V), 0) == (int)Math.Round(G.Converter.ToDeg(this.U), 0);
 
             bool tot = alfa && (a1 || a2);
 

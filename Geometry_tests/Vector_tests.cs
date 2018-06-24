@@ -28,6 +28,7 @@ namespace Geometry_tests
             Assert.AreEqual(v.X, -1, _Variables.EQUALS_TOLERANCE);
             Assert.AreEqual(v.Y, -1, _Variables.EQUALS_TOLERANCE);
         }
+
         
         [TestMethod]
         public void Vector_rotate_test()
@@ -93,6 +94,7 @@ namespace Geometry_tests
             Assert.AreEqual(r.Y, 1, _Variables.EQUALS_TOLERANCE);
         }
 
+
         [TestMethod]
         public void Vector_distance_test()
         {
@@ -112,5 +114,6 @@ namespace Geometry_tests
             len = v.Length();
             Assert.AreEqual(len, 2.828, _Variables.EQUALS_TOLERANCE);
         }
+
     }
 }

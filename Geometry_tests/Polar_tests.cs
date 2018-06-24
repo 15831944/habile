@@ -17,6 +17,7 @@ namespace Geometry_tests
             Assert.AreEqual(pol.angle, 1.0, _Variables.EQUALS_TOLERANCE);
         }
 
+
         [TestMethod]
         public void Polar_init_wrapper_test()
         {
@@ -26,6 +27,7 @@ namespace Geometry_tests
             Assert.AreEqual(pol.angle, 0.3, _Variables.EQUALS_TOLERANCE);
         }
 
+
         [TestMethod]
         public void Polar_init_wrapper_test2()
         {
@@ -34,6 +36,7 @@ namespace Geometry_tests
             Assert.AreEqual(pol.L, 1.0, _Variables.EQUALS_TOLERANCE);
             Assert.AreEqual(pol.angle, -0.3, _Variables.EQUALS_TOLERANCE);
         }
+
 
         [TestMethod]
         public void Polar_rotate_test1()
@@ -46,6 +49,7 @@ namespace Geometry_tests
             Assert.AreEqual(new_pol.angle, 2.0, _Variables.EQUALS_TOLERANCE);
         }
 
+
         [TestMethod]
         public void Polar_rotate_test2()
         {
@@ -56,6 +60,7 @@ namespace Geometry_tests
             Assert.AreEqual(new_pol.L, 1.0, _Variables.EQUALS_TOLERANCE);
             Assert.AreEqual(new_pol.angle, 0.0, _Variables.EQUALS_TOLERANCE);
         }
+
 
         [TestMethod]
         public void Polar_rotate_wrapper_test1()
@@ -68,6 +73,7 @@ namespace Geometry_tests
             Assert.AreEqual(new_pol.angle, -2.28318, _Variables.EQUALS_TOLERANCE);
         }
 
+
         [TestMethod]
         public void Polar_rotate_wrapper_test2()
         {
@@ -78,5 +84,6 @@ namespace Geometry_tests
             Assert.AreEqual(new_pol.L, 1.0, _Variables.EQUALS_TOLERANCE);
             Assert.AreEqual(new_pol.angle, 2.28318, _Variables.EQUALS_TOLERANCE);
         }
+
     }
 }
