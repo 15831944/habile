@@ -24,10 +24,7 @@ namespace summary_csv_rebar
             string program = "";
             if (kodu) program = @"C:\Program Files\Autodesk\AutoCAD 2013\acad.exe";
             else program = @"C:\Program Files\Bricsys\BricsCAD V16 en_US\bricscad.exe";
-
-            string netload = "";
-            //if (kodu) netload = @"C:\Users\Alex\Documents\GitHub\habile\DMTCommands\bin\Release\DMTCommands.dll";
-            //else netload = @"C:\Users\aleksandr.ess\Documents\GitHub\habile\DMTCommands\bin\Release\DMTCommands.dll";
+            
 
             Console.WriteLine("Enter source folder:");
             string location = Console.ReadLine();
@@ -36,7 +33,7 @@ namespace summary_csv_rebar
 
             List<string> dwgs = getFiles(location, "*.DWG");
 
-            createScriptFile(dwgs, script, netload);
+            createScriptFile(dwgs, script);
             runAutocad(program, script);
             deleteScriptFile(script);
 
@@ -68,12 +65,10 @@ namespace summary_csv_rebar
         }
 
 
-        private static void createScriptFile(List<string> dwgs, string script, string netload)
+        private static void createScriptFile(List<string> dwgs, string script)
         {
             StringBuilder txt = new StringBuilder();
-
-            //txt.AppendLine("NETLOAD \"" + netload + "\"");
-
+            
             foreach (string dwg in dwgs)
             {
                 txt.AppendLine("_.open \"" + dwg + "\"");

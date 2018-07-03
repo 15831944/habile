@@ -48,12 +48,12 @@ using T = Logic_Tabler;
 
 namespace DMTCommands
 {
-    partial class Reinforcer
+    partial class REINFORCE_command
     {
         _CONNECTION _c;
 
 
-        public Reinforcer(ref _CONNECTION c)
+        public REINFORCE_command(ref _CONNECTION c)
         {
             _c = c;
         }

@@ -49,7 +49,7 @@ using T = Logic_Tabler;
 
 namespace DMTCommands
 {
-    class CSV_Writer
+    class CSV_command
     {
         struct Rebar
         {
@@ -71,29 +71,37 @@ namespace DMTCommands
 
         _CONNECTION _c;
 
-        static string[] titleBlockName = { "kirjanurk_h_EN" };
+        static string[] titleBlockName = { "kirjanurk_h_EN", "kirjanurk_h" };
         static string[] titleNameAttribute = { "DRAWING_NR" };
         static string[] titleProjectAttribute = { "WORK_NR" };
 
+        static string[] rebarFilterOutWords = { "KOKKU", "TOTAL" };
         static string[] rebarMaterialBlockName = { "PainutusKokkuvõte" };
-        static string[] rebarFilterOutWords = { "KOKKU" };
         static string[] rebarDiamAttribute = { "Diam" };
         static string[] rebarMatAttribute = { "Klass" };
         static string[] rebarMassAttribute = { "Mass" };
         static string[] rebarUnitAttribute = { "Ühik" };
 
-        static string[] meshMaterialBlockName = { "materjalid_1" };
-        static string[] meshFilterWords = { "MESH" };
-        static string[] meshNameAttribute = { "NIMETUS" };
-        static string[] meshSizeAttribute = { "TÄHIS" };
-        static string[] meshMatAttribute = { "STANDARD" };
-        static string[] meshAreaAttribute = { "HULK" };
-        static string[] meshUnitAttribute = { "ÜHIK" };
+        //static string[] meshFilterWords = { "MESH" };
+        //static string[] meshMaterialBlockName = { "materjalid_1" };
+        //static string[] meshNameAttribute = { "NIMETUS" };
+        //static string[] meshSizeAttribute = { "TÄHIS" };
+        //static string[] meshMatAttribute = { "STANDARD" };
+        //static string[] meshAreaAttribute = { "HULK" };
+        //static string[] meshUnitAttribute = { "ÜHIK" };
+
+        static string[] meshMaterialBlockName = { "Materjalid_rida" };
+        static string[] meshFilterWords = { "VÕRK", "MESH" };
+        static string[] meshNameAttribute = { "POS" };
+        static string[] meshSizeAttribute = { "Nimi" };
+        static string[] meshMatAttribute = { "Standard" };
+        static string[] meshAreaAttribute = { "tk" };
+        static string[] meshUnitAttribute = { "Märkus" };
 
         static string output_dir = @"temp_csv\";
 
 
-        public CSV_Writer(ref _CONNECTION c)
+        public CSV_command(ref _CONNECTION c)
         {
             _c = c;
         }

@@ -48,7 +48,7 @@ using T = Logic_Tabler;
 
 namespace DMTCommands
 {
-    partial class Reinforcer
+    partial class REINFORCE_command
     {
         private void getSettings()
         {

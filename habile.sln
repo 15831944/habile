@@ -23,6 +23,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logic_Tabler", "Logic_Table
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "summary_csv_rebar", "summary_csv_rebar\summary_csv_rebar.csproj", "{F6FDEFB0-013A-43A6-B01F-A36404F9E9D5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dmt_find_replace", "dmt_find_replace\dmt_find_replace.csproj", "{FB645EB5-263A-4FED-81CF-D85CFF3535FD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -69,6 +71,10 @@ Global
 		{F6FDEFB0-013A-43A6-B01F-A36404F9E9D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F6FDEFB0-013A-43A6-B01F-A36404F9E9D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F6FDEFB0-013A-43A6-B01F-A36404F9E9D5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FB645EB5-263A-4FED-81CF-D85CFF3535FD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FB645EB5-263A-4FED-81CF-D85CFF3535FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FB645EB5-263A-4FED-81CF-D85CFF3535FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FB645EB5-263A-4FED-81CF-D85CFF3535FD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

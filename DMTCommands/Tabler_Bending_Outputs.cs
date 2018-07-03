@@ -48,7 +48,7 @@ using T = Logic_Tabler;
 
 namespace DMTCommands
 {
-    partial class Tabler
+    partial class TABLE_command
     {
         public void bending_output(List<T.DrawingArea> fields)
         {

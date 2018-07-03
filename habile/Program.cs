@@ -23,8 +23,8 @@ namespace habile
                     netload = @"C:\Users\aleksandr.ess\Documents\GitHub\habile\DMTCommands\bin\Release\DMTCommands.dll";
                 }
 
-                string dwg = @"C:\Users\aleksandr.ess\Dropbox\DMT\Brics_testimine\after.dwg";
-                //string dwg = @"C:\Users\aleksandr.ess\Dropbox\DMT\Brics_testimine\CSV_kokkuvote\VD-V-1002_W-44.dwg";
+                //string dwg = @"C:\Users\aleksandr.ess\Dropbox\DMT\Brics_testimine\after.dwg";
+                string dwg = @"C:\Users\aleksandr.ess\Dropbox\DMT\Brics_testimine\CSV_kokkuvote\VD-V-1002_W-44.dwg";
                 string script = "script1.scr";
 
                 createScriptFile(script, netload, dwg);

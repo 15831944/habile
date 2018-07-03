@@ -99,7 +99,7 @@ namespace DMTCommands
             {
                 _CONNECTION c = new _CONNECTION();
 
-                Reinforcer program = new Reinforcer(ref c);
+                REINFORCE_command program = new REINFORCE_command(ref c);
 
                 try
                 {
@@ -136,7 +136,7 @@ namespace DMTCommands
             {
                 _CONNECTION c = new _CONNECTION();
 
-                Tabler program = new Tabler(ref c);
+                TABLE_command program = new TABLE_command(ref c);
 
                 try
                 {
@@ -173,7 +173,7 @@ namespace DMTCommands
             {
                 _CONNECTION c = new _CONNECTION();
 
-                Tabler program = new Tabler(ref c);
+                TABLE_command program = new TABLE_command(ref c);
 
                 try
                 {
@@ -210,7 +210,7 @@ namespace DMTCommands
             {
                 _CONNECTION c = new _CONNECTION();
 
-                Tabler program = new Tabler(ref c);
+                TABLE_command program = new TABLE_command(ref c);
 
                 try
                 {
@@ -240,11 +240,11 @@ namespace DMTCommands
         }
 
 
-        [_Trx.CommandMethod("FindReplaceAE")]
-        public void dummy()
-        {
-            findReplacer();
-        }
+        //[_Trx.CommandMethod("FindReplaceAE")]
+        //public void dummy()
+        //{
+        //    findReplacer();
+        //}
 
 
         [_Trx.CommandMethod("AEFR")]
@@ -254,7 +254,7 @@ namespace DMTCommands
             {
                 _CONNECTION c = new _CONNECTION();
 
-                FindReplacer program = new FindReplacer(ref c);
+                FINDREPLACE_command program = new FINDREPLACE_command(ref c);
 
                 try
                 {
@@ -291,7 +291,81 @@ namespace DMTCommands
             {
                 _CONNECTION c = new _CONNECTION();
 
-                CSV_Writer program = new CSV_Writer(ref c);
+                CSV_command program = new CSV_command(ref c);
+
+                try
+                {
+                    program.run();
+
+                    c.ed.WriteMessage("\n[DONE]");
+                }
+                catch (DMTException de)
+                {
+                    c.ed.WriteMessage("\n" + de.Message);
+                }
+                catch (Exception ex)
+                {
+                    c.ed.WriteMessage("\n[ERROR] Unknown Exception");
+                    c.ed.WriteMessage("\n[ERROR] " + ex.Message);
+                    c.ed.WriteMessage("\n[ERROR] " + ex.TargetSite);
+                }
+                finally
+                {
+                    c.close();
+                }
+            }
+            catch
+            {
+                _SWF.MessageBox.Show("\n[ERROR] Connection to BricsCad/AutoCad failed.");
+            }
+        }
+
+
+        [_Trx.CommandMethod("AEDIM")]
+        public void dimLayer()
+        {
+            try
+            {
+                _CONNECTION c = new _CONNECTION();
+
+                DIMLAYER_command program = new DIMLAYER_command(ref c);
+
+                try
+                {
+                    program.run();
+
+                    c.ed.WriteMessage("\n[DONE]");
+                }
+                catch (DMTException de)
+                {
+                    c.ed.WriteMessage("\n" + de.Message);
+                }
+                catch (Exception ex)
+                {
+                    c.ed.WriteMessage("\n[ERROR] Unknown Exception");
+                    c.ed.WriteMessage("\n[ERROR] " + ex.Message);
+                    c.ed.WriteMessage("\n[ERROR] " + ex.TargetSite);
+                }
+                finally
+                {
+                    c.close();
+                }
+            }
+            catch
+            {
+                _SWF.MessageBox.Show("\n[ERROR] Connection to BricsCad/AutoCad failed.");
+            }
+        }
+
+
+        [_Trx.CommandMethod("AEDIMC")]
+        public void dimColor()
+        {
+            try
+            {
+                _CONNECTION c = new _CONNECTION();
+
+                DIMCOLOR_command program = new DIMCOLOR_command(ref c);
 
                 try
                 {

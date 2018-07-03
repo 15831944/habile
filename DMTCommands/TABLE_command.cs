@@ -48,7 +48,7 @@ using T = Logic_Tabler;
 
 namespace DMTCommands
 {
-    partial class Tabler
+    partial class TABLE_command
     {
         _CONNECTION _c;
 
@@ -63,7 +63,7 @@ namespace DMTCommands
         List<string> bendingNames;
 
 
-        public Tabler(ref _CONNECTION c)
+        public TABLE_command(ref _CONNECTION c)
         {
             _c = c;
 

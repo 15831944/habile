@@ -48,12 +48,12 @@ using T = Logic_Tabler;
 
 namespace DMTCommands
 {
-    partial class FindReplacer
+    partial class FINDREPLACE_command
     {
         _CONNECTION _c;
 
 
-        public FindReplacer(ref _CONNECTION c)
+        public FINDREPLACE_command(ref _CONNECTION c)
         {
             _c = c;
         }
@@ -179,13 +179,44 @@ namespace DMTCommands
                 }
             }
 
-            foreach (string lay in layouts)
+            if (layouts.Count > 0)
             {
                 _Db.LayoutManager lm = _Db.LayoutManager.Current;
-                string newname = lay.Replace(find, replace);
-                lm.RenameLayout(lay, newname);
+
+                foreach (string lay in layouts)
+                {
+                    string newname = lay.Replace(find, replace);
+                    lm.RenameLayout(lay, newname);
+                }
+
+
+                string randomName = generateRandomString(40);
+                _Db.ObjectId id = lm.GetLayoutId(randomName);
+
+                if (!id.IsValid)
+                {
+                    id = lm.CreateLayout(randomName);
+                }
+
+                lm.DeleteLayout(randomName);
+
+                lm.Dispose();
             }
         }
 
+        private string generateRandomString(int number)
+        {
+            string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+            char[] stringChars = new char[number];
+            Random random = new Random();
+
+            for (int i = 0; i < stringChars.Length; i++)
+            {
+                stringChars[i] = chars[random.Next(chars.Length)];
+            }
+
+            string finalString = new String(stringChars);
+            return finalString;
+        }
     }
 }

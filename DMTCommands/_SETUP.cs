@@ -107,7 +107,6 @@ namespace DMTCommands
 
             _Db.ObjectId layerId = layerTable.Add(newLayer);
             _c.trans.AddNewlyCreatedDBObject(newLayer, true);
-            _c.db.Clayer = layerId;
         }
 
 

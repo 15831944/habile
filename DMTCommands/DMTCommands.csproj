@@ -59,19 +59,21 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CSV_Writer.cs" />
-    <Compile Include="FindReplacer.cs" />
+    <Compile Include="DIMLAYER_command.cs" />
+    <Compile Include="DIMCOLOR_command.cs" />
+    <Compile Include="CSV_command.cs" />
+    <Compile Include="FINDREPLACE_command.cs" />
     <Compile Include="_COMMANDS.cs" />
-    <Compile Include="Tabler_Checker_Outputs.cs" />
+    <Compile Include="Tabler_Checker_outputs.cs" />
     <Compile Include="_CONNECTION.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Reinforcer.cs" />
-    <Compile Include="Reinforcer_Inputs.cs" />
-    <Compile Include="Reinforcer_Outputs.cs" />
-    <Compile Include="Tabler_Material_Outputs.cs" />
-    <Compile Include="Tabler.cs" />
-    <Compile Include="Tabler_Inputs.cs" />
-    <Compile Include="Tabler_Bending_Outputs.cs" />
+    <Compile Include="REINFORCE_command.cs" />
+    <Compile Include="Reinforcer_inputs.cs" />
+    <Compile Include="Reinforcer_outputs.cs" />
+    <Compile Include="Tabler_Material_outputs.cs" />
+    <Compile Include="TABLE_command.cs" />
+    <Compile Include="Tabler_inputs.cs" />
+    <Compile Include="Tabler_Bending_outputs.cs" />
     <Compile Include="_SETUP.cs" />
     <Compile Include="_EXCEPTIONS.cs" />
   </ItemGroup>

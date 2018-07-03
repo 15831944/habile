@@ -48,7 +48,7 @@ using T = Logic_Tabler;
 
 namespace DMTCommands
 {
-    partial class Reinforcer
+    partial class REINFORCE_command
     {
         private void output(List<R.Raud> reinf, List<R.Raud_Array> reinf_array, List<R.Raud> unique_reinf, G.Point insertPoint)
         {
