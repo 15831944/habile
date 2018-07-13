@@ -8,6 +8,7 @@ namespace Geometry_tests
     [TestClass]
     public class Point_tests
     {
+
         [TestMethod]
         public void Point_init_test()
         {

@@ -17,11 +17,13 @@ namespace Logic_Reinf
         public G.Edge StartEdge { get { return edge1; } }
         public G.Edge EndEdge { get { return edge2; } }
 
+
         public PseudoCorner(G.Edge ln1, G.Edge ln2)
         {
             edge1 = ln1;
             edge2 = ln2;
         }
+
 
         public G.Edge getOtherEdge(G.Edge one)
         {
@@ -29,6 +31,7 @@ namespace Logic_Reinf
             else if (one == edge2) return edge1;
             else throw new G.EdgeNotInDefinedCornerException();
         }
+
 
         public G.Point getCornerPoint(G.Edge e, double offset_main, double offset_side, double alfa = 100000)
         {
@@ -42,5 +45,6 @@ namespace Logic_Reinf
 
             return ip;
         }
+
     }
 }

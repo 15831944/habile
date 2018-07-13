@@ -17,11 +17,13 @@ namespace Reinforcement
         public List<Raud> array { get { return _array; } }
         public G.Point IP { get { return _IP; } }
 
+
         public Raud_Array(int CC)
         {
             _array = new List<Raud>();
             _CC = CC;
         }
+
 
         public void add_one(Raud one)
         {
@@ -29,6 +31,7 @@ namespace Reinforcement
             int index = (int)_array.Count / 2;
             _IP = _array[index].IP;
         }
+
 
         public override string ToString()
         {
@@ -40,8 +43,8 @@ namespace Reinforcement
             {
                 return "empty array ToString Call";
             }
-
         }
+
     }
 }
 

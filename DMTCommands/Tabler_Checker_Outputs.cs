@@ -50,6 +50,7 @@ namespace DMTCommands
 {
     partial class TABLE_command
     {
+
         public void checker_output(List<T.ErrorPoint> errors)
         {
             write(" ");

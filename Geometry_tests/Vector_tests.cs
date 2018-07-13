@@ -8,6 +8,7 @@ namespace Geometry_tests
     [TestClass]
     public class Vector_tests
     {
+
         [TestMethod]
         public void Vector_init_test()
         {

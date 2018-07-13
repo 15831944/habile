@@ -18,10 +18,12 @@ namespace Logic_Tabler
         public G.Point IP { get { return _IP; } }
         public double Scale { get { return _scale; } }
 
+
         public TableHead(G.Point position, double scale)
         {
             _IP = position;
             _scale = scale;
         }
+
     }
 }

@@ -117,6 +117,7 @@ namespace Reinforcement
             return str;
         }
 
+
         public bool Equals(B_Raud other)
         {
             if (other == null) return false;
@@ -126,6 +127,7 @@ namespace Reinforcement
                     this.Materjal == other.Materjal);
         }
 
+
         public override bool Equals(Raud obj)
         {
             if (ReferenceEquals(null, obj)) return false;
@@ -133,6 +135,7 @@ namespace Reinforcement
             if (obj.GetType() != GetType()) return false;
             return Equals(obj as B_Raud);
         }
+
 
         public override bool Equals(object obj)
         {
@@ -142,14 +145,17 @@ namespace Reinforcement
             return Equals(obj as B_Raud);
         }
 
+
         public static bool operator ==(B_Raud a, B_Raud b)
         {
             return object.Equals(a, b);
         }
 
+
         public static bool operator !=(B_Raud a, B_Raud b)
         {
             return !object.Equals(a, b);
         }
+
     }
 }

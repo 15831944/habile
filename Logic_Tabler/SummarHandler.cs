@@ -10,6 +10,7 @@ namespace Logic_Tabler
 {
     public static class SummarHandler
     {
+
         public static List<DrawingArea> main(List<G.Area> areas, List<TableHead> heads, List<TableRow> rows, List<TableSummary> summarys)
         {
             List<DrawingArea> fields = sortData(areas, heads, rows, summarys);
@@ -32,6 +33,7 @@ namespace Logic_Tabler
 
             return fields;
         }
+
 
         private static void dosomeshitmagic(DrawingArea field)
         {
@@ -114,6 +116,7 @@ namespace Logic_Tabler
             }
         }
 
+
         private static List<DrawingArea> sortData(List<G.Area> areas, List<TableHead> heads, List<TableRow> rows, List<TableSummary> summarys)
         {
             List<DrawingArea> data = new List<DrawingArea>();
@@ -162,5 +165,6 @@ namespace Logic_Tabler
 
             return data;
         }
+
     }
 }

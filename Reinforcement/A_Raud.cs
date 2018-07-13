@@ -18,6 +18,7 @@ namespace Reinforcement
         
         public double A { get { return _A; } }
 
+
         public A_Raud(G.Line main, int nr, int d, string teras) : base (main, nr, d, teras)
         {
             _A = shorter(main.Length());
@@ -26,17 +27,20 @@ namespace Reinforcement
             _Length = _A;
         }
 
+
         public override string ToString()
         {
             string str = Number.ToString() + "A" + Diameter.ToString() + A.ToString();
             return str;
         }
 
+
         public override string ToStringNoCount()
         {
             string str = "A" + Diameter.ToString() + A.ToString();
             return str;
         }
+
 
         public G.Line makeLine()
         {
@@ -45,6 +49,7 @@ namespace Reinforcement
             G.Line rebarLine = new G.Line(a, b);
             return rebarLine;
         }
+
 
         public static A_Raud mergeTwoRebar(A_Raud one, A_Raud two)
         {
@@ -57,12 +62,6 @@ namespace Reinforcement
         }
 
 
-        public static void mergeTwoRebarAB(A_Raud one, B_Raud two, ref A_Raud out1, ref B_Raud out2)
-        {
-            
-        }
-
-
         public bool Equals(A_Raud other)
         {
             if (other == null) return false;
@@ -70,6 +69,7 @@ namespace Reinforcement
                     this.Diameter == other.Diameter && 
                     this.Materjal == other.Materjal);
         }
+
 
         public override bool Equals(Raud obj)
         {
@@ -79,6 +79,7 @@ namespace Reinforcement
             return Equals(obj as A_Raud);
         }
 
+
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(null, obj)) return false;
@@ -87,14 +88,17 @@ namespace Reinforcement
             return Equals(obj as A_Raud);
         }
 
+
         public static bool operator ==(A_Raud a, A_Raud b)
         {
             return object.Equals(a, b);
         }
 
+
         public static bool operator !=(A_Raud a, A_Raud b)
         {
             return !object.Equals(a, b);
         }
+
     }
 }

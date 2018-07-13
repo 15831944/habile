@@ -12,6 +12,7 @@ namespace Logic_Reinf
 {
     public partial class ReinforcmentHandler
     {
+
         //DEBUG
         private bool A_handler_debug(G.Point mainPoint, G.Point mainEnd)
         {

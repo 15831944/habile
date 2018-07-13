@@ -9,6 +9,7 @@ namespace Geometry_tests
     [TestClass]
     public class Region_Static_tests
     {
+
         [TestMethod]
         public void Region_Static_isPointinRegion_test_simple()
         {

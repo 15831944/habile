@@ -30,6 +30,7 @@ namespace Reinforcement
         public double B2 { get { return _B2; } } // parand magic
         public double C { get { return _C; } }
 
+
         public D_Raud(G.Line side1, int z_dist, int nr, int d, string teras) : base(side1, nr, d, teras)
         {
             _A = shorter(side1.Length());
@@ -40,6 +41,7 @@ namespace Reinforcement
             _IP = side1.getCenterPoint();
             _Length = _A + _B + _C;
         }
+
 
         public D_Raud(G.Line main, G.Line side1, G.Line side2, int nr, int d, string teras, int parand = 0) : base(main, nr, d, teras)
         {
@@ -58,6 +60,7 @@ namespace Reinforcement
             _Side2Point = _EndPoint.move(_C, v2);
         }
 
+
         public G.Line makeMainLine()
         {
             G.Point a = new G.Point(_StartPoint.X, _StartPoint.Y);
@@ -65,6 +68,7 @@ namespace Reinforcement
             G.Line rebarLine = new G.Line(a, b);
             return rebarLine;
         }
+
 
         public G.Line makeSide1Line()
         {
@@ -74,6 +78,7 @@ namespace Reinforcement
             return rebarLine;
         }
 
+
         public G.Line makeSide2Line()
         {
             G.Point a = new G.Point(_EndPoint.X, _EndPoint.Y);
@@ -81,6 +86,7 @@ namespace Reinforcement
             G.Line rebarLine = new G.Line(a, b);
             return rebarLine;
         }
+
 
         public override string ToString()
         {
@@ -97,6 +103,7 @@ namespace Reinforcement
             return str;
         }
 
+
         public override string ToStringNoCount()
         {
             string str = "";
@@ -111,6 +118,7 @@ namespace Reinforcement
             return str;
         }
 
+
         public bool Equals(D_Raud other)
         {
             if (other == null) return false;
@@ -121,6 +129,7 @@ namespace Reinforcement
                     this.Materjal == other.Materjal);
         }
 
+
         public override bool Equals(Raud obj)
         {
             if (ReferenceEquals(null, obj)) return false;
@@ -128,6 +137,7 @@ namespace Reinforcement
             if (obj.GetType() != GetType()) return false;
             return Equals(obj as D_Raud);
         }
+
 
         public override bool Equals(object obj)
         {
@@ -137,14 +147,17 @@ namespace Reinforcement
             return Equals(obj as D_Raud);
         }
 
+
         public static bool operator ==(D_Raud a, D_Raud b)
         {
             return object.Equals(a, b);
         }
 
+
         public static bool operator !=(D_Raud a, D_Raud b)
         {
             return !object.Equals(a, b);
         }
+
     }
 }

@@ -30,6 +30,7 @@ namespace Reinforcement
         public string Materjal { get { return _Materjal; } }
         public double Length { get { return _Length; } }
 
+
         public Raud(G.Line main, int nr, int d, string teras)
         {
             G.Vector dir = main.getDirectionVector();
@@ -49,14 +50,17 @@ namespace Reinforcement
             _EndPoint = _StartPoint.move(shorterLength, dir);
         }
 
+
         internal int shorter(double len)
         {
             return (int)Math.Floor(len / 5 + 0.01) * 5;
         }
 
+
         public abstract override string ToString();
         public abstract string ToStringNoCount();
         public abstract bool Equals(Raud other);
         public abstract override bool Equals(object obj);
+
     }
 }

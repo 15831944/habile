@@ -12,6 +12,7 @@ namespace Logic_Reinf
 {
     public partial class ReinforcmentHandler
     {
+
         public bool define_simple_D(G.Edge mainEdge, G.Edge side1Edge, G.Edge side2Edge)
         {
             bool mainSet = setEdges.Keys.Contains(mainEdge);
@@ -118,6 +119,7 @@ namespace Logic_Reinf
 
             return success;
         }
+
 
         public bool define_D(G.Edge mainEdge, G.Edge side1Edge, G.Edge side2Edge)
         {
@@ -228,5 +230,6 @@ namespace Logic_Reinf
 
             return success;
         }
+
     }
 }

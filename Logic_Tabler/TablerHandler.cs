@@ -10,6 +10,7 @@ namespace Logic_Tabler
 {
     public class TablerHandler
     {
+
         public TablerHandler()
         {
 
@@ -94,6 +95,7 @@ namespace Logic_Tabler
             return fields;
         }
 
+
         private List<DrawingArea> sortData(List<G.Area> areas, List<TableHead> heads, List<ReinforcementMark> marks, List<Bending> bendings, List<TableRow> rows)
         {
             List<DrawingArea> data = new List<DrawingArea>();
@@ -154,5 +156,6 @@ namespace Logic_Tabler
             
             return data;
         }
+
     }
 }

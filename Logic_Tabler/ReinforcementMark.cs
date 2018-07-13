@@ -10,7 +10,7 @@ using G = Geometry;
 
 namespace Logic_Tabler
 {
-    public class ReinforcementMark
+    public class ReinforcementMark : IEquatable<ReinforcementMark>
     {
         G.Point _IP;
         string _fullMark;
@@ -42,6 +42,7 @@ namespace Logic_Tabler
             _fullMark = mark;
         }
 
+
         public bool validate()
         {
             try
@@ -55,6 +56,7 @@ namespace Logic_Tabler
 
             return true;
         }
+
 
         private void alfa()
         {
@@ -160,11 +162,42 @@ namespace Logic_Tabler
             _Other = Int32.Parse(mark.Substring(numDiam, temp));
         }
 
+
         public override string ToString() // debug
         {
             string str = _Count + " " + _Position + " " + _Shape + " " + _Diameter + " " + _Other;
             return str;
         }
+
+
+        public bool Equals(ReinforcementMark other)
+        {
+            if (other == null) return false;
+            return (this.IP == other.IP &&
+                    this._fullMark == other._fullMark);
+        }
+
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != GetType()) return false;
+            return Equals(obj as ReinforcementMark);
+        }
+
+
+        public static bool operator ==(ReinforcementMark a, ReinforcementMark b)
+        {
+            return object.Equals(a, b);
+        }
+
+
+        public static bool operator !=(ReinforcementMark a, ReinforcementMark b)
+        {
+            return !object.Equals(a, b);
+        }
+
     }
 }
 

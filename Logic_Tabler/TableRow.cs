@@ -70,10 +70,12 @@ namespace Logic_Tabler
         public bool Valid { get { return _valid; } }
         public string Reason { get { return _reason; } }
 
+
         public TableRow(G.Point position)
         {
             _IP = position;
         }
+
 
         public TableRow(Bending b)
         {
@@ -101,6 +103,7 @@ namespace Logic_Tabler
             _Y = b.Y;
         }
 
+
         public bool validator()
         {
             if (Position == "nul")
@@ -120,8 +123,7 @@ namespace Logic_Tabler
                 setInvalid("[ERROR] - TABLE ROW - Diameter");
                 return false;
             }
-
-
+            
             return true;
         }
 
@@ -139,6 +141,7 @@ namespace Logic_Tabler
             return (this.Position == other.Position &&
                     this.Material == other.Material);
         }
+
         
         public override bool Equals(object obj)
         {
@@ -148,10 +151,12 @@ namespace Logic_Tabler
             return Equals(obj as TableRow);
         }
 
+
         public static bool operator ==(TableRow a, TableRow b)
         {
             return object.Equals(a, b);
         }
+
 
         public static bool operator !=(TableRow a, TableRow b)
         {

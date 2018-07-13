@@ -24,17 +24,19 @@ namespace Logic_Tabler
         public double Weight { get { return _weight; } set { _weight = value; } }
         public string Units { get { return _units; } set { _units = value; } }
 
-
         public G.Point IP { get { return _IP; } }
+
 
         public TableSummary(G.Point position)
         {
             _IP = position;
         }
 
+
         public TableSummary()
         {
 
         }
+
     }
 }

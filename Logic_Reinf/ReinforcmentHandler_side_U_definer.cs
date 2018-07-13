@@ -12,6 +12,7 @@ namespace Logic_Reinf
 {
     public partial class ReinforcmentHandler
     {
+
         private void define_side_U(LineSegment seg)
         {
             G.Line mainLine = seg.getLine();
@@ -57,5 +58,6 @@ namespace Logic_Reinf
                 U_side_garbage_collector();
             }
         }
+
     }
 }

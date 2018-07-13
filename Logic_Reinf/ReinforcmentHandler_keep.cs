@@ -12,6 +12,7 @@ namespace Logic_Reinf
 {
     public partial class ReinforcmentHandler
     {
+
         private void keep(R.Raud reinf, G.Edge edge, G.Corner corner1, G.Corner corner2)
         {
             if (edge != null)

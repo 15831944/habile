@@ -10,6 +10,7 @@ namespace Reinforcement_tests
     [TestClass]
     public class D_Raud_tests
     {
+
         [TestMethod]
         public void D_Raud_class_test()
         {
@@ -27,6 +28,7 @@ namespace Reinforcement_tests
             Assert.IsTrue(reinf is R.Raud);
             Assert.IsTrue(reinf is R.D_Raud);
         }
+
 
         [TestMethod]
         public void D_Raud_Init_test1()
@@ -55,6 +57,7 @@ namespace Reinforcement_tests
             Assert.AreEqual(reinf.Materjal, "B500B");
         }
 
+
         [TestMethod]
         public void D_Raud_Init_test2()
         {
@@ -82,6 +85,7 @@ namespace Reinforcement_tests
             Assert.AreEqual(reinf.Materjal, "B500B");
         }
 
+
         [TestMethod]
         public void D_Raud_Init_test3()
         {
@@ -108,6 +112,7 @@ namespace Reinforcement_tests
             Assert.AreEqual(reinf.Diameter, 8, 0.001);
             Assert.AreEqual(reinf.Materjal, "B500B");
         }
+
 
         [TestMethod]
         public void D_Raud_Init_test_parand1()
@@ -137,6 +142,7 @@ namespace Reinforcement_tests
             Assert.AreEqual(reinf.Materjal, "B500B");
         }
 
+
         [TestMethod]
         public void D_Raud_Init_test_parand2()
         {
@@ -164,5 +170,6 @@ namespace Reinforcement_tests
             Assert.AreEqual(reinf.Diameter, 8, 0.001);
             Assert.AreEqual(reinf.Materjal, "B500B");
         }
+
     }
 }

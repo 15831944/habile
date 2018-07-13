@@ -12,6 +12,7 @@ namespace Logic_Reinf
 {
     public partial class ReinforcmentHandler
     {
+
         public bool define_simple_B(G.Edge startEdge, G.Edge endEdge)
         {
             double cover1 = _V_.X_CONCRETE_COVER_2;
@@ -197,5 +198,6 @@ namespace Logic_Reinf
              
             return success;
         }
+
     }
 }

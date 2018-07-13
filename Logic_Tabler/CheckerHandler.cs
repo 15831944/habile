@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 using G = Geometry;
 
@@ -10,6 +11,7 @@ namespace Logic_Tabler
 {
     public static class CheckerHandler
     {
+
         public static List<ErrorPoint> main(List<G.Area> areas, List<TableHead> heads, List<ReinforcementMark> marks, List<Bending> bendings, List<TableRow> rows, List<TableSummary> summarys)
         {
             List<ErrorPoint> errors = new List<ErrorPoint>();
@@ -29,6 +31,7 @@ namespace Logic_Tabler
 
             return errors;
         }
+
 
         private static List<ErrorPoint> dosomeshitmagic(DrawingArea field)
         {
@@ -102,6 +105,27 @@ namespace Logic_Tabler
                     errors.Add(er);
                 }
             }
+            
+            foreach (ReinforcementMark m in field._marks)
+            {
+                bool found = false;
+                foreach (ReinforcementMark n in field._marks)
+                {
+                    if (ReferenceEquals(m, n)) continue;
+
+                    if (m.IP == n.IP)
+                    {
+                        found = true;
+                        break;
+                    }
+                }
+
+                if (found == true)
+                {
+                    ErrorPoint er = new ErrorPoint(m.IP, "[VIGA] - VIIDE - TOPELT VIIDE - " + m.Position, field._tableHeads[0].Scale);
+                    if (!errors.Contains(er)) errors.Add(er);
+                }
+            }
 
             foreach (Bending b in field._bendings)
             {
@@ -168,6 +192,7 @@ namespace Logic_Tabler
                 throw new Exception();
             }
         }
+
 
         private static List<DrawingArea> sortData(List<G.Area> areas, List<TableHead> heads, List<ReinforcementMark> marks, List<Bending> bendings, List<TableRow> rows, List<TableSummary> summarys)
         {
@@ -241,5 +266,6 @@ namespace Logic_Tabler
 
             return data;
         }
+
     }
 }

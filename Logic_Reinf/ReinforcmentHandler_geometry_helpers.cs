@@ -283,6 +283,7 @@ namespace Logic_Reinf
             }
         }
 
+
         private G.Point getCornerPoint(G.Edge one, G.Edge two, double cover1, double cover2, ref G.Corner sharedCorner)
         {
             bool realCorner = G.Edge.getSharedCorner(one, two, ref sharedCorner);

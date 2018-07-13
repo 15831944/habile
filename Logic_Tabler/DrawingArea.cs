@@ -24,6 +24,7 @@ namespace Logic_Tabler
         public bool Valid { get { return _valid; } }
         public string Reason { get { return _reason; } }
 
+
         public DrawingArea(G.Area area)
         {
             _area = area;
@@ -35,42 +36,50 @@ namespace Logic_Tabler
             _summarys = new List<TableSummary>();
 
             _valid = true;
-    }
+        }
+
 
         internal bool isInArea(G.Point p)
         {
             return _area.isPointInArea(p);
         }
 
+
         internal void addTableHead(TableHead th)
         {
             _tableHeads.Add(th);
         }
+
 
         internal void addMark(ReinforcementMark mk)
         {
             _marks.Add(mk);
         }
 
+
         internal void addBending(Bending bd)
         {
             _bendings.Add(bd);
         }
+
         
         internal void addRow(TableRow r)
         {
             _rows.Add(r);
         }
+
                         
         internal void addSummary(TableSummary p)
         {
             _summarys.Add(p);
         }
 
+
         internal void setInvalid(string reason)
         {
             _valid = false;
             _reason = reason;
         }
+
     }
 }
