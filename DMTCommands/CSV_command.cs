@@ -1,5 +1,5 @@
-﻿#define BRX_APP
-//#define ARX_APP
+﻿//#define BRX_APP
+#define ARX_APP
 
 using System;
 using System.Text;
@@ -10,6 +10,7 @@ using System.Diagnostics;
 using System.Collections.Generic;
 using System.Threading;
 using _SWF = System.Windows.Forms;
+
 
 #if BRX_APP
     using _Ap = Bricscad.ApplicationServices;
@@ -129,7 +130,7 @@ namespace DMTCommands
 
         private string getPanelName()
         {
-            List<_Db.BlockReference> titleblocks = getallBlocks(titleBlockName);
+            List<_Db.BlockReference> titleblocks = getAllBlocks(titleBlockName);
             if (titleblocks.Count < 1) throw new DMTException("[ERROR] Titleblock - NOT FOUND");
 
             List<string> names = getAllAttributeValues(titleblocks, titleNameAttribute);
@@ -143,7 +144,7 @@ namespace DMTCommands
 
         private string getProjectNumber()
         {
-            List<_Db.BlockReference> titleblocks = getallBlocks(titleBlockName);
+            List<_Db.BlockReference> titleblocks = getAllBlocks(titleBlockName);
             if (titleblocks.Count < 1) throw new DMTException("[ERROR] Titleblock - NOT FOUND");
 
             List<string> names = getAllAttributeValues(titleblocks, titleProjectAttribute);
@@ -157,7 +158,7 @@ namespace DMTCommands
         {
             List<Rebar> reb = new List<Rebar>();
 
-            List<_Db.BlockReference> rebarMaterialBlocks = getallBlocks(rebarMaterialBlockName);
+            List<_Db.BlockReference> rebarMaterialBlocks = getAllBlocks(rebarMaterialBlockName);
 
             if (rebarMaterialBlocks.Count > 0)
             {
@@ -202,7 +203,7 @@ namespace DMTCommands
         {
             List<Mesh> mesh = new List<Mesh>();
 
-            List<_Db.BlockReference> meshMaterialBlocks = getallBlocks(meshMaterialBlockName);
+            List<_Db.BlockReference> meshMaterialBlocks = getAllBlocks(meshMaterialBlockName);
 
             if (meshMaterialBlocks.Count > 0)
             {
@@ -450,7 +451,7 @@ namespace DMTCommands
         }
 
         
-        private List<_Db.BlockReference> getallBlocks(string[] blockNames)
+        private List<_Db.BlockReference> getAllBlocks(string[] blockNames)
         {
             List<_Db.BlockReference> blocks = new List<_Db.BlockReference>();
 

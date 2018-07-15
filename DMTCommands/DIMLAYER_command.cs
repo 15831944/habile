@@ -1,5 +1,5 @@
-﻿#define BRX_APP
-//#define ARX_APP
+﻿//#define BRX_APP
+#define ARX_APP
 
 using System;
 using System.Text;
@@ -9,6 +9,7 @@ using System.IO;
 using System.Diagnostics;
 using System.Collections.Generic;
 using _SWF = System.Windows.Forms;
+
 
 #if BRX_APP
     using _Ap = Bricscad.ApplicationServices;
@@ -116,7 +117,7 @@ namespace DMTCommands
             newLayer.Color = _Cm.Color.FromColorIndex(_Cm.ColorMethod.None, 80);
             newLayer.Description = "Kõik mõõtjooned";
             newLayer.LineWeight = _Db.LineWeight.LineWeight013;
-            
+
             _Db.ObjectId layerId = layerTable.Add(newLayer);
             _c.trans.AddNewlyCreatedDBObject(newLayer, true);
         }

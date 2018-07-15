@@ -1,5 +1,5 @@
-﻿#define BRX_APP
-//#define ARX_APP
+﻿//#define BRX_APP
+#define ARX_APP
 
 using System;
 using System.Text;
@@ -9,6 +9,7 @@ using System.IO;
 using System.Diagnostics;
 using System.Collections.Generic;
 using _SWF = System.Windows.Forms;
+
 
 #if BRX_APP
     using _Ap = Bricscad.ApplicationServices;
