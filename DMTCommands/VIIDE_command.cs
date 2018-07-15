@@ -71,7 +71,7 @@ namespace DMTCommands
         {
             List<_Db.BlockReference> blocks = getAllBlocks(blockNames);
 
-            if (data.Count == 0)
+            if (blocks.Count == 0)
             {
                 string names = string.Join(", ", blockNames.ToArray());
                 throw new DMTException("[ERROR] - (" + names + ") - not found");
@@ -112,7 +112,7 @@ namespace DMTCommands
         }
 
 
-        private List<Viide> getData(_Db.BlockReference blocks)
+        private List<Viide> getData(List<_Db.BlockReference> blocks)
         {
             List<Viide> data = new List<Viide>();
 
@@ -139,7 +139,8 @@ namespace DMTCommands
                     v.txt = viide;
                     v.item = item;
                     v.number = number;
-                }                   
+                    data.Add(v);
+                }
             }
 
             return data;
@@ -155,21 +156,19 @@ namespace DMTCommands
 
         private void output(List<Viide> data, _Ge.Point3d ip)
         {
-            G.Point currentPoint = ip;
+            _Ge.Point3d currentPoint = ip;
             double size = 3;
             double scale = 40;
             double delta = scale * size;
 
-            currentPoint.X = ip.X;
-            currentPoint.Y -= delta;
+            currentPoint = new _Ge.Point3d(ip.X, currentPoint.Y - delta, 0);
 
             foreach (Viide v in data)
             {
-                outputText = v.item + " [" + v.number + "]";
+                string outputText = v.item + " [" + v.number + "]";
                 insertText(currentPoint, outputText, scale);
 
-                currentPoint.X = ip.X;
-                currentPoint.Y -= scale * size;
+                currentPoint = new _Ge.Point3d(ip.X, currentPoint.Y - delta, 0);
             }
         }
 
@@ -207,7 +206,7 @@ namespace DMTCommands
         }
 
 
-        private List<_Db.BlockReference> getAllBlockReference(string[] blockName)
+        private List<_Db.BlockReference> getAllBlockReference(string blockName)
         {
             List<_Db.BlockReference> refs = new List<_Db.BlockReference>();
 

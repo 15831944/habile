@@ -241,58 +241,14 @@ namespace DMTCommands
         }
 
 
-        //[_Trx.CommandMethod("FindReplaceAE")]
-        //public void dummy()
-        //{
-        //    findReplacer();
-        //}
-
-
-        [_Trx.CommandMethod("AEFR")]
-        public void findReplacer()
+        [_Trx.CommandMethod("AEV")]
+        public void viide()
         {
             try
             {
                 _CONNECTION c = new _CONNECTION();
 
-                FINDREPLACE_command program = new FINDREPLACE_command(ref c);
-
-                try
-                {
-                    program.run();
-
-                    c.ed.WriteMessage("\n[DONE]");
-                }
-                catch (DMTException de)
-                {
-                    c.ed.WriteMessage("\n" + de.Message);
-                }
-                catch (Exception ex)
-                {
-                    c.ed.WriteMessage("\n[ERROR] Unknown Exception");
-                    c.ed.WriteMessage("\n[ERROR] " + ex.Message);
-                    c.ed.WriteMessage("\n[ERROR] " + ex.TargetSite);
-                }
-                finally
-                {
-                    c.close();
-                }
-            }
-            catch
-            {
-                _SWF.MessageBox.Show("\n[ERROR] Connection to BricsCad/AutoCad failed.");
-            }
-        }
-
-
-        [_Trx.CommandMethod("CSV_REINF_SINGLE")]
-        public void csv_reinf_single()
-        {
-            try
-            {
-                _CONNECTION c = new _CONNECTION();
-
-                CSV_command program = new CSV_command(ref c);
+                VIIDE_command program = new VIIDE_command(ref c);
 
                 try
                 {
@@ -367,6 +323,80 @@ namespace DMTCommands
                 _CONNECTION c = new _CONNECTION();
 
                 DIMCOLOR_command program = new DIMCOLOR_command(ref c);
+
+                try
+                {
+                    program.run();
+
+                    c.ed.WriteMessage("\n[DONE]");
+                }
+                catch (DMTException de)
+                {
+                    c.ed.WriteMessage("\n" + de.Message);
+                }
+                catch (Exception ex)
+                {
+                    c.ed.WriteMessage("\n[ERROR] Unknown Exception");
+                    c.ed.WriteMessage("\n[ERROR] " + ex.Message);
+                    c.ed.WriteMessage("\n[ERROR] " + ex.TargetSite);
+                }
+                finally
+                {
+                    c.close();
+                }
+            }
+            catch
+            {
+                _SWF.MessageBox.Show("\n[ERROR] Connection to BricsCad/AutoCad failed.");
+            }
+        }
+
+
+        [_Trx.CommandMethod("AEFR")]
+        public void findReplacer()
+        {
+            try
+            {
+                _CONNECTION c = new _CONNECTION();
+
+                FINDREPLACE_command program = new FINDREPLACE_command(ref c);
+
+                try
+                {
+                    program.run();
+
+                    c.ed.WriteMessage("\n[DONE]");
+                }
+                catch (DMTException de)
+                {
+                    c.ed.WriteMessage("\n" + de.Message);
+                }
+                catch (Exception ex)
+                {
+                    c.ed.WriteMessage("\n[ERROR] Unknown Exception");
+                    c.ed.WriteMessage("\n[ERROR] " + ex.Message);
+                    c.ed.WriteMessage("\n[ERROR] " + ex.TargetSite);
+                }
+                finally
+                {
+                    c.close();
+                }
+            }
+            catch
+            {
+                _SWF.MessageBox.Show("\n[ERROR] Connection to BricsCad/AutoCad failed.");
+            }
+        }
+
+
+        [_Trx.CommandMethod("CSV_REINF_SINGLE")]
+        public void csv_reinf_single()
+        {
+            try
+            {
+                _CONNECTION c = new _CONNECTION();
+
+                CSV_command program = new CSV_command(ref c);
 
                 try
                 {
