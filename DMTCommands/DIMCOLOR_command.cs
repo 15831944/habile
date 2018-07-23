@@ -1,5 +1,5 @@
-﻿//#define BRX_APP
-#define ARX_APP
+﻿#define BRX_APP
+//#define ARX_APP
 
 using System;
 using System.Text;
@@ -101,10 +101,13 @@ namespace DMTCommands
 
             foreach (_Db.Dimension dim in dims)
             {
-                if (dim.ColorIndex != 256 || dim.Dimclrt != _Cm.Color.FromColorIndex(_Cm.ColorMethod.None, 256))
+                if (dim.ColorIndex != 256 || dim.Dimclrt != _Cm.Color.FromColorIndex(_Cm.ColorMethod.None, 256) || dim.Dimtfill != 0 || dim.Dimtfillclr != _Cm.Color.FromColorIndex(_Cm.ColorMethod.None, 256))
                 {
                     dim.ColorIndex = 256;
                     dim.Dimclrt = _Cm.Color.FromColorIndex(_Cm.ColorMethod.None, 256);
+                    dim.Dimtfill = 0;
+                    dim.Dimtfillclr = _Cm.Color.FromColorIndex(_Cm.ColorMethod.None, 256);
+
                     count++;
                 }
             }
