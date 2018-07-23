@@ -1,5 +1,5 @@
-﻿#define BRX_APP
-//#define ARX_APP
+﻿//#define BRX_APP
+#define ARX_APP
 
 using System;
 using System.Text;
@@ -48,9 +48,15 @@ namespace DMTCommands
     {
         _CONNECTION _c;
 
+        static double X_SCALE = 40;
+        static double X_DELTA = 3.5;
+
+        static string[] areaName = { "Drawing_Area" };
+
         static string[] blockNames = { "viide" };
         static string[] viideTopAttribute = { "ÜLEMINE_TEKST" };
         static string[] viideBottomAttribute = { "ALUMINE_TEKST" };
+
 
         struct Viide
         {
@@ -77,13 +83,52 @@ namespace DMTCommands
                 throw new DMTException("[ERROR] - (" + names + ") - not found");
             }
 
-            List<Viide> data = getData(blocks);
-            if (data.Count == 0) throw new DMTException("[ERROR] Viga andmete lugemisel ");
+            List<Viide> viited = getData(blocks);
 
-            _Ge.Point3d ip = getPoint();
+            List<_Db.BlockReference> areas = getAllBlocks(areaName);
 
-            output(data, ip);
+            if (areas.Count < 1)
+            {
+                _Ge.Point3d ip = getPoint();
+                output(viited, ip);
+            }
+            else
+            {
+                Dictionary<_Db.BlockReference, List<Viide>> data = matchBlockToArea(areas, viited);
 
+                foreach (_Db.BlockReference area in areas)
+                {
+                    output(data[area], area.GeometricExtents.MaxPoint);
+                }
+            }
+
+        }
+
+
+        private Dictionary<_Db.BlockReference, List<Viide>> matchBlockToArea(List<_Db.BlockReference> areas, List<Viide> viited)
+        {
+            Dictionary<_Db.BlockReference, List<Viide>> results = new Dictionary<_Db.BlockReference, List<Viide>>();
+
+            foreach (_Db.BlockReference area in areas)
+            {
+                results[area] = new List<Viide>();
+            }
+
+            foreach (Viide viide in viited)
+            {
+                foreach (_Db.BlockReference area in areas)
+                {
+                    bool inside = isPointInArea(area, viide.ip);
+
+                    if (inside)
+                    {
+                        results[area].Add(viide);
+                        continue;
+                    }
+                }
+            }            
+
+            return results;
         }
 
 
@@ -156,17 +201,17 @@ namespace DMTCommands
 
         private void output(List<Viide> data, _Ge.Point3d ip)
         {
+            if (data.Count == 0) write("[WARNING] Joonised puuduvad viited");
+
             _Ge.Point3d currentPoint = ip;
-            double size = 3;
-            double scale = 40;
-            double delta = scale * size;
+            double delta = X_DELTA * X_SCALE;
 
             currentPoint = new _Ge.Point3d(ip.X, currentPoint.Y - delta, 0);
 
             foreach (Viide v in data)
             {
                 string outputText = v.item + " [" + v.number + "]";
-                insertText(currentPoint, outputText, scale);
+                insertText(currentPoint, outputText, X_SCALE);
 
                 currentPoint = new _Ge.Point3d(ip.X, currentPoint.Y - delta, 0);
             }
@@ -242,6 +287,18 @@ namespace DMTCommands
             }
 
             return refs;
+        }
+
+
+        private bool isPointInArea(_Db.BlockReference area, _Ge.Point3d point)
+        {
+            if (point.X < area.GeometricExtents.MinPoint.X) return false;
+            if (point.X > area.GeometricExtents.MaxPoint.X) return false;
+
+            if (point.Y < area.GeometricExtents.MinPoint.Y) return false;
+            if (point.Y > area.GeometricExtents.MaxPoint.Y) return false;
+
+            return true;
         }
 
 
