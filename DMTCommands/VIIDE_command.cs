@@ -1,5 +1,5 @@
-﻿//#define BRX_APP
-#define ARX_APP
+﻿#define BRX_APP
+//#define ARX_APP
 
 using System;
 using System.Text;
@@ -58,7 +58,7 @@ namespace DMTCommands
         static string[] viideBottomAttribute = { "ALUMINE_TEKST" };
 
 
-        struct Viide
+        class Viide
         {
             public string txt;
             public _Ge.Point3d ip;
@@ -75,16 +75,15 @@ namespace DMTCommands
 
         internal void run()
         {
-            List<_Db.BlockReference> blocks = getAllBlocks(blockNames);
+            List<_Db.BlockReference> viiteBlocks = getAllBlocks(blockNames);
 
-            if (blocks.Count == 0)
+            if (viiteBlocks.Count == 0)
             {
                 string names = string.Join(", ", blockNames.ToArray());
                 throw new DMTException("[ERROR] - (" + names + ") - not found");
             }
 
-            List<Viide> viited = getData(blocks);
-
+            List<Viide> viited = getData(viiteBlocks);
             List<_Db.BlockReference> areas = getAllBlocks(areaName);
 
             if (areas.Count < 1)
@@ -173,28 +172,100 @@ namespace DMTCommands
                 }
 
                 string viide = v1 + " " + v2;
-                int number = 1;
-                string item = "";
+                int number = 0;
+                string item = " ";
 
                 bool valid = validate(viide, ref number, ref item);
                 if (valid)
                 {
-                    Viide v;
+                    Viide v = new Viide();
                     v.ip = block.Position;
                     v.txt = viide;
                     v.item = item;
                     v.number = number;
-                    data.Add(v);
+
+                    bool found = false;
+                    foreach (Viide d in data)
+                    {
+                        if (d.item == v.item)
+                        {
+                            d.number = d.number + v.number;
+                            found = true;
+                            break;
+                        }
+                        
+                    }
+
+                    if (found == false) data.Add(v);
                 }
             }
+
+            data = data.OrderBy(x => x.item).ToList();
 
             return data;
         }
 
-    
+
         private bool validate(string viide, ref int number, ref string item)
         {
-            item = viide.ToUpper();
+            viide = viide.ToUpper();
+            viide = viide.Replace("  ", " ");
+            item = viide;
+
+            char[] symbols = { '*', 'X' };
+
+            bool numberEnd = false;
+            bool isSymbol = false;
+
+            int indexNumberLast = -99;
+
+            try
+            {
+                for (int i = 0; i < viide.Length; i++)
+                {
+                    char cur = viide[i];
+
+                    if (Char.IsNumber(cur)) indexNumberLast = i;
+                    else numberEnd = true;
+
+                    if (numberEnd == true)
+                    {
+                        if (symbols.Contains(cur)) isSymbol = true;
+                        break;
+                    }
+                }
+
+                if (numberEnd == true && isSymbol == true)
+                {
+                    int nr = -99;
+                    Int32.TryParse(viide.Substring(0, indexNumberLast + 1), out nr);
+
+                    if (number != -99)
+                    {
+                        item = viide.Substring(indexNumberLast + 2, viide.Length - indexNumberLast - 2);
+                        number = nr;
+                    }
+                    else
+                    {
+                        item = viide;
+                        number = 1;
+                    }
+                }
+                else
+                {
+                    item = viide;
+                    number = 1;
+                }
+
+                if (item.StartsWith(" ")) item = item.Substring(1, item.Length - 1);
+                if (item.EndsWith(" ")) item = item.Substring(0, item.Length - 1);
+            }
+            catch
+            {
+                write("[WARNING] Viide ei ole loetav - " + viide.ToString());
+                return false;
+            }
+            
             return true;
         }
 
@@ -210,7 +281,7 @@ namespace DMTCommands
 
             foreach (Viide v in data)
             {
-                string outputText = v.item + " [" + v.number + "]";
+                string outputText = "[ " + v.number + " ] " + v.item;
                 insertText(currentPoint, outputText, X_SCALE);
 
                 currentPoint = new _Ge.Point3d(ip.X, currentPoint.Y - delta, 0);
