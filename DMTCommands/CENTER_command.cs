@@ -73,7 +73,10 @@ namespace DMTCommands
                 _Db.Region reg = createRegion(polys);
                 _Ge.Point3d center = getCenter(reg);
 
-                write("Centroid: " + center.X.ToString() + "," + center.Y.ToString());
+                string X = center.X.ToString("G").Replace(",", ".");
+                string Y = center.Y.ToString("G").Replace(",", ".");
+
+                write("Centroid: " + X + "," + Y);
                 createBlock(center);
             }
             catch
@@ -160,6 +163,8 @@ namespace DMTCommands
         {
             if (!_c.blockTable.Has(blockName))
             {
+                write("Create missing block");
+
                 _Db.BlockTableRecord btr = new _Db.BlockTableRecord();
                 btr.Name = blockName;
 
@@ -174,7 +179,6 @@ namespace DMTCommands
 
                 _c.modelSpace.AppendEntity(newBlockReference);
                 _c.trans.AddNewlyCreatedDBObject(newBlockReference, true);
-                write("Create missing block");
             }
             else
             {
