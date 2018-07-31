@@ -389,14 +389,14 @@ namespace DMTCommands
         }
 
 
-        [_Trx.CommandMethod("CSV_REINF_SINGLE")]
-        public void csv_reinf_single()
+        [_Trx.CommandMethod("AEMK")]
+        public void massCenter()
         {
             try
             {
                 _CONNECTION c = new _CONNECTION();
 
-                CSV_command program = new CSV_command(ref c);
+                CENTER_command program = new CENTER_command(ref c);
 
                 try
                 {
@@ -424,6 +424,43 @@ namespace DMTCommands
                 _SWF.MessageBox.Show("\n[ERROR] Connection to BricsCad/AutoCad failed.");
             }
         }
+
+
+        //[_Trx.CommandMethod("CSV_REINF_SINGLE")]
+        //public void csv_reinf_single()
+        //{
+        //    try
+        //    {
+        //        _CONNECTION c = new _CONNECTION();
+
+        //        CSV_command program = new CSV_command(ref c);
+
+        //        try
+        //        {
+        //            program.run();
+
+        //            c.ed.WriteMessage("\n[DONE]");
+        //        }
+        //        catch (DMTException de)
+        //        {
+        //            c.ed.WriteMessage("\n" + de.Message);
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            c.ed.WriteMessage("\n[ERROR] Unknown Exception");
+        //            c.ed.WriteMessage("\n[ERROR] " + ex.Message);
+        //            c.ed.WriteMessage("\n[ERROR] " + ex.TargetSite);
+        //        }
+        //        finally
+        //        {
+        //            c.close();
+        //        }
+        //    }
+        //    catch
+        //    {
+        //        _SWF.MessageBox.Show("\n[ERROR] Connection to BricsCad/AutoCad failed.");
+        //    }
+        //}
 
     }
 }

@@ -10,7 +10,7 @@ using G = Geometry;
 
 namespace Logic_Tabler
 {
-    public class TableSummary
+    public class TableMaterialRow
     {
         G.Point _IP;
 
@@ -27,13 +27,13 @@ namespace Logic_Tabler
         public G.Point IP { get { return _IP; } }
 
 
-        public TableSummary(G.Point position)
+        public TableMaterialRow(G.Point position)
         {
             _IP = position;
         }
 
 
-        public TableSummary()
+        public TableMaterialRow()
         {
 
         }

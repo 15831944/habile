@@ -10,17 +10,18 @@ using G = Geometry;
 
 namespace Logic_Tabler
 {
-    public class TableRow : IEquatable<TableRow>
+    public class TableBendingRow : IEquatable<TableBendingRow>
     {
         G.Point _IP;
 
-        string _Position = "nul";
-        string _Material = "nul";
+        string _position = "nul";
+        string _material = "nul";
+        string _shape = "nul";
 
-        int _Count = 0;
-        int _Diameter = -9;
+        int _count = 0;
+        int _diameter = -9;
 
-        int _Length = 0;
+        int _length = 0;
 
         int _A = -1;
         int _B = -1;
@@ -40,13 +41,14 @@ namespace Logic_Tabler
 
         public G.Point IP { get { return _IP; } }
 
-        public string Position { get { return _Position; } set { _Position = value; } }
-        public string Material { get { return _Material; } set { _Material = value; } }
+        public string Position { get { return _position; } set { _position = value; } }
+        public string Material { get { return _material; } set { _material = value; } }
+        public string Shape { get { return _shape; } set { _shape = value; } }
 
-        public int Count { get { return _Count; } set { _Count = value; } }
-        public int Diameter { get { return _Diameter; } set { _Diameter = value; } }
+        public int Count { get { return _count; } set { _count = value; } }
+        public int Diameter { get { return _diameter; } set { _diameter = value; } }
 
-        public int Length { get { return _Length; } set { _Length = value; } }
+        public int Length { get { return _length; } set { _length = value; } }
 
         public int A { get { return _A; } set { _A = value; } }
         public int B { get { return _B; } set { _B = value; } }
@@ -71,20 +73,21 @@ namespace Logic_Tabler
         public string Reason { get { return _reason; } }
 
 
-        public TableRow(G.Point position)
+        public TableBendingRow(G.Point position)
         {
             _IP = position;
         }
 
 
-        public TableRow(Bending b)
+        public TableBendingRow(BendingShape b)
         {
-            _Position = b.Position;
-            _Material = b.Material;
+            _shape = b.Shape;
+            _position = b.Position;
+            _material = b.Material;
 
-            _Count = 0;
-            _Diameter = b.Diameter;
-            _Length = b.Length;
+            _count = 0;
+            _diameter = b.Diameter;
+            _length = b.Length;
 
             _A = b.A;
             _B = b.B;
@@ -135,7 +138,7 @@ namespace Logic_Tabler
         }
 
 
-        public bool Equals(TableRow other)
+        public bool Equals(TableBendingRow other)
         {
             if (other == null) return false;
             return (this.Position == other.Position &&
@@ -148,17 +151,17 @@ namespace Logic_Tabler
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
             if (obj.GetType() != GetType()) return false;
-            return Equals(obj as TableRow);
+            return Equals(obj as TableBendingRow);
         }
 
 
-        public static bool operator ==(TableRow a, TableRow b)
+        public static bool operator ==(TableBendingRow a, TableBendingRow b)
         {
             return object.Equals(a, b);
         }
 
 
-        public static bool operator !=(TableRow a, TableRow b)
+        public static bool operator !=(TableBendingRow a, TableBendingRow b)
         {
             return !object.Equals(a, b);
         }

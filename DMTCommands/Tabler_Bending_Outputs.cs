@@ -51,13 +51,13 @@ namespace DMTCommands
 {
     partial class TABLE_command
     {
-        public void bending_output(List<T.DrawingArea> fields)
+        public void bending_output(List<T.DrawingArea> fields, string tableBendingRow)
         {
             foreach (T.DrawingArea f in fields)
             {
                 if (f.Valid)
                 {
-                    generateBendingTable(f);
+                    generateBendingTable(f, tableBendingRow);
                 }
                 else
                 {
@@ -67,7 +67,7 @@ namespace DMTCommands
         }
 
 
-        private void generateBendingTable(T.DrawingArea field)
+        private void generateBendingTable(T.DrawingArea field, string tableBendingRow)
         {
             G.Point insertPoint = field._tableHeads[0].IP;
             double scale = field._tableHeads[0].Scale;
@@ -78,9 +78,9 @@ namespace DMTCommands
             currentPoint.X = insertPoint.X;
             currentPoint.Y -= delta;
 
-            foreach (T.TableRow b in field._rows)
+            foreach (T.TableBendingRow b in field._rows)
             {
-                insertRow(currentPoint, b, scale);
+                insertRow(currentPoint, b, scale, tableBendingRow);
 
                 currentPoint.X = insertPoint.X;
                 currentPoint.Y -= 4 * scale;
@@ -88,20 +88,19 @@ namespace DMTCommands
         }
 
 
-        private void insertRow(G.Point insertion, T.TableRow rowData, double scale)
+        private void insertRow(G.Point insertion, T.TableBendingRow rowData, double scale, string tableBendingRow)
         {
             string layerName = "K004";
-            string blockName = "Painutustabel_rida";
 
             _Ge.Point3d insertPointBlock = new _Ge.Point3d(insertion.X, insertion.Y, 0);
-            using (_Db.BlockReference newBlockReference = new _Db.BlockReference(insertPointBlock, _c.blockTable[blockName]))
+            using (_Db.BlockReference newBlockReference = new _Db.BlockReference(insertPointBlock, _c.blockTable[tableBendingRow]))
             {
                 newBlockReference.Layer = layerName;
                 _c.modelSpace.AppendEntity(newBlockReference);
                 _c.trans.AddNewlyCreatedDBObject(newBlockReference, true);
                 newBlockReference.TransformBy(_Ge.Matrix3d.Scaling(scale, insertPointBlock));
 
-                _Db.BlockTableRecord blockBlockTable = _c.trans.GetObject(_c.blockTable[blockName], _Db.OpenMode.ForRead) as _Db.BlockTableRecord;
+                _Db.BlockTableRecord blockBlockTable = _c.trans.GetObject(_c.blockTable[tableBendingRow], _Db.OpenMode.ForRead) as _Db.BlockTableRecord;
                 if (blockBlockTable.HasAttributeDefinitions)
                 {
                     foreach (_Db.ObjectId objID in blockBlockTable)
@@ -130,7 +129,7 @@ namespace DMTCommands
         }
 
 
-        private void setRowParameters(_Db.AttributeReference ar, T.TableRow rowData)
+        private void setRowParameters(_Db.AttributeReference ar, T.TableBendingRow rowData)
         {
             if (ar != null)
             {

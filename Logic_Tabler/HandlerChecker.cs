@@ -9,10 +9,10 @@ using G = Geometry;
 
 namespace Logic_Tabler
 {
-    public static class CheckerHandler
+    public static class HandlerChecker
     {
 
-        public static List<ErrorPoint> main(List<G.Area> areas, List<TableHead> heads, List<ReinforcementMark> marks, List<Bending> bendings, List<TableRow> rows, List<TableSummary> summarys)
+        public static List<ErrorPoint> main(List<G.Area> areas, List<TableHead> heads, List<ReinforcementMark> marks, List<BendingShape> bendings, List<TableBendingRow> rows, List<TableMaterialRow> summarys)
         {
             List<ErrorPoint> errors = new List<ErrorPoint>();
             List<DrawingArea> fields = sortData(areas, heads, marks, bendings, rows, summarys);
@@ -21,7 +21,13 @@ namespace Logic_Tabler
             {
                 if (f._tableHeads.Count < 1)
                 {
-                    f.setInvalid("[WARNING] - Painutustabel_pais puudu - kontroll ei toimu sellel alal");
+                    f.setInvalid("[WARNING] - Painutustabel_pais - Puudub, ala jääb vahele");
+                    continue;
+                }
+
+                if (f._tableHeads.Count > 1)
+                {
+                    f.setInvalid("[WARNING] - Painutustabel_pais - Rohkem kui 1, ala jääb vahele");
                     continue;
                 }
 
@@ -42,7 +48,7 @@ namespace Logic_Tabler
                     .Where(g => g.Count() > 1)
                     .Select(j => j.First());
 
-            foreach (TableRow r in dublicateTableRows)
+            foreach (TableBendingRow r in dublicateTableRows)
             {
                 ErrorPoint er = new ErrorPoint(r.IP, "[VIGA] - TABEL - DUBLICATE - " + r.Position, field._tableHeads[0].Scale);
                 errors.Add(er);
@@ -53,13 +59,13 @@ namespace Logic_Tabler
                 .Where(g => g.Count() > 1)
                 .Select(j => j.First());
 
-            foreach (Bending b in dublicateBendings)
+            foreach (BendingShape b in dublicateBendings)
             {
                 ErrorPoint er = new ErrorPoint(b.IP, "[VIGA] - PAINUTUS - DUBLICATE - " + b.Position, field._tableHeads[0].Scale);
                 errors.Add(er);
             }
 
-            foreach (TableRow r in field._rows)
+            foreach (TableBendingRow r in field._rows)
             {
                 if (r.Count == 0)
                 {
@@ -71,7 +77,7 @@ namespace Logic_Tabler
             foreach (ReinforcementMark m in field._marks)
             {
                 bool found = false;
-                foreach (TableRow r in field._rows)
+                foreach (TableBendingRow r in field._rows)
                 {
                     if (m.Position == r.Position)
                     {
@@ -90,7 +96,7 @@ namespace Logic_Tabler
             foreach (ReinforcementMark m in field._marks)
             {
                 bool found = false;
-                foreach (Bending b in field._bendings)
+                foreach (BendingShape b in field._bendings)
                 {
                     if (m.Position == b.Position)
                     {
@@ -127,10 +133,10 @@ namespace Logic_Tabler
                 }
             }
 
-            foreach (Bending b in field._bendings)
+            foreach (BendingShape b in field._bendings)
             {
                 bool found = false;
-                foreach (TableRow r in field._rows)
+                foreach (TableBendingRow r in field._rows)
                 {
                     if (b.Position == r.Position)
                     {
@@ -146,7 +152,7 @@ namespace Logic_Tabler
                 }
             }
 
-            foreach (Bending b in field._bendings)
+            foreach (BendingShape b in field._bendings)
             {
                 bool found = false;
                 foreach (ReinforcementMark m in field._marks)
@@ -177,7 +183,7 @@ namespace Logic_Tabler
                 double tempX = field._tableHeads[0].IP.X;
                 double tempY = field._tableHeads[0].IP.Y;
 
-                foreach (TableRow r in field._rows)
+                foreach (TableBendingRow r in field._rows)
                 {
                     if (r.IP.Y < tempY)
                     {
@@ -194,13 +200,21 @@ namespace Logic_Tabler
         }
 
 
-        private static List<DrawingArea> sortData(List<G.Area> areas, List<TableHead> heads, List<ReinforcementMark> marks, List<Bending> bendings, List<TableRow> rows, List<TableSummary> summarys)
+        private static List<DrawingArea> sortData(List<G.Area> areas, List<TableHead> heads, List<ReinforcementMark> marks, List<BendingShape> bendings, List<TableBendingRow> rows, List<TableMaterialRow> summarys)
         {
             List<DrawingArea> data = new List<DrawingArea>();
 
-            foreach (G.Area cur in areas)
+            if (areas.Count != 0)
             {
-                DrawingArea temp = new DrawingArea(cur);
+                foreach (G.Area cur in areas)
+                {
+                    DrawingArea temp = new DrawingArea(cur);
+                    data.Add(temp);
+                }
+            }
+            else
+            {
+                DrawingArea temp = new DrawingArea(true);
                 data.Add(temp);
             }
 
@@ -228,7 +242,7 @@ namespace Logic_Tabler
                 }
             }
 
-            foreach (Bending bending in bendings)
+            foreach (BendingShape bending in bendings)
             {
                 foreach (DrawingArea cr in data)
                 {
@@ -240,7 +254,7 @@ namespace Logic_Tabler
                 }
             }
 
-            foreach (TableRow row in rows)
+            foreach (TableBendingRow row in rows)
             {
                 foreach (DrawingArea cr in data)
                 {
@@ -252,7 +266,7 @@ namespace Logic_Tabler
                 }
             }
 
-            foreach (TableSummary summary in summarys)
+            foreach (TableMaterialRow summary in summarys)
             {
                 foreach (DrawingArea cr in data)
                 {

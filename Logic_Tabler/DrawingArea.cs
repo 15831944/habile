@@ -14,9 +14,9 @@ namespace Logic_Tabler
 
         public List<TableHead> _tableHeads;
         public List<ReinforcementMark> _marks;
-        public List<Bending> _bendings;
-        public List<TableRow> _rows;
-        public List<TableSummary> _summarys;
+        public List<BendingShape> _bendings;
+        public List<TableBendingRow> _rows;
+        public List<TableMaterialRow> _summarys;
 
         bool _valid = true;
         string _reason = "none";
@@ -31,9 +31,23 @@ namespace Logic_Tabler
 
             _tableHeads = new List<TableHead>();
             _marks = new List<ReinforcementMark>();
-            _bendings = new List<Bending>();
-            _rows = new List<TableRow>();
-            _summarys = new List<TableSummary>();
+            _bendings = new List<BendingShape>();
+            _rows = new List<TableBendingRow>();
+            _summarys = new List<TableMaterialRow>();
+
+            _valid = true;
+        }
+
+
+        public DrawingArea(bool pseudo)
+        {
+            _area = new G.Area(new G.Point(int.MinValue, int.MinValue), new G.Point(int.MaxValue, int.MaxValue));
+
+            _tableHeads = new List<TableHead>();
+            _marks = new List<ReinforcementMark>();
+            _bendings = new List<BendingShape>();
+            _rows = new List<TableBendingRow>();
+            _summarys = new List<TableMaterialRow>();
 
             _valid = true;
         }
@@ -57,19 +71,19 @@ namespace Logic_Tabler
         }
 
 
-        internal void addBending(Bending bd)
+        internal void addBending(BendingShape bd)
         {
             _bendings.Add(bd);
         }
 
         
-        internal void addRow(TableRow r)
+        internal void addRow(TableBendingRow r)
         {
             _rows.Add(r);
         }
 
                         
-        internal void addSummary(TableSummary p)
+        internal void addSummary(TableMaterialRow p)
         {
             _summarys.Add(p);
         }

@@ -59,8 +59,9 @@ namespace DMTCommands
 
         internal void run()
         {
+            layerSetup();
+
             List<_Db.Dimension> dims = getAllDims();
-            layerHandle();
             int c = changeDimLayer(dims);
             write("Changed dimentions layer count: " + c.ToString());
         }
@@ -98,7 +99,7 @@ namespace DMTCommands
         }
 
 
-        private void layerHandle()
+        private void layerSetup()
         {
             _Db.LayerTable layerTable = _c.trans.GetObject(_c.db.LayerTableId, _Db.OpenMode.ForWrite) as _Db.LayerTable;
 
@@ -115,11 +116,17 @@ namespace DMTCommands
 
             newLayer.Name = layerName;
             newLayer.Color = _Cm.Color.FromColorIndex(_Cm.ColorMethod.None, 80);
-            newLayer.Description = "Kõik mõõtjooned";
             newLayer.LineWeight = _Db.LineWeight.LineWeight013;
 
             _Db.ObjectId layerId = layerTable.Add(newLayer);
             _c.trans.AddNewlyCreatedDBObject(newLayer, true);
+
+            newLayer.Description = "Kõik mõõtjooned";
+            _Db.LinetypeTable lineTypes = _c.trans.GetObject(_c.db.LinetypeTableId, _Db.OpenMode.ForWrite) as _Db.LinetypeTable;
+            if (lineTypes.Has("Continuous") == true)
+            {
+                newLayer.LinetypeObjectId = lineTypes["Continuous"];
+            }
         }
 
 

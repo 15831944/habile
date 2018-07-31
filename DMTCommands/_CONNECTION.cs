@@ -75,7 +75,7 @@ namespace DMTCommands
             _ed = _doc.Editor;
             _trans = _db.TransactionManager.StartTransaction();
             
-            _blockTable = _trans.GetObject(_db.BlockTableId, _Db.OpenMode.ForRead) as _Db.BlockTable;
+            _blockTable = _trans.GetObject(_db.BlockTableId, _Db.OpenMode.ForWrite) as _Db.BlockTable;
             _modelSpace = _trans.GetObject(_Db.SymbolUtilityServices.GetBlockModelSpaceId(_db), _Db.OpenMode.ForWrite) as _Db.BlockTableRecord;
         }
         

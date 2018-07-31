@@ -54,14 +54,17 @@ namespace DMTCommands
         //
         //DRAWING AREA
         //
-        private List<G.Area> getAllAreas(string blockName)
+        private List<G.Area> getAllAreas(List<string> blockNames)
         {
             List<G.Area> areas = new List<G.Area>();
 
-            List<_Db.BlockReference> blocks = getAllBlockReference(blockName);
-            areas = getBoxAreas(blocks);
+            foreach (string blockName in blockNames)
+            { 
+                List<_Db.BlockReference> blocks = getAllBlockReference(blockName);
+                List<G.Area> temp = getBoxAreas(blocks);
+                areas.AddRange(temp);
+            }
 
-            if (areas.Count < 1) throw new DMTException("[ERROR] " + blockName + " not found");
             return areas;
         }
 
@@ -101,14 +104,17 @@ namespace DMTCommands
         //
         //TABLE HEADS
         //
-        private List<T.TableHead> getAllTableHeads(string blockName)
+        private List<T.TableHead> getAllTableHeads(List<string> blockNames)
         {
             List<T.TableHead> heads = new List<T.TableHead>();
 
-            List<_Db.BlockReference> blocks = getAllBlockReference(blockName);
-            heads = getTableHeadData(blocks);
+            foreach (string blockName in blockNames)
+            {
+                List<_Db.BlockReference> blocks = getAllBlockReference(blockName);
+                List<T.TableHead> temp = getTableHeadData(blocks);
+                heads.AddRange(temp);
+            }                       
 
-            if (heads.Count < 1) throw new DMTException("[ERROR] " + blockName + " not found");
             return heads;
         }
 
@@ -121,11 +127,28 @@ namespace DMTCommands
             {
                 G.Point insp = new G.Point(block.Position.X, block.Position.Y);
                 double scale = block.ScaleFactors.Y;
+
                 T.TableHead current = new T.TableHead(insp, scale);
+
+                string lang = getAttributeValue(block, "Keele valik");
+                if (lang != null) current.setLanguange(lang);
+
                 parse.Add(current);
             }
 
             return parse;
+        }
+
+
+        private string getAttributeValue(_Db.BlockReference block, string attribute)
+        {
+            _Db.DynamicBlockReferencePropertyCollection aa = block.DynamicBlockReferencePropertyCollection;
+            foreach (_Db.DynamicBlockReferenceProperty a in aa)
+            {
+                if (a.PropertyName == attribute) return a.Value.ToString();
+            }
+
+            return null;
         }
 
 
@@ -139,7 +162,6 @@ namespace DMTCommands
             List<_Db.MText> allTexts = getAllText(layer);
             marks = getMarkData(allTexts);
 
-            if (marks.Count < 1) throw new DMTException("[ERROR] Reinforcement marks not found");
             return marks;
         }
 
@@ -170,31 +192,29 @@ namespace DMTCommands
         //
         //BENDING
         //
-        public List<T.Bending> getAllBendings(List<string> bendingNames)
+        public List<T.BendingShape> getAllBendings(List<string> blockNames)
         {
-            List<T.Bending> bendings = new List<T.Bending>();
+            List<T.BendingShape> bendings = new List<T.BendingShape>();
 
-            List<_Db.BlockReference> blocks = new List<_Db.BlockReference>();
-            foreach (string name in bendingNames)
+            foreach (string blockName in blockNames)
             {
-                List<_Db.BlockReference> block = getAllBlockReference(name);
-                blocks.AddRange(block);
-            }
-
-            bendings = getBendingData(blocks);
+                List<_Db.BlockReference> blocks = getAllBlockReference(blockName);
+                List<T.BendingShape> temp = getBendingData(blocks);
+                bendings.AddRange(temp);
+            }            
 
             return bendings;
         }
 
 
-        private List<T.Bending> getBendingData(List<_Db.BlockReference> blocks)
+        private List<T.BendingShape> getBendingData(List<_Db.BlockReference> blocks)
         {
-            List<T.Bending> parse = new List<T.Bending>();
+            List<T.BendingShape> parse = new List<T.BendingShape>();
 
             foreach (_Db.BlockReference block in blocks)
             {
                 G.Point insp = new G.Point(block.Position.X, block.Position.Y);
-                T.Bending current = new T.Bending(insp, block.Name);
+                T.BendingShape current = new T.BendingShape(insp, block.Name);
 
                 foreach (_Db.ObjectId arId in block.AttributeCollection)
                 {
@@ -219,7 +239,7 @@ namespace DMTCommands
         }
 
 
-        private void setBendingParameters(_Db.AttributeReference ar, T.Bending bending)
+        private void setBendingParameters(_Db.AttributeReference ar, T.BendingShape bending)
         {
             if (ar != null)
             {
@@ -250,25 +270,29 @@ namespace DMTCommands
         //
         //TABLE ROWS
         //
-        public List<T.TableRow> getAllTableRows(string blockName)
+        public List<T.TableBendingRow> getAllTableRows(List<string> blockNames)
         {
-            List<T.TableRow> rows = new List<T.TableRow>();
+            List<T.TableBendingRow> rows = new List<T.TableBendingRow>();
 
-            List<_Db.BlockReference> blocks = getAllBlockReference(blockName);
-            rows = getRowData(blocks);
+            foreach (string blockName in blockNames)
+            {
+                List<_Db.BlockReference> blocks = getAllBlockReference(blockName);
+                List<T.TableBendingRow> temp = getRowData(blocks);
+                rows.AddRange(temp);
+            }
 
             return rows;
         }
 
 
-        private List<T.TableRow> getRowData(List<_Db.BlockReference> blocks)
+        private List<T.TableBendingRow> getRowData(List<_Db.BlockReference> blocks)
         {
-            List<T.TableRow> parse = new List<T.TableRow>();
+            List<T.TableBendingRow> parse = new List<T.TableBendingRow>();
 
             foreach (_Db.BlockReference block in blocks)
             {
                 G.Point insp = new G.Point(block.Position.X, block.Position.Y);
-                T.TableRow current = new T.TableRow(insp);
+                T.TableBendingRow current = new T.TableBendingRow(insp);
 
                 foreach (_Db.ObjectId arId in block.AttributeCollection)
                 {
@@ -284,7 +308,7 @@ namespace DMTCommands
         }
 
 
-        private void setRowAttribute(_Db.AttributeReference ar, T.TableRow row)
+        private void setRowAttribute(_Db.AttributeReference ar, T.TableBendingRow row)
         {
             if (ar != null)
             {
@@ -306,25 +330,29 @@ namespace DMTCommands
         //
         //SUMMARY
         //        
-        public List<T.TableSummary> getAllTableSummarys(string blockName)
+        public List<T.TableMaterialRow> getAllTableSummarys(List<string> blockNames)
         {
-            List<T.TableSummary> sums = new List<T.TableSummary>();
+            List<T.TableMaterialRow> sums = new List<T.TableMaterialRow>();
 
-            List<_Db.BlockReference> blocks = getAllBlockReference(blockName);
-            sums = getSummaryData(blocks);
+            foreach (string blockName in blockNames)
+            {
+                List<_Db.BlockReference> blocks = getAllBlockReference(blockName);
+                List<T.TableMaterialRow> temp = getSummaryData(blocks);
+                sums.AddRange(temp);
+            }
 
             return sums;
         }
 
 
-        private List<T.TableSummary> getSummaryData(List<_Db.BlockReference> blocks)
+        private List<T.TableMaterialRow> getSummaryData(List<_Db.BlockReference> blocks)
         {
-            List<T.TableSummary> parse = new List<T.TableSummary>();
+            List<T.TableMaterialRow> parse = new List<T.TableMaterialRow>();
 
             foreach (_Db.BlockReference block in blocks)
             {
                 G.Point insp = new G.Point(block.Position.X, block.Position.Y);
-                T.TableSummary temp = new T.TableSummary(insp);
+                T.TableMaterialRow temp = new T.TableMaterialRow(insp);
                 parse.Add(temp);
             }
 
@@ -376,38 +404,49 @@ namespace DMTCommands
 
         private List<_Db.MText> getAllText(string layer)
         {
-            List<_Db.MText> txt = new List<_Db.MText>();
+            List<_Db.MText> txts = new List<_Db.MText>();
 
             foreach (_Db.ObjectId id in _c.modelSpace)
             {
                 _Db.Entity currentEntity = _c.trans.GetObject(id, _Db.OpenMode.ForWrite, false) as _Db.Entity;
+
                 if (currentEntity == null) continue;
 
                 if (currentEntity is _Db.MText)
                 {
-                    _Db.MText br = currentEntity as _Db.MText;
-                    if (br.Layer == layer)
+                    _Db.MText mtxt = currentEntity as _Db.MText;
+
+                    if (mtxt.Layer == layer)
                     {
-                        txt.Add(br);
+                        txts.Add(mtxt);
                     }
                 }
-
-                if (currentEntity is _Db.MLeader)
+                else if (currentEntity is _Db.DBText)
                 {
-                    _Db.MLeader br = currentEntity as _Db.MLeader;
-                    if (br.Layer == layer)
+                    _Db.DBText dbt = currentEntity as _Db.DBText;
+                    if (dbt.Layer == layer)
                     {
-                        if (br.ContentType == _Db.ContentType.MTextContent)
+                        _Db.MText mtxt = new _Db.MText();
+                        mtxt.Contents = dbt.TextString;
+                        mtxt.Location = dbt.Position;
+                        txts.Add(mtxt);
+                    }
+                }
+                else if (currentEntity is _Db.MLeader)
+                {
+                    _Db.MLeader ml = currentEntity as _Db.MLeader;
+                    if (ml.Layer == layer)
+                    {
+                        if (ml.ContentType == _Db.ContentType.MTextContent)
                         {
-                            _Db.MText leaderText = br.MText;
-                            txt.Add(leaderText);
+                            _Db.MText mtxt = ml.MText;
+                            txts.Add(mtxt);
                         }
                     }
                 }
-
             }
 
-            return txt;
+            return txts;
         }
 
     }

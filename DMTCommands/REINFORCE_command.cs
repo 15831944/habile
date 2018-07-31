@@ -53,6 +53,8 @@ namespace DMTCommands
     {
         _CONNECTION _c;
 
+        List<string> blockNames = new List<string>() { "Raud_A", "Raud_B", "Raud_C", "Raud_D", "Raud_E", "Raud_U", "Reinf_A_Raud", "Reinf_B_Raud", "Reinf_C_Raud", "Reinf_D_Raud", "Reinf_D_Raud_side", "Reinf_E_Raud2", "Reinf_U_Raud_side" };
+
 
         public REINFORCE_command(ref _CONNECTION c)
         {
@@ -62,10 +64,11 @@ namespace DMTCommands
 
         public void run()
         {
-            List<string> blockNames = new List<string>() { "Raud_A", "Raud_B", "Raud_C", "Raud_D", "Raud_E", "Raud_U", "Reinf_A_Raud", "Reinf_B_Raud", "Reinf_C_Raud", "Reinf_D_Raud", "Reinf_D_Raud_side", "Reinf_E_Raud2", "Reinf_U_Raud_side" };
-            List<string> layerNames = new List<string>() { "K023TL", "Armatuur" };
+            //List<string> layerNames = new List<string>() { "K023TL", "Armatuur" };
+            //init.start(blockNames, layerNames);
+
             _SETUP init = new _SETUP(ref _c);
-            init.start(blockNames, layerNames);
+            init.start(blockNames);
 
             getSettings();
             List<G.Line> polys = getGeometry();

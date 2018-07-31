@@ -59,6 +59,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CENTER_command.cs" />
     <Compile Include="VIIDE_command.cs" />
     <Compile Include="DIMLAYER_command.cs" />
     <Compile Include="DIMCOLOR_command.cs" />

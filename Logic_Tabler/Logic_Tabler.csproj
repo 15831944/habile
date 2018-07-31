@@ -41,17 +41,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CheckerHandler.cs" />
+    <Compile Include="HandlerChecker.cs" />
     <Compile Include="ErrorPoint.cs" />
     <Compile Include="DrawingArea.cs" />
     <Compile Include="ReinforcementMark.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Bending.cs" />
-    <Compile Include="SummarHandler.cs" />
+    <Compile Include="BendingShape.cs" />
+    <Compile Include="HandlerMaterial.cs" />
     <Compile Include="TableHead.cs" />
-    <Compile Include="TablerHandler.cs" />
-    <Compile Include="TableRow.cs" />
-    <Compile Include="TableSummary.cs" />
+    <Compile Include="HandlerBending.cs" />
+    <Compile Include="TableBendingRow.cs" />
+    <Compile Include="TableMaterialRow.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Geometry\Geometry.csproj">

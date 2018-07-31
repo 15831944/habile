@@ -60,7 +60,7 @@ namespace DMTCommands
         }
 
 
-        public void start(List<string> blockNames, List<string> layerNames)
+        public void start(List<string> blockNames)
         {
             _Db.LayerTable layerTable = _c.trans.GetObject(_c.db.LayerTableId, _Db.OpenMode.ForWrite) as _Db.LayerTable;
 
@@ -82,33 +82,37 @@ namespace DMTCommands
                 if (!success) throw new DMTException("[ERROR] Setup - Selles failis puuduvad vajalikud blokkid!");
             }
 
-            foreach (string layerName in layerNames)
-            {
-                if (!layerTable.Has(layerName))
-                {
-                    createLayer(layerName, layerTable);
-                }
-            }
+
+            //MUIDU TÖÖTAB, aga kui sa tõstad Reinf_settings_block, tekib K023TL layer ja kui sa tõstad sisse Armatuuri dynaamilised blockid, tekib Armatuuri layer.
+            //TULEVASTES VERSIOONIDES?
+
+            //foreach (string layerName in layerNames)
+            //{
+            //    if (!layerTable.Has(layerName))
+            //    {
+            //        createLayer(layerName, layerTable);
+            //    }
+            //}
         }
 
 
-        private void createLayer(string layerName, _Db.LayerTable layerTable)
-        {
-            _Db.LayerTableRecord newLayer = new _Db.LayerTableRecord();
+        //private void createLayer(string layerName, _Db.LayerTable layerTable)
+        //{
+        //    _Db.LayerTableRecord newLayer = new _Db.LayerTableRecord();
 
-            newLayer.Name = layerName;
-            if (layerName == "Armatuur")
-            {
-                newLayer.Color = _Cm.Color.FromColorIndex(_Cm.ColorMethod.None, 4);
-            }
-            else
-            {
-                newLayer.Color = _Cm.Color.FromColorIndex(_Cm.ColorMethod.None, 6);
-            }
+        //    newLayer.Name = layerName;
+        //    if (layerName == "Armatuur")
+        //    {
+        //        newLayer.Color = _Cm.Color.FromColorIndex(_Cm.ColorMethod.None, 30);
+        //    }
+        //    else
+        //    {
+        //        newLayer.Color = _Cm.Color.FromColorIndex(_Cm.ColorMethod.None, 6);
+        //    }
 
-            _Db.ObjectId layerId = layerTable.Add(newLayer);
-            _c.trans.AddNewlyCreatedDBObject(newLayer, true);
-        }
+        //    _Db.ObjectId layerId = layerTable.Add(newLayer);
+        //    _c.trans.AddNewlyCreatedDBObject(newLayer, true);
+        //}
 
 
         private bool getBlockFromMaster(ref List<string> missingBlocks)

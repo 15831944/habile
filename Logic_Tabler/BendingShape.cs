@@ -10,17 +10,17 @@ using G = Geometry;
 
 namespace Logic_Tabler
 {
-    public class Bending : IEquatable<Bending>
+    public class BendingShape : IEquatable<BendingShape>
     {
         G.Point _IP;
         string _BlockName;
 
-        string _Position = "nul";
-        string _Material = "nul";        
-        int _Diameter = -9;
-        string _Shape = "nul";
+        string _position = "nul";
+        string _material = "nul";        
+        int _diameter = -9;
+        string _shape = "nul";
 
-        int _Length = 0;
+        int _length = 0;
 
         int _A = -1;
         int _B = -1;
@@ -41,12 +41,13 @@ namespace Logic_Tabler
         public G.Point IP { get { return _IP; } }
         public string BlockName { get { return _BlockName; } }
 
-        public string Position { get { return _Position; } set { _Position = value; } }
-        public string Material { get { return _Material; } set { _Material = value; } }
-        
-        public int Diameter { get { return _Diameter; } set { _Diameter = value; } }
+        public string Position { get { return _position; } set { _position = value; } }
+        public string Material { get { return _material; } set { _material = value; } }
+        public string Shape { get { return _shape; } }
 
-        public int Length { get { return _Length; } set { _Diameter = value; } }
+        public int Diameter { get { return _diameter; } set { _diameter = value; } }
+
+        public int Length { get { return _length; } set { _diameter = value; } }
 
         public int A { get { return _A; } set { _A = value; } }
         public int B { get { return _B; } set { _B = value; } }
@@ -70,11 +71,13 @@ namespace Logic_Tabler
         public bool Valid { get { return _valid; } }
         public string Reason { get { return _reason; } }
 
-        public Bending(G.Point position, string blockName )
+
+        public BendingShape(G.Point position, string blockName )
         {
             _IP = position;
             _BlockName = blockName;
         }
+
 
         public bool validator()
         {
@@ -90,71 +93,71 @@ namespace Logic_Tabler
                 return false;
             }
 
-            _Length = 0;
+            _length = 0;
 
             if (_BlockName == "Raud_K")
             {
-                _Length = (int)(A + B - R - R + (R * Math.PI));
+                _length = (int)(A + B - R - R + (R * Math.PI));
             }
             else if (_BlockName == "Raud_U")
             {
-                _Length = (A + B + C) * 2;
+                _length = (A + B + C) * 2;
             }
             else if (_BlockName == "Raud_T")
             {
-                _Length = (int)(A * Math.PI + B);
+                _length = (int)(A * Math.PI + B);
             }
             else if (_BlockName == "Raud_V")
             {
-                _Length = (int)(A + B + C - R - R - R + 2 * R * Math.PI);
+                _length = (int)(A + B + C - R - R - R + 2 * R * Math.PI);
             }
             else if (_BlockName == "Raud_Y")
             {
-                _Length = A + B + C + B + A;
+                _length = A + B + C + B + A;
             }
             else if (_BlockName == "Raud_W")
             {
-                _Length = (int)(A + B + C + D + E - R - R - R + 2 * R * Math.PI);
+                _length = (int)(A + B + C + D + E - R - R - R + 2 * R * Math.PI);
             }
             else if (_BlockName == "Raud_Z3")
             {
-                _Length = (int)(A * Math.PI - B);
+                _length = (int)(A * Math.PI - B);
             }
             else if (_BlockName == "Raud_Z4")
             {
-                _Length = (int)(0.5 * A * Math.PI + 2 * B);
+                _length = (int)(0.5 * A * Math.PI + 2 * B);
             }
             else if (_BlockName == "Raud_Z5")
             {
-                _Length = A + B + C + B + A;
+                _length = A + B + C + B + A;
             }
             else if (_BlockName == "Raud_Z7")
             {
-                _Length = A + B + C + D + C + B + A;
+                _length = A + B + C + D + C + B + A;
             }
             else if (_BlockName == "Raud_Z8")
             {
-                _Length = D + A + B + C + B + A + D;
+                _length = D + A + B + C + B + A + D;
             }
             else if (_BlockName == "Raud_Z9")
             {
-                _Length = A + A + B + C + C + D;
+                _length = A + A + B + C + C + D;
             }
             else
             {
-                if (A > 0) _Length += A;
-                if (B > 0) _Length += B;
-                if (C > 0) _Length += C;
-                if (D > 0) _Length += D;
-                if (E > 0) _Length += E;
-                if (F > 0) _Length += F;
-                if (G > 0) _Length += G;
+                if (A > 0) _length += A;
+                if (B > 0) _length += B;
+                if (C > 0) _length += C;
+                if (D > 0) _length += D;
+                if (E > 0) _length += E;
+                if (F > 0) _length += F;
+                if (G > 0) _length += G;
             }
 
 
             if (Length == 0)
             {
-                setInvalid("[ERROR] - BENDING BLOCK - \"" + _Position.ToString() + "\" - Length = 0");
+                setInvalid("[ERROR] - BENDING BLOCK - \"" + _position.ToString() + "\" - Length = 0");
                 return false;
             }
 
@@ -164,19 +167,20 @@ namespace Logic_Tabler
             }
             catch
             {
-                setInvalid("[ERROR] - BENDING BLOCK - \"" + _Position.ToString() + "\" - Position invalid");
+                setInvalid("[ERROR] - BENDING BLOCK - \"" + _position.ToString() + "\" - Position invalid");
                 return false;
             }
 
             return true;
         }
 
+
         private void alfa2()
         {
-            string mark = _Position;
-            if (_Position.Contains(@"\P"))
+            string mark = _position;
+            if (_position.Contains(@"\P"))
             {
-                mark = _Position.Split('\\')[0];
+                mark = _position.Split('\\')[0];
             }
 
             int tot = mark.Length;
@@ -227,14 +231,15 @@ namespace Logic_Tabler
             }
 
             int temp = numShape;
-            _Shape = mark.Substring(numCount, temp);
+            _shape = mark.Substring(numCount, temp);
 
             temp = numDiam - numShape;
-            _Diameter = Int32.Parse(mark.Substring(numShape, temp));
+            _diameter = Int32.Parse(mark.Substring(numShape, temp));
 
             temp = tot - numDiam;
             int other = Int32.Parse(mark.Substring(numDiam, temp));
         }
+
 
         private void setInvalid(string reason)
         {
@@ -242,30 +247,35 @@ namespace Logic_Tabler
             _reason = reason;
         }
 
-        public bool Equals(Bending other)
+
+        public bool Equals(BendingShape other)
         {
             if (other == null) return false;
             return (this.Position == other.Position &&
                     this.Material == other.Material);
         }
 
+
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
             if (obj.GetType() != GetType()) return false;
-            return Equals(obj as Bending);
+            return Equals(obj as BendingShape);
         }
 
-        public static bool operator ==(Bending a, Bending b)
+
+        public static bool operator ==(BendingShape a, BendingShape b)
         {
             return object.Equals(a, b);
         }
 
-        public static bool operator !=(Bending a, Bending b)
+
+        public static bool operator !=(BendingShape a, BendingShape b)
         {
             return !object.Equals(a, b);
         }
+
     }
 }
 

@@ -8,10 +8,10 @@ using G = Geometry;
 
 namespace Logic_Tabler
 {
-    public static class SummarHandler
+    public static class HandlerMaterial
     {
 
-        public static List<DrawingArea> main(List<G.Area> areas, List<TableHead> heads, List<TableRow> rows, List<TableSummary> summarys)
+        public static List<DrawingArea> main(List<G.Area> areas, List<TableHead> heads, List<TableBendingRow> rows, List<TableMaterialRow> summarys)
         {
             List<DrawingArea> fields = sortData(areas, heads, rows, summarys);
 
@@ -19,7 +19,17 @@ namespace Logic_Tabler
             {
                 if (f._tableHeads.Count < 1)
                 {
-                    f.setInvalid("[WARNING] - Puudub [Painutustabel_pais]");
+                    f.setInvalid("[WARNING] - Painutustabel_pais - Puudub, ala jääb vahele");
+                    continue;
+                }
+                if (f._tableHeads.Count > 1)
+                {
+                    f.setInvalid("[WARNING] - Painutustabel_pais - Rohkem kui 1, ala jääb vahele");
+                    continue;
+                }
+                if (f._rows.Count == 0)
+                {
+                    f.setInvalid("[WARNING] - Painutustabel_rida - Puudub");
                     continue;
                 }
                 if (f._summarys.Count > 0)
@@ -28,29 +38,31 @@ namespace Logic_Tabler
                     continue;
                 }
 
-                dosomeshitmagic(f);
+                string lang = f._tableHeads[0].Lang;
+
+                calculateWeights(f, lang);
             }
 
             return fields;
         }
 
 
-        private static void dosomeshitmagic(DrawingArea field)
+        private static void calculateWeights(DrawingArea field, string languange)
         {
             List<string> MaterialFilter = new List<string>();
             var DistinctItems = field._rows.GroupBy(x => x.Material).Select(y => y.First());
-            foreach (TableRow item in DistinctItems)
+            foreach (TableBendingRow item in DistinctItems)
             {
                 MaterialFilter.Add(item.Material);
             }
 
             foreach (string mat in MaterialFilter)
             {
-                List<TableRow> matList = field._rows.Where(x => x.Material == mat).ToList();
+                List<TableBendingRow> matList = field._rows.Where(x => x.Material == mat).ToList();
 
                 List<int> DiameterFilter = new List<int>();
                 DistinctItems = matList.GroupBy(x => x.Diameter).Select(y => y.First());
-                foreach (TableRow item in DistinctItems)
+                foreach (TableBendingRow item in DistinctItems)
                 {
                     DiameterFilter.Add(item.Diameter);
                 }
@@ -64,15 +76,15 @@ namespace Logic_Tabler
                     double radius = diam / 2;
                     double area = Math.PI * (Math.Pow(radius, 2));
 
-                    List<TableRow> diamList = matList.Where(x => x.Diameter == diam).ToList();
+                    List<TableBendingRow> diamList = matList.Where(x => x.Diameter == diam).ToList();
 
-                    TableSummary current = new TableSummary();
+                    TableMaterialRow current = new TableMaterialRow();
                     current.Text = "%%C" + diam.ToString();
                     current.Material = mat;
                     current.Weight = 0;
                     current.Units = "kg";
 
-                    foreach (TableRow r in diamList)
+                    foreach (TableBendingRow r in diamList)
                     {
                         double count = r.Count * r.Length * area;
                         double weight = count * 7850 / 1000000000;
@@ -83,8 +95,21 @@ namespace Logic_Tabler
                     field.addSummary(current);
                 }
 
-                TableSummary total = new TableSummary();
-                total.Text = "KOKKU";
+                TableMaterialRow total = new TableMaterialRow();
+
+                if (languange == "EN")
+                {
+                    total.Text = "TOTAL";
+                }
+                else if (languange == "FIN")
+                {
+                    total.Text = "KOKON";
+                }
+                else
+                {
+                    total.Text = "KOKKU";
+                }
+                
                 total.Material = mat;
                 total.Weight = totWeight;
                 total.Units = "kg";
@@ -100,7 +125,7 @@ namespace Logic_Tabler
                 double tempX = field._tableHeads[0].IP.X;
                 double tempY = field._tableHeads[0].IP.Y;
 
-                foreach (TableRow r in field._rows)
+                foreach (TableBendingRow r in field._rows)
                 {
                     if (r.IP.Y < tempY)
                     {
@@ -117,13 +142,21 @@ namespace Logic_Tabler
         }
 
 
-        private static List<DrawingArea> sortData(List<G.Area> areas, List<TableHead> heads, List<TableRow> rows, List<TableSummary> summarys)
+        private static List<DrawingArea> sortData(List<G.Area> areas, List<TableHead> heads, List<TableBendingRow> rows, List<TableMaterialRow> summarys)
         {
             List<DrawingArea> data = new List<DrawingArea>();
 
-            foreach (G.Area cur in areas)
+            if (areas.Count != 0)
             {
-                DrawingArea temp = new DrawingArea(cur);
+                foreach (G.Area cur in areas)
+                {
+                    DrawingArea temp = new DrawingArea(cur);
+                    data.Add(temp);
+                }
+            }
+            else
+            {
+                DrawingArea temp = new DrawingArea(true);
                 data.Add(temp);
             }
 
@@ -139,7 +172,7 @@ namespace Logic_Tabler
                 }
             }
 
-            foreach (TableRow row in rows)
+            foreach (TableBendingRow row in rows)
             {
                 foreach (DrawingArea cr in data)
                 {
@@ -151,7 +184,7 @@ namespace Logic_Tabler
                 }
             }
 
-            foreach (TableSummary summary in summarys)
+            foreach (TableMaterialRow summary in summarys)
             {
                 foreach (DrawingArea cr in data)
                 {

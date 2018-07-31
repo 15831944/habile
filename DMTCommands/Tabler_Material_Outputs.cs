@@ -51,13 +51,13 @@ namespace DMTCommands
 {
     partial class TABLE_command
     {
-        public void material_output(List<T.DrawingArea> fields)
+        public void material_output(List<T.DrawingArea> fields, string tableMaterialRow)
         {
             foreach (T.DrawingArea f in fields)
             {
                 if (f.Valid)
                 {
-                    generateMaterialTable(f);
+                    generateMaterialTable(f, tableMaterialRow);
                 }
                 else
                 {
@@ -67,20 +67,20 @@ namespace DMTCommands
         }
 
 
-        private void generateMaterialTable(T.DrawingArea field)
+        private void generateMaterialTable(T.DrawingArea field, string tableMaterialRow)
         {
-            G.Point insertPoint = T.SummarHandler.getSummaryInsertionPoint(field);
+            G.Point insertPoint = T.HandlerMaterial.getSummaryInsertionPoint(field);
             double scale = field._tableHeads[0].Scale;
 
-            G.Point currentPoint = T.SummarHandler.getSummaryInsertionPoint(field);
+            G.Point currentPoint = T.HandlerMaterial.getSummaryInsertionPoint(field);
             double delta = scale * 4;
 
             currentPoint.X = insertPoint.X;
             currentPoint.Y -= delta;
 
-            foreach (T.TableSummary s in field._summarys)
+            foreach (T.TableMaterialRow s in field._summarys)
             {
-                insertRow(currentPoint, s, scale);
+                insertRow(currentPoint, s, scale, tableMaterialRow);
 
                 currentPoint.X = insertPoint.X;
                 currentPoint.Y -= 4 * scale;
@@ -88,20 +88,19 @@ namespace DMTCommands
         }
 
 
-        private void insertRow(G.Point insertion, T.TableSummary sumData, double scale)
+        private void insertRow(G.Point insertion, T.TableMaterialRow sumData, double scale, string tableMaterialRow)
         {
             string layerName = "K004";
-            string blockName = "PainutusKokkuvõte";
 
             _Ge.Point3d insertPointBlock = new _Ge.Point3d(insertion.X, insertion.Y, 0);
-            using (_Db.BlockReference newBlockReference = new _Db.BlockReference(insertPointBlock, _c.blockTable[blockName]))
+            using (_Db.BlockReference newBlockReference = new _Db.BlockReference(insertPointBlock, _c.blockTable[tableMaterialRow]))
             {
                 newBlockReference.Layer = layerName;
                 _c.modelSpace.AppendEntity(newBlockReference);
                 _c.trans.AddNewlyCreatedDBObject(newBlockReference, true);
                 newBlockReference.TransformBy(_Ge.Matrix3d.Scaling(scale, insertPointBlock));
 
-                _Db.BlockTableRecord blockBlockTable = _c.trans.GetObject(_c.blockTable[blockName], _Db.OpenMode.ForRead) as _Db.BlockTableRecord;
+                _Db.BlockTableRecord blockBlockTable = _c.trans.GetObject(_c.blockTable[tableMaterialRow], _Db.OpenMode.ForRead) as _Db.BlockTableRecord;
                 if (blockBlockTable.HasAttributeDefinitions)
                 {
                     foreach (_Db.ObjectId objID in blockBlockTable)
@@ -130,7 +129,7 @@ namespace DMTCommands
         }
 
 
-        private void setRowParameters(_Db.AttributeReference ar, T.TableSummary sumData)
+        private void setRowParameters(_Db.AttributeReference ar, T.TableMaterialRow sumData)
         {
             if (ar != null)
             {

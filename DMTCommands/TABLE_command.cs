@@ -53,117 +53,77 @@ namespace DMTCommands
     {
         _CONNECTION _c;
 
-        string boxName;
+        List<string> boxName = new List<string>() { "Drawing_Area" };
+        List<string> tableHead = new List<string>() { "Painutustabel_pais" };
+        List<string> tableBendingRow = new List<string>() { "Painutustabel_rida" };
+        List<string> tableMaterialRow = new List<string>() { "PainutusKokkuvõte" };
 
-        string tableHeadName;
-        string tableRowName;
-        string tableSummaryName;
+        string markLayer = "K023TL";
+        //string tableLayer = "K004";
 
-        string markLayerName;
-
-        List<string> bendingNames;
+        List<string> bendingShapes = new List<string>() { "Raud_A", "Raud_B", "Raud_C", "Raud_D", "Raud_E", "Raud_F", "Raud_G", "Raud_H", "Raud_J", "Raud_K", "Raud_L", "Raud_M", "Raud_N", "Raud_R", "Raud_S", "Raud_T",
+                                                         "Raud_U", "Raud_V", "Raud_W", "Raud_X", "Raud_Y", "Raud_Z1", "Raud_Z2", "Raud_Z3", "Raud_Z4", "Raud_Z5", "Raud_Z6", "Raud_Z7", "Raud_Z8", "Raud_Z9" };
 
 
         public TABLE_command(ref _CONNECTION c)
         {
-            _c = c;
-
-            boxName = "Drawing_Area";
-
-            tableHeadName = "Painutustabel_pais";
-            tableRowName = "Painutustabel_rida";
-            tableSummaryName = "PainutusKokkuvõte";
-
-            markLayerName = "K023TL";
-
-            bendingNames = new List<string>();
-
-            bendingNames.Add("Raud_A");
-            bendingNames.Add("Raud_B");
-            bendingNames.Add("Raud_C");
-            bendingNames.Add("Raud_D");
-            bendingNames.Add("Raud_E");
-            bendingNames.Add("Raud_F");
-            bendingNames.Add("Raud_G");
-            bendingNames.Add("Raud_H");
-            bendingNames.Add("Raud_J");
-            bendingNames.Add("Raud_K");
-            bendingNames.Add("Raud_L");
-            bendingNames.Add("Raud_M");
-            bendingNames.Add("Raud_N");
-            bendingNames.Add("Raud_R");
-            bendingNames.Add("Raud_S");
-            bendingNames.Add("Raud_T");
-            bendingNames.Add("Raud_U");
-            bendingNames.Add("Raud_V");
-            bendingNames.Add("Raud_W");
-            bendingNames.Add("Raud_X");
-            bendingNames.Add("Raud_Y");
-            bendingNames.Add("Raud_Z1");
-            bendingNames.Add("Raud_Z2");
-            bendingNames.Add("Raud_Z3");
-            bendingNames.Add("Raud_Z4");
-            bendingNames.Add("Raud_Z5");
-            bendingNames.Add("Raud_Z6");
-            bendingNames.Add("Raud_Z7");
-            bendingNames.Add("Raud_Z8");
-            bendingNames.Add("Raud_Z9");
+            _c = c;        
         }
 
 
         public void bending()
         {
-            List<string> blockNames = new List<string>() { "Painutustabel_rida" };
-            List<string> layerNames = new List<string>() { "K004" };
-            _SETUP init = new _SETUP(ref _c);
-            init.start(blockNames, layerNames);
+            //List<string> layerNames = new List<string>() { tableLayer };
+            //init.start(blockNames, layerNames);
 
+            _SETUP init = new _SETUP(ref _c);
+            init.start(tableBendingRow);
 
             List<G.Area> areas = getAllAreas(boxName);
-            List<T.TableHead> heads = getAllTableHeads(tableHeadName);
-            List<T.ReinforcementMark> marks = getAllMarks(markLayerName);
+            List<T.TableHead> heads = getAllTableHeads(tableHead);
+            List<T.ReinforcementMark> marks = getAllMarks(markLayer);
 
-            List<T.Bending> bendings = getAllBendings(bendingNames);
-            List<T.TableRow> rows = getAllTableRows(tableRowName);
+            List<T.BendingShape> bendings = getAllBendings(bendingShapes);
+            List<T.TableBendingRow> rows = getAllTableRows(tableBendingRow);
 
-            T.TablerHandler logic = new T.TablerHandler();
+            T.HandlerBending logic = new T.HandlerBending();
             List<T.DrawingArea> data = logic.main(areas, heads, marks, bendings, rows);
 
-            bending_output(data);
+            bending_output(data, tableBendingRow[0]);
         }
 
 
         public void material()
         {
-            List<string> blockNames = new List<string>() { "PainutusKokkuvõte" };
-            List<string> layerNames = new List<string>() { "K004" };
-            _SETUP init = new _SETUP(ref _c);
-            init.start(blockNames, layerNames);
+            //List<string> layerNames = new List<string>() { tableLayer };
+            //init.start(blockNames, layerNames);
 
+            _SETUP init = new _SETUP(ref _c);
+            init.start(tableMaterialRow);
 
             List<G.Area> areas = getAllAreas(boxName);
-            List<T.TableHead> heads = getAllTableHeads(tableHeadName);
+            List<T.TableHead> heads = getAllTableHeads(tableHead);
 
-            List<T.TableRow> rows = getAllTableRows(tableRowName);
-            List<T.TableSummary> summarys = getAllTableSummarys(tableSummaryName);
+            List<T.TableBendingRow> rows = getAllTableRows(tableBendingRow);
+            List<T.TableMaterialRow> summarys = getAllTableSummarys(tableMaterialRow);
 
-            List<T.DrawingArea> data = T.SummarHandler.main(areas, heads, rows, summarys);
+            List<T.DrawingArea> data = T.HandlerMaterial.main(areas, heads, rows, summarys);
 
-            material_output(data);
+            material_output(data, tableMaterialRow[0]);
         }
 
 
         public void check()
         {
             List<G.Area> areas = getAllAreas(boxName);
-            List<T.TableHead> heads = getAllTableHeads(tableHeadName);
-            List<T.ReinforcementMark> marks = getAllMarks(markLayerName);
+            List<T.TableHead> heads = getAllTableHeads(tableHead);
+            List<T.ReinforcementMark> marks = getAllMarks(markLayer);
 
-            List<T.Bending> bendings = getAllBendings(bendingNames);
-            List<T.TableRow> rows = getAllTableRows(tableRowName);
-            List<T.TableSummary> summarys = getAllTableSummarys(tableSummaryName);
+            List<T.BendingShape> bendings = getAllBendings(bendingShapes);
+            List<T.TableBendingRow> rows = getAllTableRows(tableBendingRow);
+            List<T.TableMaterialRow> summarys = getAllTableSummarys(tableMaterialRow);
 
-            List<T.ErrorPoint> errors = T.CheckerHandler.main(areas, heads, marks, bendings, rows, summarys);
+            List<T.ErrorPoint> errors = T.HandlerChecker.main(areas, heads, marks, bendings, rows, summarys);
 
             checker_output(errors);
         }

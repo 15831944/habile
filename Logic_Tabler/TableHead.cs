@@ -12,17 +12,26 @@ namespace Logic_Tabler
     {    
         G.Point _IP;
         double _scale;
+        string _lang;
 
         public int height = 14;
 
         public G.Point IP { get { return _IP; } }
         public double Scale { get { return _scale; } }
+        public string Lang { get { return _lang; } }
 
 
-        public TableHead(G.Point position, double scale)
+        public TableHead(G.Point position, double scale) // default as EST
         {
             _IP = position;
             _scale = scale;
+            _lang = "ET";
+        }
+
+
+        public void setLanguange(string lang)
+        {
+            _lang = lang;
         }
 
     }
