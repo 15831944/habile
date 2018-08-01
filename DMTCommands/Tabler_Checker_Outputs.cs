@@ -52,11 +52,35 @@ namespace DMTCommands
     partial class TABLE_command
     {
 
-        public void checker_output(List<T.ErrorPoint> errors)
+        public void checker_output(List<T.DrawingArea> fields)
         {
             write(" ");
             write("----- VIGADE LOETELU ALGUS -----");
-            foreach (T.ErrorPoint e in errors)
+
+            int i = 0;
+
+            foreach (T.DrawingArea f in fields)
+            {
+                if (f.Valid)
+                {
+                    showErrors(f);
+                    i += f._errors.Count;
+                }
+                else
+                {
+                    write(f.Reason);
+                }
+            }
+
+            write("----- VIGADE LOETELU LÕPP -----");
+            write(" ");
+            write("VIGADE ARV - " + i.ToString());
+        }
+        
+
+        private int showErrors(T.DrawingArea f)
+        {
+            foreach (T.ErrorPoint e in f._errors)
             {
                 double scale = e.Scale;
                 _Ge.Point3d insertPoint = new _Ge.Point3d(e.IP.X, e.IP.Y, 0);
@@ -65,11 +89,10 @@ namespace DMTCommands
 
                 write(e.ErrorMessage);
             }
-            write("----- VIGADE LOETELU LÕPP -----");
-            write(" ");
-            write("VIGADE ARV - " + errors.Count.ToString());
+
+            return f._errors.Count;
         }
-        
+
 
         private void createCircle(double radius, _Ge.Point3d ip)
         {

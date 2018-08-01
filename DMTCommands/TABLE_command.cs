@@ -123,9 +123,9 @@ namespace DMTCommands
             List<T.TableBendingRow> rows = getAllTableRows(tableBendingRow);
             List<T.TableMaterialRow> summarys = getAllTableSummarys(tableMaterialRow);
 
-            List<T.ErrorPoint> errors = T.HandlerChecker.main(areas, heads, marks, bendings, rows, summarys);
+            List<T.DrawingArea> data = T.HandlerChecker.main(areas, heads, marks, bendings, rows, summarys);
 
-            checker_output(errors);
+            checker_output(data);
         }
 
 

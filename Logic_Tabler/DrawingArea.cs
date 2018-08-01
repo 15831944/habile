@@ -17,6 +17,7 @@ namespace Logic_Tabler
         public List<BendingShape> _bendings;
         public List<TableBendingRow> _rows;
         public List<TableMaterialRow> _summarys;
+        public List<ErrorPoint> _errors;
 
         bool _valid = true;
         string _reason = "none";
@@ -34,6 +35,7 @@ namespace Logic_Tabler
             _bendings = new List<BendingShape>();
             _rows = new List<TableBendingRow>();
             _summarys = new List<TableMaterialRow>();
+            _errors = new List<ErrorPoint>();
 
             _valid = true;
         }
@@ -48,6 +50,7 @@ namespace Logic_Tabler
             _bendings = new List<BendingShape>();
             _rows = new List<TableBendingRow>();
             _summarys = new List<TableMaterialRow>();
+            _errors = new List<ErrorPoint>();
 
             _valid = true;
         }
@@ -86,6 +89,12 @@ namespace Logic_Tabler
         internal void addSummary(TableMaterialRow p)
         {
             _summarys.Add(p);
+        }
+
+
+        internal void addErrors(List<ErrorPoint> e)
+        {
+            _errors.AddRange(e);
         }
 
 

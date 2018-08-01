@@ -12,13 +12,14 @@ namespace Logic_Tabler
     public static class HandlerChecker
     {
 
-        public static List<ErrorPoint> main(List<G.Area> areas, List<TableHead> heads, List<ReinforcementMark> marks, List<BendingShape> bendings, List<TableBendingRow> rows, List<TableMaterialRow> summarys)
+        public static List<DrawingArea> main(List<G.Area> areas, List<TableHead> heads, List<ReinforcementMark> marks, List<BendingShape> bendings, List<TableBendingRow> rows, List<TableMaterialRow> summarys)
         {
-            List<ErrorPoint> errors = new List<ErrorPoint>();
             List<DrawingArea> fields = sortData(areas, heads, marks, bendings, rows, summarys);
 
             foreach (DrawingArea f in fields)
             {
+                List<ErrorPoint> errors = new List<ErrorPoint>();
+
                 if (f._tableHeads.Count < 1)
                 {
                     f.setInvalid("[WARNING] - Painutustabel_pais - Puudub, ala jääb vahele");
@@ -31,15 +32,15 @@ namespace Logic_Tabler
                     continue;
                 }
 
-                List<ErrorPoint> currentErrors = dosomeshitmagic(f);
-                errors.AddRange(currentErrors);
+                List<ErrorPoint> currentErrors = checker(f);
+               f.addErrors(currentErrors);
             }
 
-            return errors;
+            return fields;
         }
 
 
-        private static List<ErrorPoint> dosomeshitmagic(DrawingArea field)
+        private static List<ErrorPoint> checker(DrawingArea field)
         {
             List<ErrorPoint> errors = new List<ErrorPoint>();
 
