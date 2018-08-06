@@ -52,7 +52,7 @@ namespace DMTCommands
     partial class TABLE_command
     {
 
-        public void checker_output(List<T.DrawingArea> fields)
+        public void checker_output(_SETUP init, List<T.DrawingArea> fields)
         {
             write(" ");
             write("----- VIGADE LOETELU ALGUS -----");
@@ -63,7 +63,7 @@ namespace DMTCommands
             {
                 if (f.Valid)
                 {
-                    showErrors(f);
+                    showErrors(init, f);
                     i += f._errors.Count;
                 }
                 else
@@ -78,8 +78,14 @@ namespace DMTCommands
         }
         
 
-        private int showErrors(T.DrawingArea f)
+        private int showErrors(_SETUP init, T.DrawingArea f)
         {
+            if (f._errors.Count > 0)
+            {
+                List<string> layerNames = new List<string>() { kontrollLayer };
+                init.initLayers(layerNames);
+            }
+
             foreach (T.ErrorPoint e in f._errors)
             {
                 double scale = e.Scale;
@@ -101,6 +107,7 @@ namespace DMTCommands
                 circle.Center = ip;
                 circle.Radius = radius;
                 circle.ColorIndex = 1;
+                circle.Layer = kontrollLayer;
                 _c.modelSpace.AppendEntity(circle);
                 _c.trans.AddNewlyCreatedDBObject(circle, true);
             }

@@ -15,6 +15,7 @@ namespace Logic_Tabler
         public List<TableHead> _tableHeads;
         public List<ReinforcementMark> _marks;
         public List<BendingShape> _bendings;
+        public List<BendingShape> _defaultMaterial;
         public List<TableBendingRow> _rows;
         public List<TableMaterialRow> _summarys;
         public List<ErrorPoint> _errors;
@@ -33,6 +34,7 @@ namespace Logic_Tabler
             _tableHeads = new List<TableHead>();
             _marks = new List<ReinforcementMark>();
             _bendings = new List<BendingShape>();
+            _defaultMaterial = new List<BendingShape>();
             _rows = new List<TableBendingRow>();
             _summarys = new List<TableMaterialRow>();
             _errors = new List<ErrorPoint>();
@@ -48,6 +50,7 @@ namespace Logic_Tabler
             _tableHeads = new List<TableHead>();
             _marks = new List<ReinforcementMark>();
             _bendings = new List<BendingShape>();
+            _defaultMaterial = new List<BendingShape>();
             _rows = new List<TableBendingRow>();
             _summarys = new List<TableMaterialRow>();
             _errors = new List<ErrorPoint>();
@@ -79,7 +82,13 @@ namespace Logic_Tabler
             _bendings.Add(bd);
         }
 
-        
+
+        internal void addMaterial(BendingShape df)
+        {
+            _defaultMaterial.Add(df);
+        }
+
+
         internal void addRow(TableBendingRow r)
         {
             _rows.Add(r);
@@ -89,6 +98,12 @@ namespace Logic_Tabler
         internal void addSummary(TableMaterialRow p)
         {
             _summarys.Add(p);
+        }
+
+
+        internal void addError(ErrorPoint e)
+        {
+            _errors.Add(e);
         }
 
 
@@ -102,6 +117,39 @@ namespace Logic_Tabler
         {
             _valid = false;
             _reason = reason;
+        }
+
+
+        public G.Point getSummaryInsertionPoint()
+        {
+            if (_valid)
+            {
+                double tempX = _tableHeads[0].IP.X;
+                double tempY = _tableHeads[0].IP.Y;
+
+                foreach (TableBendingRow r in _rows)
+                {
+                    if (r.IP.Y < tempY)
+                    {
+                        tempY = r.IP.Y;
+                    }
+                }
+
+                return new G.Point(tempX, tempY);
+            }
+            else
+            {
+                throw new Exception();
+            }
+        }
+
+
+        public void setErrorScale(double scale)
+        {
+            foreach (ErrorPoint e in _errors)
+            {
+                e.Scale = scale;
+            }
         }
 
     }

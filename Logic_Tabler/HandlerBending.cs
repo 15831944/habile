@@ -10,6 +10,9 @@ namespace Logic_Tabler
 {
     public class HandlerBending
     {
+        string defaultMaterial = "B500B";
+        string defaultAMaterialBlock = "Raud_A_DEFAULT";
+
 
         public HandlerBending()
         {
@@ -43,8 +46,12 @@ namespace Logic_Tabler
                     f.setInvalid("[WARNING] - Raamjoone vahel pole ühtegi viidet");
                     continue;
                 }
+                if (f._defaultMaterial.Count > 1)
+                {
+                    f.setInvalid("[WARNING] - Raud_A_DEFAULT - Rohkem kui 1, ala jääb vahele");
+                    continue;
+                }
 
-                string defaultMaterial = "B500B";
 
                 foreach (BendingShape b in f._bendings)
                 {
@@ -52,14 +59,23 @@ namespace Logic_Tabler
                     f.addRow(r);
                 }
 
-                try
-                {
-                    defaultMaterial = f._rows.GroupBy(i => i.Material).OrderByDescending(grp => grp.Count()).Select(grp => grp.Key).First();
-                }
-                catch
-                {
 
+                string currentDefaultMaterial = defaultMaterial;
+                if (f._defaultMaterial.Count == 0)
+                {
+                    try
+                    {
+                        currentDefaultMaterial = f._rows.GroupBy(i => i.Material).OrderByDescending(grp => grp.Count()).Select(grp => grp.Key).First();
+                    }
+                    catch
+                    {
+
+                    }
                 }
+                else
+                {
+                    currentDefaultMaterial = f._defaultMaterial[0].Material;
+                }        
                 
 
                 foreach (ReinforcementMark m in f._marks)
@@ -81,7 +97,7 @@ namespace Logic_Tabler
                         {
                             BendingShape newBending = new BendingShape(m.IP, "Raud_A");
                             newBending.A = m.Other;
-                            newBending.Material = defaultMaterial;
+                            newBending.Material = currentDefaultMaterial;
                             newBending.Position = m.Position;
 
                             if (newBending.validator())
@@ -137,7 +153,15 @@ namespace Logic_Tabler
                 {
                     if (cr.isInArea(mark.IP))
                     {
-                        cr.addMark(mark);
+                        if (mark.validate())
+                        {
+                            cr.addMark(mark);
+                        }
+                        else
+                        {
+                            cr.addError(new ErrorPoint(mark.IP, "[WARNING] VIIDE - \"" + mark.Content + "\" - could not read!"));
+                        }
+
                         break;
                     }
                 }
@@ -149,7 +173,15 @@ namespace Logic_Tabler
                 {
                     if (cr.isInArea(bending.IP))
                     {
-                        cr.addBending(bending);
+                        if (bending.BlockName == defaultAMaterialBlock)
+                        {
+                            cr.addMaterial(bending);
+                        }
+                        else
+                        {
+                            cr.addBending(bending);
+                        }
+                        
                         break;
                     }
                 }

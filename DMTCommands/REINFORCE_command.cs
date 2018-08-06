@@ -68,7 +68,7 @@ namespace DMTCommands
             //init.start(blockNames, layerNames);
 
             _SETUP init = new _SETUP(ref _c);
-            init.start(blockNames);
+            init.initBlocks(blockNames);
 
             getSettings();
             List<G.Line> polys = getGeometry();

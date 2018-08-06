@@ -87,6 +87,11 @@ namespace Logic_Tabler
                 return false;
             }
 
+            if (_BlockName == "Raud_A_DEFAULT")
+            {
+                return true;
+            }
+
             if (Position == "nul")
             {
                 setInvalid("[ERROR] - BENDING BLOCK - Position = nul");

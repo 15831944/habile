@@ -155,12 +155,10 @@ namespace DMTCommands
         //
         //MARKS
         //
-        private List<T.ReinforcementMark> getAllMarks(string layer)
+        private List<T.ReinforcementMark> getAllMarks()
         {
-            List<T.ReinforcementMark> marks = new List<T.ReinforcementMark>();
-
-            List<_Db.MText> allTexts = getAllText(layer);
-            marks = getMarkData(allTexts);
+            List<_Db.MText> allTexts = getAllText(markLayer);
+            List<T.ReinforcementMark> marks = getMarkData(allTexts);
 
             return marks;
         }
@@ -174,15 +172,7 @@ namespace DMTCommands
             {
                 G.Point insp = new G.Point(txt.Location.X, txt.Location.Y);
                 T.ReinforcementMark current = new T.ReinforcementMark(insp, txt.Contents);
-
-                if (current.validate())
-                {
-                    parse.Add(current);
-                }
-                else
-                {
-                    write("[WARNING] VIIDE - \"" + txt.Contents + "\" - could not read!");
-                }
+                parse.Add(current);
             }
 
             return parse;
@@ -222,9 +212,8 @@ namespace DMTCommands
                     _Db.AttributeReference ar = obj as _Db.AttributeReference;
                     setBendingParameters(ar, current);
                 }
-
+                
                 current.validator();
-
                 if (current.Valid)
                 {
                     parse.Add(current);

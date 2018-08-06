@@ -78,6 +78,11 @@ namespace DMTCommands
             currentPoint.X = insertPoint.X;
             currentPoint.Y -= delta;
 
+            foreach (T.ErrorPoint e in field._errors)
+            {
+                write(e.ErrorMessage);
+            }
+            
             foreach (T.TableBendingRow b in field._rows)
             {
                 insertRow(currentPoint, b, scale, tableBendingRow);
@@ -90,12 +95,10 @@ namespace DMTCommands
 
         private void insertRow(G.Point insertion, T.TableBendingRow rowData, double scale, string tableBendingRow)
         {
-            string layerName = "K004";
-
             _Ge.Point3d insertPointBlock = new _Ge.Point3d(insertion.X, insertion.Y, 0);
             using (_Db.BlockReference newBlockReference = new _Db.BlockReference(insertPointBlock, _c.blockTable[tableBendingRow]))
             {
-                newBlockReference.Layer = layerName;
+                newBlockReference.Layer = bendingLayer;
                 _c.modelSpace.AppendEntity(newBlockReference);
                 _c.trans.AddNewlyCreatedDBObject(newBlockReference, true);
                 newBlockReference.TransformBy(_Ge.Matrix3d.Scaling(scale, insertPointBlock));

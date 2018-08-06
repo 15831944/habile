@@ -69,10 +69,10 @@ namespace DMTCommands
 
         private void generateMaterialTable(T.DrawingArea field, string tableMaterialRow)
         {
-            G.Point insertPoint = T.HandlerMaterial.getSummaryInsertionPoint(field);
+            G.Point insertPoint = field.getSummaryInsertionPoint();
             double scale = field._tableHeads[0].Scale;
 
-            G.Point currentPoint = T.HandlerMaterial.getSummaryInsertionPoint(field);
+            G.Point currentPoint = field.getSummaryInsertionPoint();
             double delta = scale * 4;
 
             currentPoint.X = insertPoint.X;
@@ -90,12 +90,10 @@ namespace DMTCommands
 
         private void insertRow(G.Point insertion, T.TableMaterialRow sumData, double scale, string tableMaterialRow)
         {
-            string layerName = "K004";
-
             _Ge.Point3d insertPointBlock = new _Ge.Point3d(insertion.X, insertion.Y, 0);
             using (_Db.BlockReference newBlockReference = new _Db.BlockReference(insertPointBlock, _c.blockTable[tableMaterialRow]))
             {
-                newBlockReference.Layer = layerName;
+                newBlockReference.Layer = materialLayer;
                 _c.modelSpace.AppendEntity(newBlockReference);
                 _c.trans.AddNewlyCreatedDBObject(newBlockReference, true);
                 newBlockReference.TransformBy(_Ge.Matrix3d.Scaling(scale, insertPointBlock));

@@ -13,22 +13,24 @@ namespace Logic_Tabler
     public class ReinforcementMark : IEquatable<ReinforcementMark>
     {
         G.Point _IP;
-        string _fullMark;
+        string _content;
 
         public G.Point IP { get { return _IP; } }
 
-        int _Count;
-        string _Position;
+        int _count;
+        string _position;
 
-        string _Shape;
-        int _Diameter;
-        int _Other;
+        string _shape;
+        int _diameter;
+        int _other;
 
-        public int Count { get { return _Count; } }
-        public string Position { get { return _Position; } }
-        public string Shape { get { return _Shape; } }
-        public int Diameter { get { return _Diameter; } }
-        public int Other { get { return _Other; } }
+        public string Content { get { return _content; } }
+
+        public int Count { get { return _count; } }
+        public string Position { get { return _position; } }
+        public string Shape { get { return _shape; } }
+        public int Diameter { get { return _diameter; } }
+        public int Other { get { return _other; } }
 
         bool _valid = true;
         string _reason = "none";
@@ -36,10 +38,11 @@ namespace Logic_Tabler
         public bool Valid { get { return _valid; } }
         public string Reason { get { return _reason; } }
 
+
         public ReinforcementMark(G.Point position, string mark)
         {
             _IP = position;
-            _fullMark = mark;
+            _content = mark;
         }
 
 
@@ -60,11 +63,11 @@ namespace Logic_Tabler
 
         private void alfa()
         {
-            string mark = _fullMark;
+            string mark = _content;
 
-            if (_fullMark.Contains(@"\P"))
+            if (_content.Contains(@"\P"))
             {
-                mark = _fullMark.Split('\\')[0];
+                mark = _content.Split('\\')[0];
             }
 
             int tot = mark.Length;
@@ -142,30 +145,30 @@ namespace Logic_Tabler
                 int number = Int32.Parse(mark.Substring(0, multiplierCount));
 
                 int count = Int32.Parse(mark.Substring(multiplierCount + 1, temp));
-                _Count = number * count;
+                _count = number * count;
             }
             else
             {
-                _Count = Int32.Parse(mark.Substring(0, temp));
+                _count = Int32.Parse(mark.Substring(0, temp));
             }
 
             temp = tot - numCount;
-            _Position = mark.Substring(numCount, temp);
+            _position = mark.Substring(numCount, temp);
 
             temp = numShape - numCount;
-            _Shape = mark.Substring(numCount, temp);
+            _shape = mark.Substring(numCount, temp);
 
             temp = numDiam - numShape;
-            _Diameter = Int32.Parse(mark.Substring(numShape, temp));
+            _diameter = Int32.Parse(mark.Substring(numShape, temp));
 
             temp = tot - numDiam;
-            _Other = Int32.Parse(mark.Substring(numDiam, temp));
+            _other = Int32.Parse(mark.Substring(numDiam, temp));
         }
 
 
         public override string ToString() // debug
         {
-            string str = _Count + " " + _Position + " " + _Shape + " " + _Diameter + " " + _Other;
+            string str = _count + " " + _position + " " + _shape + " " + _diameter + " " + _other;
             return str;
         }
 
@@ -174,7 +177,7 @@ namespace Logic_Tabler
         {
             if (other == null) return false;
             return (this.IP == other.IP &&
-                    this._fullMark == other._fullMark);
+                    this._content == other._content);
         }
 
 

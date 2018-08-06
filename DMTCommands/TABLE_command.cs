@@ -59,11 +59,12 @@ namespace DMTCommands
         List<string> tableMaterialRow = new List<string>() { "PainutusKokkuvõte" };
 
         string markLayer = "K023TL";
-        //string tableLayer = "K004";
+        string kontrollLayer = "_AUTO_KONTROLL_";
+        string bendingLayer = "K004";
+        string materialLayer = "K004";
 
-        List<string> bendingShapes = new List<string>() { "Raud_A", "Raud_B", "Raud_C", "Raud_D", "Raud_E", "Raud_F", "Raud_G", "Raud_H", "Raud_J", "Raud_K", "Raud_L", "Raud_M", "Raud_N", "Raud_R", "Raud_S", "Raud_T",
+        List<string> bendingShapes = new List<string>() { "Raud_A",  "Raud_A_DEFAULT", "Raud_B", "Raud_C", "Raud_D", "Raud_E", "Raud_F", "Raud_G", "Raud_H", "Raud_J", "Raud_K", "Raud_L", "Raud_M", "Raud_N", "Raud_R", "Raud_S", "Raud_T",
                                                          "Raud_U", "Raud_V", "Raud_W", "Raud_X", "Raud_Y", "Raud_Z1", "Raud_Z2", "Raud_Z3", "Raud_Z4", "Raud_Z5", "Raud_Z6", "Raud_Z7", "Raud_Z8", "Raud_Z9" };
-
 
         public TABLE_command(ref _CONNECTION c)
         {
@@ -72,16 +73,16 @@ namespace DMTCommands
 
 
         public void bending()
-        {
-            //List<string> layerNames = new List<string>() { tableLayer };
-            //init.start(blockNames, layerNames);
-
+        {            
             _SETUP init = new _SETUP(ref _c);
-            init.start(tableBendingRow);
+            init.initBlocks(tableBendingRow);
+
+            //List<string> layerNames = new List<string>() { bendingLayer };
+            //init.layers(layerNames);
 
             List<G.Area> areas = getAllAreas(boxName);
             List<T.TableHead> heads = getAllTableHeads(tableHead);
-            List<T.ReinforcementMark> marks = getAllMarks(markLayer);
+            List<T.ReinforcementMark> marks = getAllMarks();
 
             List<T.BendingShape> bendings = getAllBendings(bendingShapes);
             List<T.TableBendingRow> rows = getAllTableRows(tableBendingRow);
@@ -95,11 +96,11 @@ namespace DMTCommands
 
         public void material()
         {
-            //List<string> layerNames = new List<string>() { tableLayer };
-            //init.start(blockNames, layerNames);
-
             _SETUP init = new _SETUP(ref _c);
-            init.start(tableMaterialRow);
+            init.initBlocks(tableMaterialRow);
+
+            //List<string> layerNames = new List<string>() { materialLayer };
+            //init.layers(layerNames);
 
             List<G.Area> areas = getAllAreas(boxName);
             List<T.TableHead> heads = getAllTableHeads(tableHead);
@@ -107,7 +108,8 @@ namespace DMTCommands
             List<T.TableBendingRow> rows = getAllTableRows(tableBendingRow);
             List<T.TableMaterialRow> summarys = getAllTableSummarys(tableMaterialRow);
 
-            List<T.DrawingArea> data = T.HandlerMaterial.main(areas, heads, rows, summarys);
+            T.HandlerMaterial logic = new T.HandlerMaterial();
+            List<T.DrawingArea> data = logic.main(areas, heads, rows, summarys);
 
             material_output(data, tableMaterialRow[0]);
         }
@@ -115,17 +117,24 @@ namespace DMTCommands
 
         public void check()
         {
+            _SETUP init = new _SETUP(ref _c);
+
+            //KONTROLL LAYER LUUAKSE HILJEM PROGRAMMIS, KUI ON VAJA
+            //List<string> layerNames = new List<string>() { kontrollLayer };
+            //init.initLayers(layerNames);
+
             List<G.Area> areas = getAllAreas(boxName);
             List<T.TableHead> heads = getAllTableHeads(tableHead);
-            List<T.ReinforcementMark> marks = getAllMarks(markLayer);
+            List<T.ReinforcementMark> marks = getAllMarks();
 
             List<T.BendingShape> bendings = getAllBendings(bendingShapes);
             List<T.TableBendingRow> rows = getAllTableRows(tableBendingRow);
             List<T.TableMaterialRow> summarys = getAllTableSummarys(tableMaterialRow);
 
-            List<T.DrawingArea> data = T.HandlerChecker.main(areas, heads, marks, bendings, rows, summarys);
+            T.HandlerChecker logic = new T.HandlerChecker();
+            List<T.DrawingArea> data = logic.main(areas, heads, marks, bendings, rows, summarys);
 
-            checker_output(data);
+            checker_output(init, data);
         }
 
 

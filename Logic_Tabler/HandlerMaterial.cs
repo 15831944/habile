@@ -8,10 +8,16 @@ using G = Geometry;
 
 namespace Logic_Tabler
 {
-    public static class HandlerMaterial
+    public class HandlerMaterial
     {
 
-        public static List<DrawingArea> main(List<G.Area> areas, List<TableHead> heads, List<TableBendingRow> rows, List<TableMaterialRow> summarys)
+        public HandlerMaterial()
+        {
+
+        }
+
+
+        public List<DrawingArea> main(List<G.Area> areas, List<TableHead> heads, List<TableBendingRow> rows, List<TableMaterialRow> summarys)
         {
             List<DrawingArea> fields = sortData(areas, heads, rows, summarys);
 
@@ -47,7 +53,7 @@ namespace Logic_Tabler
         }
 
 
-        private static void calculateWeights(DrawingArea field, string languange)
+        private void calculateWeights(DrawingArea field, string languange)
         {
             List<string> MaterialFilter = new List<string>();
             var DistinctItems = field._rows.GroupBy(x => x.Material).Select(y => y.First());
@@ -118,7 +124,7 @@ namespace Logic_Tabler
         }
 
 
-        public static G.Point getSummaryInsertionPoint(DrawingArea field)
+        public G.Point getSummaryInsertionPoint(DrawingArea field)
         {
             if (field.Valid)
             {
@@ -142,7 +148,7 @@ namespace Logic_Tabler
         }
 
 
-        private static List<DrawingArea> sortData(List<G.Area> areas, List<TableHead> heads, List<TableBendingRow> rows, List<TableMaterialRow> summarys)
+        private List<DrawingArea> sortData(List<G.Area> areas, List<TableHead> heads, List<TableBendingRow> rows, List<TableMaterialRow> summarys)
         {
             List<DrawingArea> data = new List<DrawingArea>();
 

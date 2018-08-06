@@ -9,10 +9,15 @@ using G = Geometry;
 
 namespace Logic_Tabler
 {
-    public static class HandlerChecker
+    public class HandlerChecker
     {
+        public HandlerChecker()
+        {
 
-        public static List<DrawingArea> main(List<G.Area> areas, List<TableHead> heads, List<ReinforcementMark> marks, List<BendingShape> bendings, List<TableBendingRow> rows, List<TableMaterialRow> summarys)
+        }
+
+
+        public List<DrawingArea> main(List<G.Area> areas, List<TableHead> heads, List<ReinforcementMark> marks, List<BendingShape> bendings, List<TableBendingRow> rows, List<TableMaterialRow> summarys)
         {
             List<DrawingArea> fields = sortData(areas, heads, marks, bendings, rows, summarys);
 
@@ -25,22 +30,27 @@ namespace Logic_Tabler
                     f.setInvalid("[WARNING] - Painutustabel_pais - Puudub, ala jääb vahele");
                     continue;
                 }
-
                 if (f._tableHeads.Count > 1)
                 {
                     f.setInvalid("[WARNING] - Painutustabel_pais - Rohkem kui 1, ala jääb vahele");
                     continue;
                 }
+                if (f._defaultMaterial.Count > 1)
+                {
+                    f.setInvalid("[WARNING] - Raud_A_DEFAULT - Rohkem kui 1, ala jääb vahele");
+                    continue;
+                }
 
                 List<ErrorPoint> currentErrors = checker(f);
-               f.addErrors(currentErrors);
+                f.addErrors(currentErrors);
+                f.setErrorScale(f._tableHeads[0].Scale);
             }
 
             return fields;
         }
 
 
-        private static List<ErrorPoint> checker(DrawingArea field)
+        private List<ErrorPoint> checker(DrawingArea field)
         {
             List<ErrorPoint> errors = new List<ErrorPoint>();
 
@@ -51,7 +61,7 @@ namespace Logic_Tabler
 
             foreach (TableBendingRow r in dublicateTableRows)
             {
-                ErrorPoint er = new ErrorPoint(r.IP, "[VIGA] - TABEL - DUBLICATE - " + r.Position, field._tableHeads[0].Scale);
+                ErrorPoint er = new ErrorPoint(r.IP, "[VIGA] - TABEL - DUBLICATE - " + r.Position);
                 errors.Add(er);
             }
 
@@ -62,7 +72,7 @@ namespace Logic_Tabler
 
             foreach (BendingShape b in dublicateBendings)
             {
-                ErrorPoint er = new ErrorPoint(b.IP, "[VIGA] - PAINUTUS - DUBLICATE - " + b.Position, field._tableHeads[0].Scale);
+                ErrorPoint er = new ErrorPoint(b.IP, "[VIGA] - PAINUTUS - DUBLICATE - " + b.Position);
                 errors.Add(er);
             }
 
@@ -70,7 +80,7 @@ namespace Logic_Tabler
             {
                 if (r.Count == 0)
                 {
-                    ErrorPoint er = new ErrorPoint(r.IP, "[VIGA] - TABEL - KOGUS -> 0", field._tableHeads[0].Scale);
+                    ErrorPoint er = new ErrorPoint(r.IP, "[VIGA] - TABEL - KOGUS -> 0");
                     errors.Add(er);
                 }
             }
@@ -89,7 +99,7 @@ namespace Logic_Tabler
 
                 if (found == false)
                 {
-                    ErrorPoint er = new ErrorPoint(m.IP, "[VIGA] - VIIDE - EI LEIA TABELIST - " + m.Position, field._tableHeads[0].Scale);
+                    ErrorPoint er = new ErrorPoint(m.IP, "[VIGA] - VIIDE - EI LEIA TABELIST - " + m.Position);
                     errors.Add(er);
                 }
             }
@@ -108,7 +118,7 @@ namespace Logic_Tabler
 
                 if (found == false && m.Shape != "A")
                 {
-                    ErrorPoint er = new ErrorPoint(m.IP, "[VIGA] - VIIDE - EI LEIA PAINUTUST - " + m.Position, field._tableHeads[0].Scale);
+                    ErrorPoint er = new ErrorPoint(m.IP, "[VIGA] - VIIDE - EI LEIA PAINUTUST - " + m.Position);
                     errors.Add(er);
                 }
             }
@@ -129,7 +139,7 @@ namespace Logic_Tabler
 
                 if (found == true)
                 {
-                    ErrorPoint er = new ErrorPoint(m.IP, "[VIGA] - VIIDE - TOPELT VIIDE - " + m.Position, field._tableHeads[0].Scale);
+                    ErrorPoint er = new ErrorPoint(m.IP, "[VIGA] - VIIDE - TOPELT VIIDE - " + m.Position);
                     if (!errors.Contains(er)) errors.Add(er);
                 }
             }
@@ -148,7 +158,7 @@ namespace Logic_Tabler
 
                 if (found == false)
                 {
-                    ErrorPoint er = new ErrorPoint(b.IP, "[VIGA] - PAINUTUS - EI LEIA TABELIST - " + b.Position, field._tableHeads[0].Scale);
+                    ErrorPoint er = new ErrorPoint(b.IP, "[VIGA] - PAINUTUS - EI LEIA TABELIST - " + b.Position);
                     errors.Add(er);
                 }
             }
@@ -168,7 +178,7 @@ namespace Logic_Tabler
 
                 if (found == false)
                 {
-                    ErrorPoint er = new ErrorPoint(b.IP, "[VIGA] - PAINUTUS - EI LEIA VIIDET - " + b.Position, field._tableHeads[0].Scale);
+                    ErrorPoint er = new ErrorPoint(b.IP, "[VIGA] - PAINUTUS - EI LEIA VIIDET - " + b.Position);
                     errors.Add(er);
                 }
             }
@@ -201,7 +211,7 @@ namespace Logic_Tabler
         }
 
 
-        private static List<DrawingArea> sortData(List<G.Area> areas, List<TableHead> heads, List<ReinforcementMark> marks, List<BendingShape> bendings, List<TableBendingRow> rows, List<TableMaterialRow> summarys)
+        private List<DrawingArea> sortData(List<G.Area> areas, List<TableHead> heads, List<ReinforcementMark> marks, List<BendingShape> bendings, List<TableBendingRow> rows, List<TableMaterialRow> summarys)
         {
             List<DrawingArea> data = new List<DrawingArea>();
 
@@ -237,7 +247,15 @@ namespace Logic_Tabler
                 {
                     if (cr.isInArea(mark.IP))
                     {
-                        cr.addMark(mark);
+                        if (mark.validate())
+                        {
+                            cr.addMark(mark);
+                        }
+                        else
+                        {
+                            cr.addError(new ErrorPoint(mark.IP, "[WARNING] VIIDE - \"" + mark.Content + "\" - could not read!"));
+                        }
+
                         break;
                     }
                 }

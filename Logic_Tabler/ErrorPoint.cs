@@ -11,19 +11,19 @@ namespace Logic_Tabler
     public class ErrorPoint : IEquatable<ErrorPoint>
     {
         G.Point _IP;
-        string _ErrorMessage;
-        double _Scale;
+        string _errorMessage;
+        double _scale;
 
         public G.Point IP { get { return _IP; } }
-        public string ErrorMessage { get { return _ErrorMessage; } }
-        public double Scale { get { return _Scale; } }
+        public string ErrorMessage { get { return _errorMessage; } }
+        public double Scale { get { return _scale; } set { _scale = value; } }
+        
 
-
-        public ErrorPoint(G.Point ip, string message, double scale)
+        public ErrorPoint(G.Point ip, string message)
         {
             _IP = ip;
-            _ErrorMessage = message;
-            _Scale = scale;
+            _errorMessage = message;
+            _scale = 1;
         }
 
 
