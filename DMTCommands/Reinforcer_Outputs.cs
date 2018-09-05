@@ -107,40 +107,36 @@ namespace DMTCommands
         private void insertReinforcmentMark(string mark, G.Point IP)
         {
             string layerName = "K023TL";
-            
+            string styleName = "dmt_M" + (int)L._V_.Z_DRAWING_SCALE;
+
+            textStyleHandler();
+            leaderStyleHandler(styleName, (int)L._V_.Z_DRAWING_SCALE);
+
+            _Db.DBDictionary mleaderStyleTable = _c.trans.GetObject(_c.db.MLeaderStyleDictionaryId, _Db.OpenMode.ForWrite) as _Db.DBDictionary;
+
             _Ge.Point3d insertPointLeader = new _Ge.Point3d(IP.X, IP.Y, 0);
             _Ge.Point3d insertPointText = new _Ge.Point3d(IP.X + 7.5 * L._V_.Z_DRAWING_SCALE, IP.Y + 7.5 * L._V_.Z_DRAWING_SCALE, 0);
 
-            _Db.MLeader leader = new _Db.MLeader();
-            leader.SetDatabaseDefaults();
-            leader.Layer = layerName;
-
-            if (!_c.blockTable.Has("_NONE")) _Ap.Application.SetSystemVariable("DIMBLK", "_NONE");
-            leader.ArrowSymbolId = _c.blockTable["_NONE"];
-
-            leader.SetTextAttachmentType(_Db.TextAttachmentType.AttachmentBottomOfTopLine, _Db.LeaderDirectionType.LeftLeader); // Left attachment
-            leader.SetTextAttachmentType(_Db.TextAttachmentType.AttachmentBottomOfTopLine, _Db.LeaderDirectionType.RightLeader); // Right attachment
-            leader.EnableLanding = false;
-            leader.LeaderLineColor = _Cm.Color.FromColorIndex(_Cm.ColorMethod.None, 255);
-            leader.LandingGap = 0;
-            leader.ContentType = _Db.ContentType.MTextContent;
-
             _Db.MText mText = new _Db.MText();
             mText.SetDatabaseDefaults();
-            mText.TextHeight = 2.5 * L._V_.Z_DRAWING_SCALE;
             mText.Contents = mark;
-            mText.Location = insertPointText;
 
+            _Db.MLeader leader = new _Db.MLeader();
+            leader.SetDatabaseDefaults();
+            leader.ContentType = _Db.ContentType.MTextContent;
             leader.MText = mText;
-
-            int idx = leader.AddLeaderLine(insertPointLeader);
+            leader.AddLeaderLine(insertPointLeader);
+            leader.TextLocation = insertPointText;
+            leader.MLeaderStyle = mleaderStyleTable.GetAt(styleName);
+            
+            leader.Layer = layerName;
 
             _c.modelSpace.AppendEntity(leader);
             _c.trans.AddNewlyCreatedDBObject(leader, true);
         }
 
 
-        private void insertBending(R.Raud _ALFA_, G.Point insertion)
+            private void insertBending(R.Raud _ALFA_, G.Point insertion)
         {
             string layerName = "K023TL";
             string blockName = getBendingBlockName(_ALFA_);
@@ -487,6 +483,84 @@ namespace DMTCommands
             else if (_ALFA_ is R.E_Raud) return "Raud_E";
             else if (_ALFA_ is R.U_Raud) return "Raud_U";
             else return "Raud_A";
+        }
+
+
+        private void textStyleHandler()
+        {
+            _Db.TextStyleTable txtStyleTable = _c.trans.GetObject(_c.db.TextStyleTableId, _Db.OpenMode.ForWrite) as _Db.TextStyleTable;
+
+            if (!txtStyleTable.Has("Stommest"))
+            {
+                _Db.TextStyleTableRecord newStyle = new _Db.TextStyleTableRecord();
+                newStyle.Name = "Stommest";
+
+                newStyle.FileName = "ARIALN.TTF";
+                newStyle.FlagBits = 0;
+                newStyle.Font = new _Gi.FontDescriptor("Arial Narrow", false, false, 0, 34);
+                newStyle.IsVertical = false;
+                newStyle.ObliquingAngle = 0;
+                newStyle.TextSize = 0;
+                newStyle.XScale = 1;
+
+                txtStyleTable.Add(newStyle);
+                _c.trans.AddNewlyCreatedDBObject(newStyle, true);
+                write("[OUTPUT] TextStyle 'Stommest' created");
+            }
+        }
+        
+
+        private void leaderStyleHandler(string styleName, int scale)
+        {
+            _Db.DBDictionary mleaderStyleTable = _c.trans.GetObject(_c.db.MLeaderStyleDictionaryId, _Db.OpenMode.ForWrite) as _Db.DBDictionary;
+            _Db.TextStyleTable txtStyleTable = _c.trans.GetObject(_c.db.TextStyleTableId, _Db.OpenMode.ForWrite) as _Db.TextStyleTable;
+
+            if (!mleaderStyleTable.Contains(styleName))
+            {
+                _Db.MLeaderStyle newStyle = new _Db.MLeaderStyle();
+
+                newStyle.Annotative = _Db.AnnotativeStates.False;
+                newStyle.ArrowSize = 3.0;
+                newStyle.ArrowSymbolId = _Db.ObjectId.Null;
+                //newStyle.BlockColor=; //BYBLOCK
+                newStyle.BlockConnectionType = _Db.BlockConnectionType.ConnectExtents;
+                newStyle.BlockId = _Db.ObjectId.Null;
+                newStyle.BlockRotation = 0;
+                newStyle.BlockScale = new _Ge.Scale3d(1, 1, 1);
+                newStyle.BreakSize = 0;
+                newStyle.ContentType = _Db.ContentType.MTextContent;
+                newStyle.DefaultMText = new _Db.MText();
+                newStyle.DoglegLength = 8;
+                newStyle.DrawLeaderOrderType = _Db.DrawLeaderOrderType.DrawLeaderHeadFirst;
+                newStyle.DrawMLeaderOrderType = _Db.DrawMLeaderOrderType.DrawLeaderFirst;
+                newStyle.EnableBlockRotation = true;
+                newStyle.EnableBlockScale = true;
+                newStyle.EnableDogleg = false;
+                newStyle.EnableFrameText = false;
+                newStyle.EnableLanding = true;
+                newStyle.FirstSegmentAngleConstraint = _Db.AngleConstraint.DegreesAny;
+                newStyle.LandingGap = 1;
+                newStyle.LeaderLineColor = _Cm.Color.FromColorIndex(_Cm.ColorMethod.None, 142);
+                newStyle.LeaderLineType = _Db.LeaderType.StraightLeader;
+                //newStyle.LeaderLineTypeId=; //BYBLOCK
+                //newStyle.LeaderLineWeight=; //BYBLOCK
+                newStyle.MaxLeaderSegmentsPoints = 2;
+                newStyle.Scale = scale;
+                newStyle.SecondSegmentAngleConstraint = _Db.AngleConstraint.DegreesAny;
+                newStyle.TextAlignAlwaysLeft = false;
+                newStyle.TextAlignmentType = _Db.TextAlignmentType.LeftAlignment;
+                newStyle.TextAngleType = _Db.TextAngleType.HorizontalAngle;
+                //newStyle.TextColor=; //BYBLOCK
+                newStyle.TextHeight = 2.5;
+                newStyle.TextStyleId = txtStyleTable["Stommest"];
+
+                newStyle.SetTextAttachmentType(_Db.TextAttachmentType.AttachmentBottomOfTopLine, _Db.LeaderDirectionType.LeftLeader); // Left attachment
+                newStyle.SetTextAttachmentType(_Db.TextAttachmentType.AttachmentBottomOfTopLine, _Db.LeaderDirectionType.RightLeader); // Right attachment
+
+                newStyle.PostMLeaderStyleToDb(_c.db, styleName);
+                _c.trans.AddNewlyCreatedDBObject(newStyle, true);
+                write("[OUTPUT] MLeader style '" + styleName + "' created");
+            }
         }
 
     }
