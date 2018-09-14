@@ -107,10 +107,11 @@ namespace DMTCommands
         private void insertReinforcmentMark(string mark, G.Point IP)
         {
             string layerName = "K023TL";
-            string styleName = "dmt_M" + (int)L._V_.Z_DRAWING_SCALE;
+            string styleName = "dmt_M" + (int)Math.Round(L._V_.Z_DRAWING_SCALE);
 
             textStyleHandler();
-            leaderStyleHandler(styleName, (int)L._V_.Z_DRAWING_SCALE);
+            blockHandler();
+            leaderStyleHandler(styleName, (int)Math.Round(L._V_.Z_DRAWING_SCALE));
 
             _Db.DBDictionary mleaderStyleTable = _c.trans.GetObject(_c.db.MLeaderStyleDictionaryId, _Db.OpenMode.ForWrite) as _Db.DBDictionary;
 
@@ -508,7 +509,18 @@ namespace DMTCommands
                 write("[OUTPUT] TextStyle 'Stommest' created");
             }
         }
-        
+
+
+        private void blockHandler()
+        {
+            if (!_c.blockTable.Has("_NONE"))
+            {
+                _Ap.Application.SetSystemVariable("DIMBLK", "_NONE");
+
+                write("[OUTPUT] Block '_NONE' created");
+            }
+        }
+
 
         private void leaderStyleHandler(string styleName, int scale)
         {
@@ -521,7 +533,7 @@ namespace DMTCommands
 
                 newStyle.Annotative = _Db.AnnotativeStates.False;
                 newStyle.ArrowSize = 3.0;
-                newStyle.ArrowSymbolId = _Db.ObjectId.Null;
+                newStyle.ArrowSymbolId = _c.blockTable["_NONE"];
                 //newStyle.BlockColor=; //BYBLOCK
                 newStyle.BlockConnectionType = _Db.BlockConnectionType.ConnectExtents;
                 newStyle.BlockId = _Db.ObjectId.Null;
